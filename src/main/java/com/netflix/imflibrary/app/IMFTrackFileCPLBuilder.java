@@ -22,7 +22,7 @@ import com.netflix.imflibrary.IMFErrorLogger;
 import com.netflix.imflibrary.IMFErrorLoggerImpl;
 import com.netflix.imflibrary.st0377.HeaderPartition;
 import com.netflix.imflibrary.utils.ErrorLogger;
-import com.netflix.imflibrary.writerTools.CompositionPlaylistBuilder_2013;
+import com.netflix.imflibrary.writertools.CompositionPlaylistBuilder_2013;
 import com.sandflow.smpte.klv.Triplet;
 import com.netflix.imflibrary.KLVPacket;
 import com.netflix.imflibrary.exceptions.IMFException;
@@ -44,10 +44,10 @@ import org.smpte_ra.schemas._433._2008.dcmltypes.UserTextType;
 import com.netflix.imflibrary.st0377.header.InterchangeObject;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
 import com.netflix.imflibrary.utils.ResourceByteRangeProvider;
-import com.netflix.imflibrary.writerTools.IMFCPLObjectFieldsFactory;
+import com.netflix.imflibrary.writertools.IMFCPLObjectFieldsFactory;
 import com.netflix.imflibrary.utils.RegXMLLibHelper;
-import com.netflix.imflibrary.writerTools.utils.IMFUUIDGenerator;
-import com.netflix.imflibrary.writerTools.utils.IMFUtils;
+import com.netflix.imflibrary.writertools.utils.IMFUUIDGenerator;
+import com.netflix.imflibrary.writertools.utils.IMFUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Node;
@@ -104,7 +104,7 @@ final class IMFTrackFileCPLBuilder {
         this.regXMLLibHelper = new RegXMLLibHelper(primerPackHeader, this.imfTrackFileReader.getByteProvider(primerPackHeader));
         this.workingDirectory = workingDirectory;
         /*Peek into the CompositionPlayListType and recursively construct its constituent fields*/
-        this.cplRoot = IMFCPLObjectFieldsFactory.constructCompositionPlaylistType_2013();
+        this.cplRoot = IMFCPLObjectFieldsFactory.constructCompositionPlaylistType2013();
         this.mxfFile = essenceFile;
         this.fileName = this.mxfFile.getName();
     }
@@ -144,7 +144,7 @@ final class IMFTrackFileCPLBuilder {
         /*Build ContentVersionList*/
         buildContentVersionList();
         /*EssenceDescriptorList*/
-        List<String> essenceDescriptorIdsList = Collections.synchronizedList(new LinkedList<String>());
+        List<String> essenceDescriptorIdsList = Collections.synchronizedList(new LinkedList<>());
         buildEssenceDescriptorList(essenceDescriptorIdsList, imfErrorLogger);
         /*CompositionTimeCode*/
         buildCompositionTimeCode();
@@ -247,7 +247,7 @@ final class IMFTrackFileCPLBuilder {
         List<LocaleType> list = this.cplRoot.getLocaleList().getLocale();
         LocaleType localeType = new LocaleType();
         /*Locale Annotation*/
-        localeType.setAnnotation(CompositionPlaylistBuilder_2013.buildCPLUserTextType_2013("Netflix-CustomLocale", "en"));
+        localeType.setAnnotation(CompositionPlaylistBuilder_2013.buildCPLUserTextType2013("Netflix-CustomLocale", "en"));
         /*Locale Language List*/
         LocaleType.LanguageList languageList = new LocaleType.LanguageList();
         languageList.getLanguage().add("en");
@@ -279,7 +279,7 @@ final class IMFTrackFileCPLBuilder {
         /*Segment Annotation*/
         String name = this.fileName.substring(0, this.fileName.lastIndexOf("."));
         String language = this.imfTrackFileReader.getAudioEssenceLanguage(imfErrorLogger) != null ? this.imfTrackFileReader.getAudioEssenceLanguage(imfErrorLogger) : "unknown";
-        segmentType.setAnnotation(CompositionPlaylistBuilder_2013.buildCPLUserTextType_2013(name, language));
+        segmentType.setAnnotation(CompositionPlaylistBuilder_2013.buildCPLUserTextType2013(name, language));
         /*Sequence List*/
         SegmentType.SequenceList sequenceList = new SegmentType.SequenceList();
         int index = 0;
@@ -325,7 +325,7 @@ final class IMFTrackFileCPLBuilder {
         /*Resource Annotation*/
         String name = this.fileName.substring(0, this.fileName.lastIndexOf("."));
         String language = this.imfTrackFileReader.getAudioEssenceLanguage(imfErrorLogger) != null ? this.imfTrackFileReader.getAudioEssenceLanguage(imfErrorLogger) : "unknown";
-        trackFileResourceType.setAnnotation(CompositionPlaylistBuilder_2013.buildCPLUserTextType_2013(name, language));
+        trackFileResourceType.setAnnotation(CompositionPlaylistBuilder_2013.buildCPLUserTextType2013(name, language));
         /*Edit Rate*/
         trackFileResourceType.getEditRate().addAll(this.imfTrackFileReader.getEssenceEditRateAsList(imfErrorLogger));
         /*Intrinsic Duration*/

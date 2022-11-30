@@ -105,7 +105,7 @@ public final class CDCIPictureEssenceDescriptor extends GenericPictureEssenceDes
          * Accessor for the horizontal sampling
          * @return a long integer representing the horizontal sampling
          */
-        public Long getHorizontal_subsampling() {
+        public Long getHorizontalSubsampling() {
             return horizontal_subsampling;
         }
 
@@ -113,7 +113,7 @@ public final class CDCIPictureEssenceDescriptor extends GenericPictureEssenceDes
          * Accessor for the vertical sampling
          * @return a long integer representing the vertical sampling
          */
-        public Long getVertical_subsampling() {
+        public Long getVerticalSubsampling() {
             return vertical_subsampling;
         }
 

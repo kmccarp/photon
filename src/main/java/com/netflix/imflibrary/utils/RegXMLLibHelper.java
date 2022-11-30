@@ -193,12 +193,12 @@ public final class RegXMLLibHelper {
 
     /**
      * A utility method that gets Symbol name provided URN for an element
-     * @param URN - URN of the element
+     * @param urn - URN of the element
      * @return Symbol name of the element
      */
-    public String getElementSymbolNameFromUL(String URN) {
+    public String getElementSymbolNameFromUL(String urn) {
         DefinitionResolver definitionResolver = this.regXMLLibDictionary.getMetaDictionaryCollection();
-        Definition definition = definitionResolver.getDefinition(AUID.fromURN(URN));
+        Definition definition = definitionResolver.getDefinition(AUID.fromURN(urn));
         return definition.getSymbol();
     }
 

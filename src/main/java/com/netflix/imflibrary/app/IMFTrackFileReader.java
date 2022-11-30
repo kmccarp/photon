@@ -66,11 +66,11 @@ final class IMFTrackFileReader
 {
     private final File workingDirectory;
     private final ResourceByteRangeProvider resourceByteRangeProvider;
-    private volatile RandomIndexPack randomIndexPack = null;
-    private volatile List<PartitionPack> partitionPacks = null;
-    private volatile List<PartitionPack> referencedPartitionPacks = null;
+    private volatile RandomIndexPack randomIndexPack;
+    private volatile List<PartitionPack> partitionPacks;
+    private volatile List<PartitionPack> referencedPartitionPacks;
     private volatile IMFConstraints.HeaderPartitionIMF headerPartition;
-    private volatile List<IndexTableSegment> indexTableSegments = null;
+    private volatile List<IndexTableSegment> indexTableSegments;
 
 
     private static final Logger logger = LogManager.getLogger(IMFTrackFileReader.class);
@@ -302,7 +302,7 @@ final class IMFTrackFileReader
         {
             setPartitionPacks(imfErrorLogger);
         }
-        ArrayList<String> partitionPackTypeString = new ArrayList<String>();
+        ArrayList<String> partitionPackTypeString = new ArrayList<>();
         for(PartitionPack partitionPack : this.partitionPacks){
             partitionPackTypeString.add(partitionPack.getPartitionPackType().getPartitionTypeString());
         }
@@ -574,7 +574,7 @@ final class IMFTrackFileReader
      */
     BigInteger getEssenceEditRate(@Nonnull IMFErrorLogger imfErrorLogger) throws IOException {
         BigInteger result = BigInteger.valueOf(0);
-        if(!(this.getHeaderPartition(imfErrorLogger).getEssenceDescriptors().size() > 0)){
+        if(this.getHeaderPartition(imfErrorLogger).getEssenceDescriptors().size() <= 0){
             imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("No EssenceDescriptors were found in " +
                     "the MXF essence Header Partition")));
         }
@@ -594,7 +594,7 @@ final class IMFTrackFileReader
      * @return editRate of the essence as a List of Long Integers
      */
     List<Long> getEssenceEditRateAsList(@Nonnull IMFErrorLogger imfErrorLogger) throws IOException {
-        if(!(this.getHeaderPartition(imfErrorLogger).getEssenceDescriptors().size() > 0)){
+        if(this.getHeaderPartition(imfErrorLogger).getEssenceDescriptors().size() <= 0){
             throw new MXFException(String.format("No EssenceDescriptors were found in the MXF essence"));
         }
         FileDescriptor.FileDescriptorBO fileDescriptorBO = (FileDescriptor.FileDescriptorBO) this.getHeaderPartition(imfErrorLogger).getEssenceDescriptors().get(0);
@@ -619,9 +619,7 @@ final class IMFTrackFileReader
         Preface preface = this.headerPartition.getHeaderPartitionOP1A().getHeaderPartition().getPreface();
         GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
         SourcePackage filePackage = (SourcePackage)genericPackage;
-
-        UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
-        return packageUUID;
+        return filePackage.getPackageMaterialNumberasUUID();
     }
 
     /**

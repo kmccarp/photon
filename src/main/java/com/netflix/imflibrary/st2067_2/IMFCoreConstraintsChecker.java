@@ -23,44 +23,46 @@ import java.util.UUID;
  */
 final class IMFCoreConstraintsChecker {
 
-    private static final Set<String> homogeneitySelectionSet = new HashSet<String>(){{
-        add("CDCIDescriptor");
-        add("RGBADescriptor");
-        add("SubDescriptors");
-        add("JPEG2000SubDescriptor");
-        add("WAVEPCMDescriptor");
-        add("StoredWidth");
-        add("StoredHeight");
-        add("FrameLayout");
-        add("SampleRate");
-        add("PixelLayout");
-        add("ColorPrimaries");
-        add("TransferCharacteristic");
-        add("PictureCompression");
-        add("ComponentMaxRef");
-        add("ComponentMinRef");
-        add("BlackRefLevel");
-        add("WhiteRefLevel");
-        add("ColorRange");
-        add("ColorSiting");
-        add("ComponentDepth");
-        add("HorizontalSubsampling");
-        add("VerticalSubsampling");
-        add("Xsiz");
-        add("Ysiz");
-        add("Csiz");
-        add("J2CLayout");
-        add("RGBAComponent");
-        add("Code");
-        add("ComponentSize");
-        add("PictureComponentSizing");
-        add("J2KComponentSizing");
-        add("Ssiz");
-        add("XRSiz");
-        add("YRSiz");
-        add("AudioSampleRate");
-        add("QuantizationBits");
-    }};
+    private static final Set<String> homogeneitySelectionSet;
+    static {
+        homogeneitySelectionSet = new HashSet<>();
+        homogeneitySelectionSet.add("CDCIDescriptor");
+        homogeneitySelectionSet.add("RGBADescriptor");
+        homogeneitySelectionSet.add("SubDescriptors");
+        homogeneitySelectionSet.add("JPEG2000SubDescriptor");
+        homogeneitySelectionSet.add("WAVEPCMDescriptor");
+        homogeneitySelectionSet.add("StoredWidth");
+        homogeneitySelectionSet.add("StoredHeight");
+        homogeneitySelectionSet.add("FrameLayout");
+        homogeneitySelectionSet.add("SampleRate");
+        homogeneitySelectionSet.add("PixelLayout");
+        homogeneitySelectionSet.add("ColorPrimaries");
+        homogeneitySelectionSet.add("TransferCharacteristic");
+        homogeneitySelectionSet.add("PictureCompression");
+        homogeneitySelectionSet.add("ComponentMaxRef");
+        homogeneitySelectionSet.add("ComponentMinRef");
+        homogeneitySelectionSet.add("BlackRefLevel");
+        homogeneitySelectionSet.add("WhiteRefLevel");
+        homogeneitySelectionSet.add("ColorRange");
+        homogeneitySelectionSet.add("ColorSiting");
+        homogeneitySelectionSet.add("ComponentDepth");
+        homogeneitySelectionSet.add("HorizontalSubsampling");
+        homogeneitySelectionSet.add("VerticalSubsampling");
+        homogeneitySelectionSet.add("Xsiz");
+        homogeneitySelectionSet.add("Ysiz");
+        homogeneitySelectionSet.add("Csiz");
+        homogeneitySelectionSet.add("J2CLayout");
+        homogeneitySelectionSet.add("RGBAComponent");
+        homogeneitySelectionSet.add("Code");
+        homogeneitySelectionSet.add("ComponentSize");
+        homogeneitySelectionSet.add("PictureComponentSizing");
+        homogeneitySelectionSet.add("J2KComponentSizing");
+        homogeneitySelectionSet.add("Ssiz");
+        homogeneitySelectionSet.add("XRSiz");
+        homogeneitySelectionSet.add("YRSiz");
+        homogeneitySelectionSet.add("AudioSampleRate");
+        homogeneitySelectionSet.add("QuantizationBits");
+    }
 
     //To prevent instantiation
     private IMFCoreConstraintsChecker(){
@@ -227,7 +229,7 @@ final class IMFCoreConstraintsChecker {
                     }
                 }
                 //Section 6.8 st2067-2:2016
-                if(!(virtualTrackEssenceDescriptors.size() > 0)){
+                if(virtualTrackEssenceDescriptors.size() <= 0){
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                             String.format("This Composition represented by the ID %s is invalid since the resources comprising the VirtualTrack represented by ID %s seem to refer to EssenceDescriptor/s in the CPL's EssenceDescriptorList that are absent", compositionPlaylistType.getId().toString(), virtualTrack.getTrackID().toString()));
                 }
@@ -392,7 +394,7 @@ final class IMFCoreConstraintsChecker {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         //Section 6.9.3 st2067-3:2016
         if(virtualBaseResourceList == null
-                || virtualBaseResourceList.size() == 0){
+                || virtualBaseResourceList.isEmpty()){
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("VirtualTrack with ID %s does not have any associated resources this is invalid", trackID.toString()));
             return imfErrorLogger.getErrors();
         }
@@ -450,6 +452,6 @@ final class IMFCoreConstraintsChecker {
     }
 
     private static boolean isCDCIEssenceDescriptor(DOMNodeObjectModel domNodeObjectModel) {
-        return domNodeObjectModel.getLocalName().equals("CDCIDescriptor");
+        return "CDCIDescriptor".equals(domNodeObjectModel.getLocalName());
     }
 }

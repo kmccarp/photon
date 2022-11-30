@@ -25,7 +25,7 @@ import com.netflix.imflibrary.st0377.header.InterchangeObject;
 import com.netflix.imflibrary.utils.ByteArrayDataProvider;
 import com.netflix.imflibrary.utils.ByteProvider;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
-import com.netflix.imflibrary.writerTools.IMFCPLObjectFieldsFactory;
+import com.netflix.imflibrary.writertools.IMFCPLObjectFieldsFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import org.w3c.dom.Document;
@@ -47,7 +47,7 @@ public class IMFTrackFileCPLBuilderFunctionalTests {
 
     @Test
     public void IMFCPLFactoryTest(){
-        org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType = IMFCPLObjectFieldsFactory.constructCompositionPlaylistType_2013();
+        org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType = IMFCPLObjectFieldsFactory.constructCompositionPlaylistType2013();
         Assert.assertTrue(compositionPlaylistType.getContentTitle() != null);
         Assert.assertTrue(compositionPlaylistType.getContentVersionList() != null);
         Assert.assertTrue(compositionPlaylistType.getContentVersionList().getContentVersion() != null);

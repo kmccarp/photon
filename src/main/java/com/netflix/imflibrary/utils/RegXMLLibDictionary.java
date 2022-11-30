@@ -107,12 +107,12 @@ public final class RegXMLLibDictionary {
 
     /**
      * A utility method that gets Symbol name provided URN for an element
-     * @param URN - URN of the element
+     * @param urn - URN of the element
      * @return Symbol name of the element
      */
-    public String getSymbolNameFromURN(String URN) {
+    public String getSymbolNameFromURN(String urn) {
         DefinitionResolver definitionResolver = this.metaDictionaryCollection;
-        Definition definition = definitionResolver.getDefinition(AUID.fromURN(URN));
+        Definition definition = definitionResolver.getDefinition(AUID.fromURN(urn));
         return definition != null ? definition.getSymbol( ) : null;
     }
 
