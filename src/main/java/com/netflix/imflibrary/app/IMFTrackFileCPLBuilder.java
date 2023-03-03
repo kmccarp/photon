@@ -22,7 +22,7 @@ import com.netflix.imflibrary.IMFErrorLogger;
 import com.netflix.imflibrary.IMFErrorLoggerImpl;
 import com.netflix.imflibrary.st0377.HeaderPartition;
 import com.netflix.imflibrary.utils.ErrorLogger;
-import com.netflix.imflibrary.writerTools.CompositionPlaylistBuilder_2013;
+import com.netflix.imflibrary.writertools.CompositionPlaylistBuilder_2013;
 import com.sandflow.smpte.klv.Triplet;
 import com.netflix.imflibrary.KLVPacket;
 import com.netflix.imflibrary.exceptions.IMFException;
@@ -44,10 +44,10 @@ import org.smpte_ra.schemas._433._2008.dcmltypes.UserTextType;
 import com.netflix.imflibrary.st0377.header.InterchangeObject;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
 import com.netflix.imflibrary.utils.ResourceByteRangeProvider;
-import com.netflix.imflibrary.writerTools.IMFCPLObjectFieldsFactory;
+import com.netflix.imflibrary.writertools.IMFCPLObjectFieldsFactory;
 import com.netflix.imflibrary.utils.RegXMLLibHelper;
-import com.netflix.imflibrary.writerTools.utils.IMFUUIDGenerator;
-import com.netflix.imflibrary.writerTools.utils.IMFUtils;
+import com.netflix.imflibrary.writertools.utils.IMFUUIDGenerator;
+import com.netflix.imflibrary.writertools.utils.IMFUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Node;
@@ -144,7 +144,7 @@ final class IMFTrackFileCPLBuilder {
         /*Build ContentVersionList*/
         buildContentVersionList();
         /*EssenceDescriptorList*/
-        List<String> essenceDescriptorIdsList = Collections.synchronizedList(new LinkedList<String>());
+        List<String> essenceDescriptorIdsList = Collections.synchronizedList(new LinkedList<>());
         buildEssenceDescriptorList(essenceDescriptorIdsList, imfErrorLogger);
         /*CompositionTimeCode*/
         buildCompositionTimeCode();
@@ -454,7 +454,7 @@ final class IMFTrackFileCPLBuilder {
             throw new IMFException(e);
         }
         List<ErrorLogger.ErrorObject> errors = imfErrorLogger.getErrors();
-        if(errors.size() > 0){
+        if(!errors.isEmpty()){
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("IMFTrackFile has %d errors and %d warnings",
