@@ -20,8 +20,8 @@ import com.netflix.imflibrary.Colorimetry;
 import com.netflix.imflibrary.IMFErrorLogger;
 import com.netflix.imflibrary.IMFErrorLoggerImpl;
 import com.netflix.imflibrary.MXFUID;
-import com.netflix.imflibrary.RESTfulInterfaces.IMPValidator;
-import com.netflix.imflibrary.RESTfulInterfaces.PayloadRecord;
+import com.netflix.imflibrary.restfulinterfaces.IMPValidator;
+import com.netflix.imflibrary.restfulinterfaces.PayloadRecord;
 import com.netflix.imflibrary.exceptions.MXFException;
 import com.netflix.imflibrary.st0377.header.AudioChannelLabelSubDescriptor;
 import com.netflix.imflibrary.st0377.header.ContentStorage;
@@ -253,7 +253,7 @@ public class HeaderPartitionTest
 
         Assert.assertTrue(headerPartition.hasAudioChannelLabelSubDescriptors());
         Assert.assertEquals(headerPartition.getAudioChannelLabelSubDescriptors().size(), 6);
-        if(headerPartition.getAudioChannelLabelSubDescriptors().size() == 0){
+        if(headerPartition.getAudioChannelLabelSubDescriptors().isEmpty()){
             throw new MXFException(String.format("Asset seems to be invalid since it does not contain any AudioChannelLabelSubDescriptors"));
         }
         Assert.assertEquals(headerPartition.getAudioContentKind(), AudioContentKind.Unknown);

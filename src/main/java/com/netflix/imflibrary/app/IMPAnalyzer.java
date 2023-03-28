@@ -3,8 +3,8 @@ package com.netflix.imflibrary.app;
 import com.netflix.imflibrary.IMFErrorLogger;
 import com.netflix.imflibrary.IMFErrorLoggerImpl;
 import com.netflix.imflibrary.KLVPacket;
-import com.netflix.imflibrary.RESTfulInterfaces.IMPValidator;
-import com.netflix.imflibrary.RESTfulInterfaces.PayloadRecord;
+import com.netflix.imflibrary.restfulinterfaces.IMPValidator;
+import com.netflix.imflibrary.restfulinterfaces.PayloadRecord;
 import com.netflix.imflibrary.exceptions.IMFException;
 import com.netflix.imflibrary.exceptions.MXFException;
 import com.netflix.imflibrary.st0377.HeaderPartition;
@@ -43,10 +43,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.netflix.imflibrary.RESTfulInterfaces.IMPValidator.validateAssetMap;
-import static com.netflix.imflibrary.RESTfulInterfaces.IMPValidator.validateCPL;
-import static com.netflix.imflibrary.RESTfulInterfaces.IMPValidator.validateOPL;
-import static com.netflix.imflibrary.RESTfulInterfaces.IMPValidator.validatePKL;
+import static com.netflix.imflibrary.restfulinterfaces.IMPValidator.validateAssetMap;
+import static com.netflix.imflibrary.restfulinterfaces.IMPValidator.validateCPL;
+import static com.netflix.imflibrary.restfulinterfaces.IMPValidator.validateOPL;
+import static com.netflix.imflibrary.restfulinterfaces.IMPValidator.validatePKL;
 
 /**
  * Created by svenkatrav on 9/2/16.
@@ -75,8 +75,7 @@ public class IMPAnalyzer {
         Preface preface = headerPartition.getPreface();
         GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
         SourcePackage filePackage = (SourcePackage) genericPackage;
-        UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
-        return packageUUID;
+        return filePackage.getPackageMaterialNumberasUUID();
     }
 
 
@@ -135,8 +134,7 @@ public class IMPAnalyzer {
             rangeStart = partitionByteOffsets.get(0);
             rangeEnd = partitionByteOffsets.get(1) - 1;
             byte[] headerPartitionBytes = resourceByteRangeProvider.getByteRangeAsBytes(rangeStart, rangeEnd);
-            PayloadRecord headerParitionPayload = new PayloadRecord(headerPartitionBytes, PayloadRecord.PayloadAssetType.EssencePartition, rangeStart, rangeEnd);
-            return headerParitionPayload;
+            return new PayloadRecord(headerPartitionBytes, PayloadRecord.PayloadAssetType.EssencePartition, rangeStart, rangeEnd);
         }
 
 
@@ -464,14 +462,15 @@ public class IMPAnalyzer {
                                     Set<UUID> trackFileIds = virtualTrack.getTrackResourceIds();
                                     List<PayloadRecord> trackHeaderPartitionPayloads = new ArrayList<>();
                                     for (UUID trackFileId : trackFileIds) {
-                                        if (trackFileIDToHeaderPartitionPayLoadMap.containsKey(trackFileId))
+                                        if (trackFileIDToHeaderPartitionPayLoadMap.containsKey(trackFileId)) {
                                             trackHeaderPartitionPayloads.add
                                                     (trackFileIDToHeaderPartitionPayLoadMap.get(trackFileId));
+                                        }
                                     }
 
                                     if (isVirtualTrackComplete(virtualTrack, trackFileIDsSet)) {
                                         compositionConformanceErrorLogger.addAllErrors(IMPValidator.isVirtualTrackInCPLConformed(cplPayloadRecord, virtualTrack, trackHeaderPartitionPayloads));
-                                    } else if (trackHeaderPartitionPayloads.size() != 0) {
+                                    } else if (!trackHeaderPartitionPayloads.isEmpty()) {
                                         compositionConformanceErrorLogger.addAllErrors(IMPValidator.conformVirtualTracksInCPL(cplPayloadRecord, trackHeaderPartitionPayloads, false));
                                     }
                                 }
@@ -480,7 +479,7 @@ public class IMPAnalyzer {
                                         .stream()
                                         .map(IMFEssenceComponentVirtualTrack::getTrackResourceIds)
                                         .flatMap(Set::stream)
-                                        .map( e -> trackFileIDToHeaderPartitionPayLoadMap.get(e))
+                                        .map( trackFileIDToHeaderPartitionPayLoadMap::get)
                                         .collect(Collectors.toList());
                                 compositionConformanceErrorLogger.addAllErrors(IMPValidator.areAllVirtualTracksInCPLConformed(cplPayloadRecord, cplHeaderPartitionPayloads));
                             }
@@ -509,7 +508,7 @@ public class IMPAnalyzer {
 
         if(inputFile.getName().lastIndexOf('.') > 0) {
             String extension = inputFile.getName().substring(inputFile.getName().lastIndexOf('.')+1);
-            if(extension.equalsIgnoreCase("mxf")) {
+            if("mxf".equalsIgnoreCase(extension)) {
                 errorLogger.addAllErrors(validateEssencePartition(resourceByteRangeProvider));
                 return errorLogger.getErrors();
             }
@@ -559,7 +558,7 @@ public class IMPAnalyzer {
 
     private static void logErrors(String file, List<ErrorLogger.ErrorObject> errors)
     {
-        if(errors.size()>0)
+        if(!errors.isEmpty())
 
         {
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
@@ -583,7 +582,7 @@ public class IMPAnalyzer {
 
     }
 
-    public static void main(String args[]) throws IOException
+    public static void main(String[] args) throws IOException
     {
         if (args.length != 1)
         {
