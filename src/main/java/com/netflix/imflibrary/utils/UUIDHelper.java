@@ -16,23 +16,23 @@ public final class UUIDHelper
 
     /**
      * A helper method to return the UUID without the "urn:uuid:" prefix
-     * @param UUIDasURN a urn:uuid type
+     * @param uUIDasURN a urn:uuid type
      * @return a UUID without the "urn:uuid:" prefix
      */
-    public static UUID fromUUIDAsURNStringToUUID(String UUIDasURN)
+    public static UUID fromUUIDAsURNStringToUUID(String uUIDasURN)
     {
-        if (!UUIDasURN.startsWith(UUIDHelper.UUID_as_a_URN_PREFIX))
+        if (!uUIDasURN.startsWith(UUIDHelper.UUID_as_a_URN_PREFIX))
         {
             IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.UUID_ERROR, IMFErrorLogger.IMFErrors
                     .ErrorLevels.FATAL, String.format("Input UUID %s " +
-                    "does not start with %s", UUIDasURN, UUIDHelper
+                    "does not start with %s", uUIDasURN, UUIDHelper
                     .UUID_as_a_URN_PREFIX));
-            throw new IMFException(String.format("Input UUID %s does not start with %s", UUIDasURN, UUIDHelper
+            throw new IMFException(String.format("Input UUID %s does not start with %s", uUIDasURN, UUIDHelper
                     .UUID_as_a_URN_PREFIX), imfErrorLogger);
         }
 
-        return UUID.fromString(UUIDasURN.split(UUIDHelper.UUID_as_a_URN_PREFIX)[1]);
+        return UUID.fromString(uUIDasURN.split(UUIDHelper.UUID_as_a_URN_PREFIX)[1]);
 
     }
 
