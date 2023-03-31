@@ -40,7 +40,7 @@ public class Application2ExtendedComposition extends AbstractApplicationComposit
         add(new Fraction(24)); add(new Fraction(25)); add(new Fraction(30)); add(new Fraction(50)); add(new Fraction(60));
         add(new Fraction(24000, 1001)); add(new Fraction(30000, 1001)); add(new Fraction(60000, 1001)); }});
     public static final Map<Colorimetry, Set<Integer>>colorToBitDepthMap = Collections.unmodifiableMap(new HashMap<Colorimetry, Set<Integer>>() {{
-        put(Colorimetry.Unknown, new HashSet<Integer>(){{ }});
+        put(Colorimetry.Unknown, new HashSet<Integer>(){});
         put(Colorimetry.Color3, new HashSet<Integer>(){{ add(8); add(10); }});
         put(Colorimetry.Color4, new HashSet<Integer>(){{ add(8); add(10); }});
         put(Colorimetry.Color5, new HashSet<Integer>(){{ add(10); add(12); }});

@@ -20,14 +20,14 @@ package com.netflix.imflibrary.st0429_8;
 
 import com.netflix.imflibrary.IMFErrorLogger;
 import com.netflix.imflibrary.IMFErrorLoggerImpl;
-import com.netflix.imflibrary.RESTfulInterfaces.IMPValidator;
-import com.netflix.imflibrary.RESTfulInterfaces.PayloadRecord;
+import com.netflix.imflibrary.restfulinterfaces.IMPValidator;
+import com.netflix.imflibrary.restfulinterfaces.PayloadRecord;
 import com.netflix.imflibrary.exceptions.IMFException;
 import com.netflix.imflibrary.utils.ErrorLogger;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
 import com.netflix.imflibrary.utils.ResourceByteRangeProvider;
 import com.netflix.imflibrary.utils.UUIDHelper;
-import com.netflix.imflibrary.writerTools.utils.ValidationEventHandlerImpl;
+import com.netflix.imflibrary.writertools.utils.ValidationEventHandlerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.smpte_ra.schemas._429_8._2007.pkl.PackingListType;
@@ -76,7 +76,7 @@ public final class PackingList
     private final PKLSchema pklSchema;
     private final List<Asset> assetList = new ArrayList<>();
 
-    private static class PKLSchema {
+    private static final class PKLSchema {
         private final String pklSchemaPath;
         private final String pklContext;
 
@@ -129,12 +129,12 @@ public final class PackingList
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);
-                 InputStream xmldsig_core_is = contextClassLoader.getResourceAsStream(PackingList.xmldsig_core_schema_path);
-                 InputStream pkl_is = contextClassLoader.getResourceAsStream(pklSchema.getPKLSchemaPath());
+                 InputStream xmldsigCoreIs = contextClassLoader.getResourceAsStream(PackingList.xmldsig_core_schema_path);
+                 InputStream pklIs = contextClassLoader.getResourceAsStream(pklSchema.getPKLSchemaPath())
             ) {
                 StreamSource[] streamSources = new StreamSource[2];
-                streamSources[0] = new StreamSource(xmldsig_core_is);
-                streamSources[1] = new StreamSource(pkl_is);
+                streamSources[0] = new StreamSource(xmldsigCoreIs);
+                streamSources[1] = new StreamSource(pklIs);
 
                 SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
                 Schema schema = schemaFactory.newSchema(streamSources);
@@ -174,10 +174,10 @@ public final class PackingList
         {
             case "org.smpte_ra.schemas._429_8._2007.pkl":
                 //this.packingListType = PackingList.checkConformance(packingListTypeJAXBElement.getValue());
-                org.smpte_ra.schemas._429_8._2007.pkl.PackingListType packingListType_st0429_8_2007_PKL = (org.smpte_ra.schemas._429_8._2007.pkl.PackingListType) this.packingListTypeJAXBElement.getValue();
-                this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(packingListType_st0429_8_2007_PKL.getId());
+                org.smpte_ra.schemas._429_8._2007.pkl.PackingListType packingListTypeSt042982007PKL = (org.smpte_ra.schemas._429_8._2007.pkl.PackingListType) this.packingListTypeJAXBElement.getValue();
+                this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(packingListTypeSt042982007PKL.getId());
 
-                for (org.smpte_ra.schemas._429_8._2007.pkl.AssetType assetType : packingListType_st0429_8_2007_PKL.getAssetList().getAsset())
+                for (org.smpte_ra.schemas._429_8._2007.pkl.AssetType assetType : packingListTypeSt042982007PKL.getAssetList().getAsset())
                 {
                     Asset asset = new Asset(assetType.getId(), Arrays.copyOf(assetType.getHash(), assetType.getHash().length),
 					    assetType.getSize().longValue(), assetType.getType(),
@@ -186,10 +186,10 @@ public final class PackingList
                 }
                 break;
             case "org.smpte_ra.schemas._2067_2._2016.pkl":
-                org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType packingListType_st2067_2_2016_PKL = (org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType) this.packingListTypeJAXBElement.getValue();
-                this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(packingListType_st2067_2_2016_PKL.getId());
+                org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType packingListTypeSt206722016PKL = (org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType) this.packingListTypeJAXBElement.getValue();
+                this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(packingListTypeSt206722016PKL.getId());
 
-                for (org.smpte_ra.schemas._2067_2._2016.pkl.AssetType assetType : packingListType_st2067_2_2016_PKL.getAssetList().getAsset())
+                for (org.smpte_ra.schemas._2067_2._2016.pkl.AssetType assetType : packingListTypeSt206722016PKL.getAssetList().getAsset())
                 {
                     Asset asset = new Asset(assetType.getId(), Arrays.copyOf(assetType.getHash(), assetType.getHash().length),
 					    assetType.getSize().longValue(), assetType.getType(),
@@ -221,7 +221,7 @@ public final class PackingList
     private static String getPackingListSchemaURI(ResourceByteRangeProvider resourceByteRangeProvider, IMFErrorLogger imfErrorLogger) throws IOException {
 
         String packingListSchemaURI = "";
-        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize()-1);)
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize()-1))
         {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -273,7 +273,7 @@ public final class PackingList
         return packingListSchemaURI;
     }
 
-    private static final String serializePKLSchemasToString(){
+    private static String serializePKLSchemasToString(){
         StringBuilder stringBuilder = new StringBuilder();
         Iterator iterator = supportedPKLSchemas.values().iterator();
         while(iterator.hasNext()){
@@ -292,7 +292,7 @@ public final class PackingList
      */
     public static boolean isFileOfSupportedSchema(ResourceByteRangeProvider resourceByteRangeProvider) throws IOException{
 
-        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize()-1);)
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize()-1))
         {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -389,22 +389,22 @@ public final class PackingList
          * @param hash hash a byte[] containing the Base64 encoded SHA-1 hash of this PackingList Asset
          * @param size of the asset in bytes
          * @param type could be either text/xml or application/mxf as defined in st0429-9:2007
-         * @param original_filename a free form human readable text that contains the name of the file
+         * @param originalFilename a free form human readable text that contains the name of the file
          *                         containing the asset at the time the PackingList was created
          */
-        public Asset(String uuid, byte[] hash, long size, String type, String original_filename)
+        public Asset(String uuid, byte[] hash, long size, String type, String originalFilename)
         {
-            this(uuid, hash, size, type, original_filename, Asset.DEFAULT_HASH_ALGORITHM);
+            this(uuid, hash, size, type, originalFilename, Asset.DEFAULT_HASH_ALGORITHM);
         }
 
-        public Asset(String uuid, byte[] hash, long size, String type, String original_filename, String hash_algorithm)
+        public Asset(String uuid, byte[] hash, long size, String type, String original_filename, String hashAlgorithm)
         {
             this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(uuid);
             this.hash = Arrays.copyOf(hash, hash.length);
             this.size = size;
             this.type = type;
             this.original_filename = original_filename;
-            this.hash_algorithm = hash_algorithm;
+            this.hash_algorithm = hashAlgorithm;
         }
 
         /**
@@ -490,7 +490,7 @@ public final class PackingList
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);
              InputStream xmldsig_core_is = contextClassLoader.getResourceAsStream(PackingList.xmldsig_core_schema_path);
-             InputStream pkl_is = contextClassLoader.getResourceAsStream(pklSchema.getPKLSchemaPath());
+             InputStream pkl_is = contextClassLoader.getResourceAsStream(pklSchema.getPKLSchemaPath())
         )
         {
             StreamSource inputSource = new StreamSource(inputStream);
@@ -531,7 +531,7 @@ public final class PackingList
         return sb.toString();
     }
 
-    public static void main(String args[]) throws IOException, SAXException, JAXBException
+    public static void main(String[] args) throws IOException, SAXException, JAXBException
     {
         if (args.length != 1)
         {
@@ -549,7 +549,7 @@ public final class PackingList
         PayloadRecord payloadRecord = new PayloadRecord(bytes, PayloadRecord.PayloadAssetType.PackingList, 0L, resourceByteRangeProvider.getResourceSize());
         List<ErrorLogger.ErrorObject>errors = IMPValidator.validatePKL(payloadRecord);
 
-        if(errors.size() > 0){
+        if(!errors.isEmpty()){
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("PackingList Document has %d errors and %d warnings",
