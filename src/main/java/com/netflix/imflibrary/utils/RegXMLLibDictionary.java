@@ -107,12 +107,12 @@ public final class RegXMLLibDictionary {
 
     /**
      * A utility method that gets Symbol name provided URN for an element
-     * @param URN - URN of the element
+     * @param urn - URN of the element
      * @return Symbol name of the element
      */
-    public String getSymbolNameFromURN(String URN) {
+    public String getSymbolNameFromURN(String urn) {
         DefinitionResolver definitionResolver = this.metaDictionaryCollection;
-        Definition definition = definitionResolver.getDefinition(AUID.fromURN(URN));
+        Definition definition = definitionResolver.getDefinition(AUID.fromURN(urn));
         return definition != null ? definition.getSymbol( ) : null;
     }
 
@@ -130,8 +130,8 @@ public final class RegXMLLibDictionary {
             return null;
         } else if (definition instanceof EnumerationTypeDefinition) {
             EnumerationTypeDefinition enumerationTypeDefinition = EnumerationTypeDefinition.class.cast(definition);
-            List<Integer> enumList = enumerationTypeDefinition.getElements().stream().filter(e -> e.getName().equals(name)).map(e -> e.getValue()).collect(Collectors.toList());
-            enumValue = (enumList.size() > 0)  ? enumList.get(0) : null;
+            List<Integer> enumList = enumerationTypeDefinition.getElements().stream().filter(e -> e.getName().equals(name)).map(EnumerationTypeDefinition.Element::getValue).collect(Collectors.toList());
+            enumValue = (!enumList.isEmpty())  ? enumList.get(0) : null;
         }
         return enumValue;
     }
@@ -150,8 +150,8 @@ public final class RegXMLLibDictionary {
             return null;
         } else if (definition instanceof RecordTypeDefinition) {
             RecordTypeDefinition recordTypeDefinition = RecordTypeDefinition.class.cast(definition);
-            List<String> enumList = recordTypeDefinition.getMembers().stream().filter(e -> e.getType().equals(AUID.fromURN(fieldURN))).map(e -> e.getName()).collect(Collectors.toList());
-            fieldName = (enumList.size() > 0)  ? enumList.get(0) : null;
+            List<String> enumList = recordTypeDefinition.getMembers().stream().filter(e -> e.getType().equals(AUID.fromURN(fieldURN))).map(RecordTypeDefinition.Member::getName).collect(Collectors.toList());
+            fieldName = (!enumList.isEmpty())  ? enumList.get(0) : null;
         }
         return fieldName;
     }

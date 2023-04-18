@@ -61,8 +61,8 @@ public class ApplicationCompositionFactory {
         APPLICATION_5_COMPOSITION_TYPE(Application5Composition.class,          namespacesApplication5Composition),
         APPLICATION_2E2021_COMPOSITION_TYPE(Application2E2021.class,           namespacesApplication2E2021Composition),
         APPLICATION_UNSUPPORTED_COMPOSITION_TYPE(ApplicationUnsupportedComposition.class, Collections.unmodifiableSet(new HashSet<>()));
-        private Set<String> nameSpaceSet;
-        private Class<?> clazz;
+        private final Set<String> nameSpaceSet;
+        private final Class<?> clazz;
 
         ApplicationCompositionType(Class<?> clazz, Set<String> nameSpaceSet) {
             this.nameSpaceSet = nameSpaceSet;
@@ -103,7 +103,7 @@ public class ApplicationCompositionFactory {
 
         try {
             IMFCompositionPlaylistType imfCompositionPlaylistType = IMFCompositionPlaylistType.getCompositionPlayListType(resourceByteRangeProvider, imfErrorLogger);
-            if (imfCompositionPlaylistType.getApplicationIdentificationSet().size() == 0) {
+            if (imfCompositionPlaylistType.getApplicationIdentificationSet().isEmpty()) {
                 clazz = Application2ExtendedComposition.class;
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                         String.format("Missing ApplicationIdentification in CPL"));

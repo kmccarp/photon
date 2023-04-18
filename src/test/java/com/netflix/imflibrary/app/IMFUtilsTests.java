@@ -21,7 +21,7 @@ import com.netflix.imflibrary.IMFErrorLoggerImpl;
 import com.netflix.imflibrary.exceptions.IMFException;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
 import com.netflix.imflibrary.utils.ResourceByteRangeProvider;
-import com.netflix.imflibrary.writerTools.utils.IMFUtils;
+import com.netflix.imflibrary.writertools.utils.IMFUtils;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import testUtils.TestHelper;

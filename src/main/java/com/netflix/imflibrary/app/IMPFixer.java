@@ -4,8 +4,8 @@ import com.netflix.imflibrary.IMFConstraints;
 import com.netflix.imflibrary.IMFErrorLogger;
 import com.netflix.imflibrary.IMFErrorLoggerImpl;
 import com.netflix.imflibrary.MXFOperationalPattern1A;
-import com.netflix.imflibrary.RESTfulInterfaces.IMPValidator;
-import com.netflix.imflibrary.RESTfulInterfaces.PayloadRecord;
+import com.netflix.imflibrary.restfulinterfaces.IMPValidator;
+import com.netflix.imflibrary.restfulinterfaces.PayloadRecord;
 import com.netflix.imflibrary.exceptions.IMFException;
 import com.netflix.imflibrary.exceptions.MXFException;
 import com.netflix.imflibrary.st0377.HeaderPartition;
@@ -23,9 +23,9 @@ import com.netflix.imflibrary.utils.ByteArrayDataProvider;
 import com.netflix.imflibrary.utils.ErrorLogger;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
 import com.netflix.imflibrary.utils.ResourceByteRangeProvider;
-import com.netflix.imflibrary.writerTools.CompositionPlaylistBuilder_2016;
-import com.netflix.imflibrary.writerTools.IMPBuilder;
-import com.netflix.imflibrary.writerTools.utils.IMFUtils;
+import com.netflix.imflibrary.writertools.CompositionPlaylistBuilder_2016;
+import com.netflix.imflibrary.writertools.IMPBuilder;
+import com.netflix.imflibrary.writertools.utils.IMFUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
@@ -178,8 +178,7 @@ public class IMPFixer {
             rangeStart = partitionByteOffsets.get(0);
             rangeEnd = partitionByteOffsets.get(1) - 1;
             byte[] headerPartitionBytes = resourceByteRangeProvider.getByteRangeAsBytes(rangeStart, rangeEnd);
-            PayloadRecord headerParitionPayload = new PayloadRecord(headerPartitionBytes, PayloadRecord.PayloadAssetType.EssencePartition, rangeStart, rangeEnd);
-            return headerParitionPayload;
+            return new PayloadRecord(headerPartitionBytes, PayloadRecord.PayloadAssetType.EssencePartition, rangeStart, rangeEnd);
         }
 
 
@@ -236,7 +235,7 @@ public class IMPFixer {
                         continue;
                     }
                     Set<UUID> trackFileIDsSet = trackFileIDToHeaderPartitionPayLoadMap.keySet();
-                        if(versionCPLSchema.equals(""))
+                        if("".equals(versionCPLSchema))
                         {
                             String coreConstraintsSchema = applicationComposition.getCoreConstraintsSchema();
                             if (coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2013)) {
@@ -253,7 +252,7 @@ public class IMPFixer {
                             }
                         }
 
-                        if(versionCPLSchema.equals("2016"))
+                        if("2016".equals(versionCPLSchema))
                         {
                             imfErrorLogger.addAllErrors(IMPBuilder.buildIMP_2016("IMP",
                                     "Netflix",
@@ -264,7 +263,7 @@ public class IMPFixer {
                                     targetFile));
 
                         }
-                        else if(versionCPLSchema.equals("2013")) {
+                        else if("2013".equals(versionCPLSchema)) {
                             imfErrorLogger.addAllErrors(IMPBuilder.buildIMP_2013("IMP",
                                     "Netflix",
                                     applicationComposition.getEssenceVirtualTracks(),
@@ -276,7 +275,7 @@ public class IMPFixer {
                         else {
                             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR,
                                     IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
-                                    String.format("Invalid CPL schema %s for output", versionCPLSchema.equals("2013")));
+                                    String.format("Invalid CPL schema %s for output", "2013".equals(versionCPLSchema)));
                         }
                     }
                 }
@@ -316,7 +315,7 @@ public class IMPFixer {
     }
 
 
-    public static void main(String args[]) throws
+    public static void main(String[] args) throws
             IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException, NoSuchAlgorithmException {
 
         if (args.length < 2) {
@@ -346,7 +345,7 @@ public class IMPFixer {
         {
             String curArg = args[argIdx];
             String nextArg = argIdx < args.length - 1 ? args[argIdx + 1] : "";
-            if(curArg.equalsIgnoreCase("--cpl-schema") || curArg.equalsIgnoreCase("-cs")) {
+            if("--cpl-schema".equalsIgnoreCase(curArg) || "-cs".equalsIgnoreCase(curArg)) {
                 if(nextArg.length() == 0 || nextArg.charAt(0) == '-') {
                     logger.error(usage());
                     System.exit(-1);
@@ -354,10 +353,10 @@ public class IMPFixer {
                 versionCPLSchema = nextArg;
                 argIdx++;
             }
-            else if(curArg.equalsIgnoreCase("--no-copy") || curArg.equalsIgnoreCase("-nc")) {
+            else if("--no-copy".equalsIgnoreCase(curArg) || "-nc".equalsIgnoreCase(curArg)) {
                 copyTrackFile = false;
             }
-            else if(curArg.equalsIgnoreCase("--no-hash") || curArg.equalsIgnoreCase("-nh")) {
+            else if("--no-hash".equalsIgnoreCase(curArg) || "-nh".equalsIgnoreCase(curArg)) {
                 generateHash = false;
             }
             else {
@@ -373,7 +372,7 @@ public class IMPFixer {
         else
         {
             List<ErrorLogger.ErrorObject> errors = analyzePackageAndWrite(inputFile, outputFile, versionCPLSchema, copyTrackFile, generateHash);
-            if (errors.size() > 0) {
+            if (!errors.isEmpty()) {
                 logger.info(String.format("IMPWriter encountered errors:"));
                 for (ErrorLogger.ErrorObject errorObject : errors) {
                     if (errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
