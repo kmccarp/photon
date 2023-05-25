@@ -29,10 +29,10 @@ import com.netflix.imflibrary.utils.ErrorLogger;
 import com.netflix.imflibrary.utils.FileByteRangeProvider;
 import com.netflix.imflibrary.utils.RegXMLLibHelper;
 import com.netflix.imflibrary.utils.ResourceByteRangeProvider;
-import com.netflix.imflibrary.writerTools.CompositionPlaylistBuilder_2013;
-import com.netflix.imflibrary.writerTools.IMFCPLObjectFieldsFactory;
-import com.netflix.imflibrary.writerTools.utils.IMFUUIDGenerator;
-import com.netflix.imflibrary.writerTools.utils.IMFUtils;
+import com.netflix.imflibrary.writertools.CompositionPlaylistBuilder_2013;
+import com.netflix.imflibrary.writertools.IMFCPLObjectFieldsFactory;
+import com.netflix.imflibrary.writertools.utils.IMFUUIDGenerator;
+import com.netflix.imflibrary.writertools.utils.IMFUtils;
 import com.sandflow.smpte.klv.Triplet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,7 +141,7 @@ public final class IMFTrackFileCPLBuilder {
         /*Build ContentVersionList*/
         buildContentVersionList();
         /*EssenceDescriptorList*/
-        List<String> essenceDescriptorIdsList = Collections.synchronizedList(new LinkedList<String>());
+        List<String> essenceDescriptorIdsList = Collections.synchronizedList(new LinkedList<>());
         buildEssenceDescriptorList(essenceDescriptorIdsList, imfErrorLogger);
         /*CompositionTimeCode*/
         buildCompositionTimeCode();
@@ -451,7 +451,7 @@ public final class IMFTrackFileCPLBuilder {
             throw new IMFException(e);
         }
         List<ErrorLogger.ErrorObject> errors = imfErrorLogger.getErrors();
-        if(errors.size() > 0){
+        if(!errors.isEmpty()){
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("IMFTrackFile has %d errors and %d warnings",
