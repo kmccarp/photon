@@ -93,7 +93,7 @@ public class MXFEssenceReader {
      * @return Header partition in the essence
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
-    public HeaderPartition getHeaderPartition() throws IOException{
+    public HeaderPartition getHeaderPartition() throws IOException {
         RandomIndexPack randomIndexPack = this.getRandomIndexPack();
         List<Long> allPartitionByteOffsets = randomIndexPack.getAllPartitionByteOffsets();
         long inclusiveRangeStart = allPartitionByteOffsets.get(0);
@@ -111,7 +111,7 @@ public class MXFEssenceReader {
      * @return List of partition packs in the essence
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
-    public List<PartitionPack> getPartitionPacks() throws IOException{
+    public List<PartitionPack> getPartitionPacks() throws IOException {
         RandomIndexPack randomIndexPack = getRandomIndexPack();
 
         List<PartitionPack> partitionPacks = new ArrayList<>();
@@ -126,13 +126,13 @@ public class MXFEssenceReader {
             MXFOperationalPattern1A.checkOperationalPattern1ACompliance(partitionPacks);
             IMFConstraints.checkIMFCompliance(partitionPacks, imfErrorLogger);
         }
-        catch (IMFException | MXFException e){
+        catch(IMFException | MXFException e) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("This IMFTrackFile has fatal errors in the partition packs, please see the errors that follow."));
-            if(e instanceof IMFException){
+            if (e instanceof IMFException) {
                 IMFException imfException = (IMFException)e;
                 imfErrorLogger.addAllErrors(imfException.getErrors());
             }
-            else if(e instanceof MXFException){
+            else if (e instanceof MXFException) {
                 MXFException mxfException = (MXFException)e;
                 imfErrorLogger.addAllErrors(mxfException.getErrors());
             }
@@ -146,7 +146,7 @@ public class MXFEssenceReader {
      * @return List of DOM Nodes corresponding to every EssenceDescriptor in the essence
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
-    public List<Node> getEssenceDescriptorsDOMNodes() throws IOException{
+    public List<Node> getEssenceDescriptorsDOMNodes() throws IOException {
         try {
             List<InterchangeObject.InterchangeObjectBO> essenceDescriptors = this.getHeaderPartition().getEssenceDescriptors();
             List<Node> essenceDescriptorNodes = new ArrayList<>();
@@ -164,7 +164,7 @@ public class MXFEssenceReader {
             }
             return essenceDescriptorNodes;
         }
-        catch(ParserConfigurationException e){
+        catch(ParserConfigurationException e) {
             throw new IMFException(e);
         }
     }
@@ -175,7 +175,7 @@ public class MXFEssenceReader {
      * @return List of Object model representations corresponding to every EssenceDescriptor in the essence
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
-    public List<? extends InterchangeObject.InterchangeObjectBO> getEssenceDescriptors() throws IOException{
+    public List<? extends InterchangeObject.InterchangeObjectBO> getEssenceDescriptors() throws IOException {
         return this.getHeaderPartition().getEssenceDescriptors();
     }
 
@@ -184,7 +184,7 @@ public class MXFEssenceReader {
      * @return a list of essence types present in the MXF file
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
-    public List<HeaderPartition.EssenceTypeEnum> getEssenceTypes() throws IOException{
+    public List<HeaderPartition.EssenceTypeEnum> getEssenceTypes() throws IOException {
         return this.getHeaderPartition().getEssenceTypes();
     }
 
@@ -203,7 +203,7 @@ public class MXFEssenceReader {
         KLVPacket.Header header;
         {//logic to provide as an input stream the portion of the archive that contains PartitionPack KLVPacker Header
             long rangeEnd = resourceOffset +
-                    (KLVPacket.KEY_FIELD_SIZE + KLVPacket.LENGTH_FIELD_SUFFIX_MAX_SIZE) -1;
+                    (KLVPacket.KEY_FIELD_SIZE + KLVPacket.LENGTH_FIELD_SUFFIX_MAX_SIZE) - 1;
             rangeEnd = rangeEnd < (archiveFileSize - 1) ? rangeEnd : (archiveFileSize - 1);
 
             File fileWithPartitionPackKLVPacketHeader = this.resourceByteRangeProvider.getByteRange(resourceOffset, rangeEnd, this.workingDirectory);
@@ -232,8 +232,8 @@ public class MXFEssenceReader {
     private List<KLVPacket.Header> getSubDescriptorKLVHeader(InterchangeObject.InterchangeObjectBO essenceDescriptor) throws IOException {
         List<KLVPacket.Header> subDescriptorHeaders = new ArrayList<>();
         List<InterchangeObject.InterchangeObjectBO>subDescriptors = this.getHeaderPartition().getSubDescriptors(essenceDescriptor);
-        for(InterchangeObject.InterchangeObjectBO subDescriptorBO : subDescriptors){
-            if(subDescriptorBO != null) {
+        for (InterchangeObject.InterchangeObjectBO subDescriptorBO : subDescriptors) {
+            if (subDescriptorBO != null) {
                 subDescriptorHeaders.add(subDescriptorBO.getHeader());
             }
         }
@@ -249,7 +249,7 @@ public class MXFEssenceReader {
         //DocumentFragment documentFragment = this.regXMLLibHelper.getDocumentFragment(essenceDescriptorTriplet, document);
         /*Get the Triplets corresponding to the SubDescriptors*/
         List<Triplet> subDescriptorTriplets = new ArrayList<>();
-        for(KLVPacket.Header subDescriptorHeader : subDescriptors){
+        for (KLVPacket.Header subDescriptorHeader : subDescriptors) {
             subDescriptorTriplets.add(regXMLLibHelper.getTripletFromKLVHeader(subDescriptorHeader, this.getByteProvider(subDescriptorHeader)));
         }
         return regXMLLibHelper.getEssenceDescriptorDocumentFragment(essenceDescriptorTriplet, subDescriptorTriplets, document, this.imfErrorLogger);
@@ -267,14 +267,14 @@ public class MXFEssenceReader {
     private ByteProvider getByteProvider(File file) throws IOException {
         ByteProvider byteProvider;
         Long size = file.length();
-        if(size <= 0){
+        if (size <= 0) {
             throw new IOException(String.format("Range of bytes (%d) has to be +ve and non-zero", size));
         }
-        if(size <= Integer.MAX_VALUE) {
+        if (size <= Integer.MAX_VALUE) {
             byte[] bytes = Files.readAllBytes(Paths.get(file.toURI()));
             byteProvider = new ByteArrayDataProvider(bytes);
         }
-        else{
+        else {
             byteProvider = new FileDataProvider(file);
         }
         return byteProvider;

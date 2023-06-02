@@ -57,7 +57,7 @@ public final class AudioChannelLabelSubDescriptor extends GenericDescriptor
 
     public MXFUID getSoundfieldGroupLinkId()
     {
-        if(this.audioChannelLabelSubDescriptorBO.soundfield_group_link_id == null) {
+        if (this.audioChannelLabelSubDescriptorBO.soundfield_group_link_id == null) {
             return null;
         }
         return new MXFUID(this.audioChannelLabelSubDescriptorBO.soundfield_group_link_id);
@@ -70,7 +70,7 @@ public final class AudioChannelLabelSubDescriptor extends GenericDescriptor
 
     public MXFUID getMCALinkId()
     {
-        if(this.audioChannelLabelSubDescriptorBO.mca_link_id == null) {
+        if (this.audioChannelLabelSubDescriptorBO.mca_link_id == null) {
             return null;
         }
         return new MXFUID(this.audioChannelLabelSubDescriptorBO.mca_link_id);
@@ -100,7 +100,7 @@ public final class AudioChannelLabelSubDescriptor extends GenericDescriptor
      * A getter for the spoken language in this SubDescriptor
      * @return string representing the spoken language as defined in RFC-5646
      */
-    public String getRFC5646SpokenLanguage(){
+    public String getRFC5646SpokenLanguage() {
         return this.audioChannelLabelSubDescriptorBO.rfc_5646_spoken_language;
     }
 
@@ -112,7 +112,8 @@ public final class AudioChannelLabelSubDescriptor extends GenericDescriptor
     public static final class AudioChannelLabelSubDescriptorBO extends MCALabelSubDescriptor.MCALabelSubDescriptorBO
     {
 
-        @MXFProperty(size=16) private final byte[] soundfield_group_link_id = null; //UUID
+        @MXFProperty(size = 16)
+        private final byte[] soundfield_group_link_id = null; //UUID
 
         /**
          * Instantiates a new parsed AudioChannelLabelSubDescriptor object by virtue of parsing the MXF file bitstream

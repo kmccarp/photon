@@ -48,7 +48,7 @@ public class IMFUtils {
     /**
      * Private constructor to prevent instantiation
      */
-    private IMFUtils(){
+    private IMFUtils() {
 
     }
 
@@ -57,7 +57,7 @@ public class IMFUtils {
      * @return the constructed XMLGregorianCalendar
      */
     @Nullable
-    public static XMLGregorianCalendar createXMLGregorianCalendar(){
+    public static XMLGregorianCalendar createXMLGregorianCalendar() {
         XMLGregorianCalendar result = null;
         try {
             DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
@@ -65,7 +65,7 @@ public class IMFUtils {
             GregorianCalendar now = new GregorianCalendar(utc);
             result = datatypeFactory.newXMLGregorianCalendar(now);
         }
-        catch (DatatypeConfigurationException e){
+        catch(DatatypeConfigurationException e) {
             throw new IMFException("Could not create a XMLGregorianCalendar instance");
         }
         return result;
@@ -75,13 +75,13 @@ public class IMFUtils {
      * A method that generates a CPL schema valid TimecodeStartAddress string
      * @return a string representing the time code start address compliant with its regex definition
      */
-    public static String generateTimecodeStartAddress(){
+    public static String generateTimecodeStartAddress() {
         String delimiter = ":";
         String timeCodeStartAddress = "00:00:00:00";
-        if(timeCodeStartAddress.matches("[0-2][0-9](:|/|;|,|\\.|\\+|\\-)[0-5][0-9](:|/|;|,|\\.|\\+|\\-)[0-5][0-9](:|/|;|,|\\.|\\+|\\-)[0-5][0-9]")){
+        if (timeCodeStartAddress.matches("[0-2][0-9](:|/|;|,|\\.|\\+|\\-)[0-5][0-9](:|/|;|,|\\.|\\+|\\-)[0-5][0-9](:|/|;|,|\\.|\\+|\\-)[0-5][0-9]")) {
             return timeCodeStartAddress;
         }
-        else{
+        else {
             throw new IMFException(String.format("Could not generate a valid TimecodeStartAddress based on input " +
                     "received"));
         }
@@ -95,8 +95,8 @@ public class IMFUtils {
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
     public static byte[] generateSHA1Hash(File file) throws IOException {
-            ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(file);
-            return IMFUtils.generateHash(resourceByteRangeProvider, "SHA-1");
+        ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(file);
+        return IMFUtils.generateHash(resourceByteRangeProvider, "SHA-1");
     }
 
     /**
@@ -126,7 +126,7 @@ public class IMFUtils {
      * @param bytes a byte[] that is to be Base64 encoded
      * @return a byte[] representing the Base64 encode of the input
      */
-    public static byte[] generateBase64Encode(byte[] bytes){
+    public static byte[] generateBase64Encode(byte[] bytes) {
         byte[] hashCopy = Arrays.copyOf(bytes, bytes.length);
         return Base64.getEncoder().encode(hashCopy);
     }
@@ -151,7 +151,7 @@ public class IMFUtils {
             while (rangeStart < resourceByteRangeProvider.getResourceSize()
                     && rangeEnd < resourceByteRangeProvider.getResourceSize()) {
                 byte[] dataBytes = resourceByteRangeProvider.getByteRangeAsBytes(rangeStart, rangeEnd);
-                nread = (int) (rangeEnd - rangeStart + 1);
+                nread = (int)(rangeEnd - rangeStart + 1);
                 md.update(dataBytes, 0, nread);
                 rangeStart = rangeEnd + 1;
                 rangeEnd = (rangeStart + 1023 > resourceByteRangeProvider.getResourceSize() - 1)
@@ -161,7 +161,7 @@ public class IMFUtils {
             byte[] mdbytes = md.digest();
             return Arrays.copyOf(mdbytes, mdbytes.length);
         }
-        catch (NoSuchAlgorithmException e){
+        catch(NoSuchAlgorithmException e) {
             throw new IMFException(e);
         }
     }
@@ -177,10 +177,10 @@ public class IMFUtils {
      */
     public static <T extends BaseResourceType> T safeCast(BaseResourceType baseResourceType, Class<T> cls) throws IMFException
     {
-        if(baseResourceType == null){
+        if (baseResourceType == null) {
             return null;
         }
-        if(!cls.isAssignableFrom(baseResourceType.getClass()))
+        if (!cls.isAssignableFrom(baseResourceType.getClass()))
         {
             throw new IMFException(String.format("Unable to cast from Box type %s to %s", baseResourceType.getClass()
                     .getName(), cls.getName()));
@@ -203,10 +203,10 @@ public class IMFUtils {
             imfcplSerializer.write(compositionPlaylistType, fileOutputStream, true);
             fileOutputStream.close();
         }
-        catch (FileNotFoundException e){
+        catch(FileNotFoundException e) {
             throw new IMFException(String.format("Error occurred while trying to serialize the CompositionPlaylistType, file %s not found", outputFile.getName()));
         }
-        catch(SAXException | JAXBException e ){
+        catch(SAXException | JAXBException e) {
             throw new IMFException(e);
         }
     }
@@ -215,7 +215,7 @@ public class IMFUtils {
         try {
             ApplicationComposition applicationComposition = com.netflix.imflibrary.st2067_2.ApplicationCompositionFactory.getApplicationComposition(cplFile, imfErrorLogger);
             return applicationComposition.getUUID();
-        } catch (IOException e) {
+        } catch(IOException e) {
             throw new IMFException(String.format("Error occurred while parsing CPL File %s", cplFile.toString()));
         }
     }

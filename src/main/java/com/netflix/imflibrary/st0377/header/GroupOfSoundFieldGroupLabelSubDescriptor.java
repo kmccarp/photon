@@ -60,7 +60,7 @@ public final class GroupOfSoundFieldGroupLabelSubDescriptor extends SubDescripto
      */
     public MXFUID getMCALinkId()
     {
-        if(this.groupOfSoundFieldGroupLabelSubDescriptorBO.mca_link_id == null) {
+        if (this.groupOfSoundFieldGroupLabelSubDescriptorBO.mca_link_id == null) {
             return null;
         }
         return new MXFUID(this.groupOfSoundFieldGroupLabelSubDescriptorBO.mca_link_id);
@@ -70,7 +70,7 @@ public final class GroupOfSoundFieldGroupLabelSubDescriptor extends SubDescripto
      * A getter for the spoken language in this SubDescriptor
      * @return string representing the spoken language as defined in RFC-5646
      */
-    public String getRFC5646SpokenLanguage(){
+    public String getRFC5646SpokenLanguage() {
         return this.groupOfSoundFieldGroupLabelSubDescriptorBO.rfc_5646_spoken_language;
     }
 

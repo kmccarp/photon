@@ -39,7 +39,7 @@ public class IABCompositionTest {
                 ("TestIMP/IAB/CPL/IAB_CPL_invalid_missing_audio.xml");
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         ApplicationCompositionFactory.getApplicationComposition(inputFile, imfErrorLogger);
-        Assert.assertEquals(imfErrorLogger.getErrors().size(),1);
+        Assert.assertEquals(imfErrorLogger.getErrors().size(), 1);
     }
 
     @Test
@@ -68,7 +68,7 @@ public class IABCompositionTest {
                 ("TestIMP/IAB/CPL/IAB_CPL_invalid_homogeneous.xml");
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         ApplicationCompositionFactory.getApplicationComposition(inputFile, imfErrorLogger);
-        Assert.assertEquals(imfErrorLogger.getErrors().size(),2);
+        Assert.assertEquals(imfErrorLogger.getErrors().size(), 2);
     }
 
     @Test

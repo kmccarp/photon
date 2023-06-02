@@ -30,24 +30,44 @@ public class Application2Composition extends AbstractApplicationComposition {
     public static final UL JPEG2000PICTURECODINGSCHEME = UL.fromULAsURNStringToUL("urn:smpte:ul:060e2b34.04010107.04010202.03010000");
     public static final Integer MAX_IMAGE_FRAME_WIDTH = 1920;
     public static final Integer MAX_IMAGE_FRAME_HEIGHT = 1080;
-    public static final Set<Fraction>progressiveSampleRateSupported = Collections.unmodifiableSet(new HashSet<Fraction>() {{
-        add(new Fraction(24)); add(new Fraction(25)); add(new Fraction(30)); add(new Fraction(50)); add(new Fraction(60));
-        add(new Fraction(24000, 1001)); add(new Fraction(30000, 1001)); add(new Fraction(60000, 1001)); }});
-    public static final Set<Fraction>interlaceSampleRateSupported = Collections.unmodifiableSet(new HashSet<Fraction>() {{
-        add(new Fraction(50)); add(new Fraction(60)); add(new Fraction(60000, 1001)); }});
-    public static final Set<Integer>bitDepthsSupported = Collections.unmodifiableSet(new HashSet<Integer>() {{
-        add(8); add(10); }});
-    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("SignalStandard");
-        add("ActiveFormatDescriptor");
-        add("VideoLineMap");
-        add("AlphaTransparency");
-        add("PixelLayout");
-        add("ActiveHeight");
-        add("ActiveWidth");
-        add("ActiveXOffset");
-        add("ActiveYOffset");
-    }});
+    public static final Set<Fraction>progressiveSampleRateSupported = Collections.unmodifiableSet(new HashSet<Fraction>() {
+        {
+            add(new Fraction(24));
+            add(new Fraction(25));
+            add(new Fraction(30));
+            add(new Fraction(50));
+            add(new Fraction(60));
+            add(new Fraction(24000, 1001));
+            add(new Fraction(30000, 1001));
+            add(new Fraction(60000, 1001));
+        }
+    });
+    public static final Set<Fraction>interlaceSampleRateSupported = Collections.unmodifiableSet(new HashSet<Fraction>() {
+        {
+            add(new Fraction(50));
+            add(new Fraction(60));
+            add(new Fraction(60000, 1001));
+        }
+    });
+    public static final Set<Integer>bitDepthsSupported = Collections.unmodifiableSet(new HashSet<Integer>() {
+        {
+            add(8);
+            add(10);
+        }
+    });
+    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("SignalStandard");
+            add("ActiveFormatDescriptor");
+            add("VideoLineMap");
+            add("AlphaTransparency");
+            add("PixelLayout");
+            add("ActiveHeight");
+            add("ActiveWidth");
+            add("ActiveXOffset");
+            add("ActiveYOffset");
+        }
+    });
 
     public Application2Composition(@Nonnull IMFCompositionPlaylistType imfCompositionPlaylistType) {
         this(imfCompositionPlaylistType, new HashSet<>());
@@ -70,7 +90,7 @@ public class Application2Composition extends AbstractApplicationComposition {
                         imfErrorLogger);
             }
         }
-        catch (Exception e) {
+        catch(Exception e) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Exception in validating EssenceDescriptors in APPLICATION_2_COMPOSITION_TYPE: %s ", e.getMessage()));
@@ -78,14 +98,14 @@ public class Application2Composition extends AbstractApplicationComposition {
     }
 
     public static void validateGenericPictureEssenceDescriptor(CompositionImageEssenceDescriptorModel imageEssenceDescriptorModel,
-                                                               ApplicationCompositionFactory.ApplicationCompositionType applicationCompositionType,
-                                                               IMFErrorLogger
-            imfErrorLogger)
+            ApplicationCompositionFactory.ApplicationCompositionType applicationCompositionType,
+            IMFErrorLogger
+                    imfErrorLogger)
     {
         UUID imageEssenceDescriptorID = imageEssenceDescriptorModel.getImageEssencedescriptorID();
 
         ColorModel colorModel = imageEssenceDescriptorModel.getColorModel();
-        if( colorModel.equals(ColorModel.Unknown)) {
+        if (colorModel.equals(ColorModel.Unknown)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has Invalid color components as per %s",
@@ -121,7 +141,7 @@ public class Application2Composition extends AbstractApplicationComposition {
                             applicationCompositionType.toString()));
         }
 
-        if( imageEssenceDescriptorModel.getStoredOffset() != null) {
+        if (imageEssenceDescriptorModel.getStoredOffset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s invalid StoredOffset as per %s",
@@ -129,7 +149,7 @@ public class Application2Composition extends AbstractApplicationComposition {
         }
 
         ColorPrimaries colorPrimaries = imageEssenceDescriptorModel.getColorPrimaries();
-        if(colorPrimaries.equals(ColorPrimaries.Unknown)) {
+        if (colorPrimaries.equals(ColorPrimaries.Unknown)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid ColorPrimaries as per %s",
@@ -137,7 +157,7 @@ public class Application2Composition extends AbstractApplicationComposition {
         }
 
         TransferCharacteristic transferCharacteristic = imageEssenceDescriptorModel.getTransferCharacteristic();
-        if(transferCharacteristic.equals(TransferCharacteristic.Unknown)) {
+        if (transferCharacteristic.equals(TransferCharacteristic.Unknown)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid TransferCharacteristic as per %s",
@@ -145,7 +165,7 @@ public class Application2Composition extends AbstractApplicationComposition {
         }
 
         CodingEquation codingEquation = imageEssenceDescriptorModel.getCodingEquation();
-        if(codingEquation.equals(CodingEquation.Unknown)) {
+        if (codingEquation.equals(CodingEquation.Unknown)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid CodingEquation as per %s",
@@ -153,7 +173,7 @@ public class Application2Composition extends AbstractApplicationComposition {
         }
 
         Colorimetry color = imageEssenceDescriptorModel.getColor();
-        if(color.equals(Colorimetry.Unknown)) {
+        if (color.equals(Colorimetry.Unknown)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid ColorPrimaries(%s)-TransferCharacteristic(%s)-CodingEquation(%s) combination as per %s",
@@ -162,7 +182,7 @@ public class Application2Composition extends AbstractApplicationComposition {
 
         FrameLayoutType frameLayoutType = imageEssenceDescriptorModel.getFrameLayoutType();
         UL essenceContainerFormatUL = imageEssenceDescriptorModel.getEssenceContainerFormatUL();
-        if(essenceContainerFormatUL != null) {
+        if (essenceContainerFormatUL != null) {
             JP2KContentKind contentKind = JP2KContentKind.valueOf(essenceContainerFormatUL.getULAsBytes()[14]);
             if ((frameLayoutType.equals(FrameLayoutType.FullFrame) && !contentKind.equals(JP2KContentKind.P1)) ||
                     (frameLayoutType.equals(FrameLayoutType.SeparateFields) && !contentKind.equals(JP2KContentKind.I1))) {
@@ -172,16 +192,16 @@ public class Application2Composition extends AbstractApplicationComposition {
                                 imageEssenceDescriptorID.toString(), contentKind, applicationCompositionType.toString()));
             }
         }
-   }
+    }
 
     public static void validateImageCharacteristics(CompositionImageEssenceDescriptorModel imageEssenceDescriptorModel,
-                                                    ApplicationCompositionFactory.ApplicationCompositionType applicationCompositionType,
-                                                    IMFErrorLogger imfErrorLogger)
+            ApplicationCompositionFactory.ApplicationCompositionType applicationCompositionType,
+            IMFErrorLogger imfErrorLogger)
     {
         UUID imageEssenceDescriptorID = imageEssenceDescriptorModel.getImageEssencedescriptorID();
 
         ColorModel colorModel = imageEssenceDescriptorModel.getColorModel();
-        if( !colorModel.equals(ColorModel.RGB) && !colorModel.equals(ColorModel.YUV)) {
+        if (!colorModel.equals(ColorModel.RGB) && !colorModel.equals(ColorModel.YUV)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has Invalid color components as per %s",
@@ -209,7 +229,7 @@ public class Application2Composition extends AbstractApplicationComposition {
 
         //PixelBitDepth
         Integer pixelBitDepth = imageEssenceDescriptorModel.getPixelBitDepth();
-        if( !(pixelBitDepth.equals(8) || pixelBitDepth.equals(10))) {
+        if (!(pixelBitDepth.equals(8) || pixelBitDepth.equals(10))) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s invalid PixelBitDepth(%d) as per %s",
@@ -245,7 +265,7 @@ public class Application2Composition extends AbstractApplicationComposition {
 
         //Sampling
         Sampling sampling = imageEssenceDescriptorModel.getSampling();
-        if(frameLayoutType.equals(FrameLayoutType.SeparateFields) && !sampling.equals(Sampling.Sampling422) ) {
+        if (frameLayoutType.equals(FrameLayoutType.SeparateFields) && !sampling.equals(Sampling.Sampling422)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid combination of FrameLayOut(%s) for Sampling(%s) as per %s",
@@ -255,7 +275,7 @@ public class Application2Composition extends AbstractApplicationComposition {
         //Quantization
         Quantization quantization = imageEssenceDescriptorModel.getQuantization();
         Colorimetry color = imageEssenceDescriptorModel.getColor();
-        if((sampling.equals(Sampling.Sampling422) &&
+        if ((sampling.equals(Sampling.Sampling422) &&
                 !(quantization.equals(Quantization.QE1) && colorModel.equals(ColorModel.YUV))) ||
                 (quantization.equals(Quantization.QE2) &&
                         !(colorModel.equals(ColorModel.RGB) && color.equals(Colorimetry.Color3)))) {
@@ -268,7 +288,7 @@ public class Application2Composition extends AbstractApplicationComposition {
         //Coding
         UL pictureEssenceCoding = imageEssenceDescriptorModel.getPictureEssenceCodingUL();
 
-        if(pictureEssenceCoding.equalsWithMask(JPEG2000PICTURECODINGSCHEME, 0b1111111011111100)) {
+        if (pictureEssenceCoding.equalsWithMask(JPEG2000PICTURECODINGSCHEME, 0b1111111011111100)) {
             boolean validProfile = false;
 
             if (pictureEssenceCoding.getByte(14) == 0x01) {
@@ -286,21 +306,22 @@ public class Application2Composition extends AbstractApplicationComposition {
                 }
             }
 
-            if (! validProfile) {
+            if (!validProfile) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
-                    IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
-                    String.format("Invalid JPEG 2000 profile: %s", pictureEssenceCoding.toString()
-                ));
+                        IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
+                        String.format("Invalid JPEG 2000 profile: %s", pictureEssenceCoding.toString()
+                        ));
             }
 
-        } else {
+        }
+        else {
 
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
-                IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
-                String.format("Image codec must be JPEG 2000. Found %s instead.", pictureEssenceCoding.toString()
-            ));
+                    IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
+                    String.format("Image codec must be JPEG 2000. Found %s instead.", pictureEssenceCoding.toString()
+                    ));
         }
-        
+
     }
 
     public ApplicationCompositionType getApplicationCompositionType() {

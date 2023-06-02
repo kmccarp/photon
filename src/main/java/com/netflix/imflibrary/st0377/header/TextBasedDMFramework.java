@@ -33,7 +33,8 @@ public class TextBasedDMFramework extends DMFramework {
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static class TextBasedDMFrameworkBO extends DMFrameworkBO {
 
-        @MXFProperty(size=16, depends=true) private final StrongRef text_based_object = null;
+        @MXFProperty(size = 16, depends = true)
+        private final StrongRef text_based_object = null;
         private final IMFErrorLogger imfErrorLogger;
 
         /**

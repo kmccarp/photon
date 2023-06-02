@@ -126,6 +126,7 @@ public final class SourcePackage extends GenericPackage
 
         return staticTracks;
     }
+
     /**
      * A method that returns a string representation of a Source Package object
      *
@@ -143,7 +144,8 @@ public final class SourcePackage extends GenericPackage
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class SourcePackageBO extends GenericPackageBO
     {
-        @MXFProperty(size=16, depends=true) private final StrongRef descriptor = null;
+        @MXFProperty(size = 16, depends = true)
+        private final StrongRef descriptor = null;
 
         /**
          * Instantiates a new parsed SourcePackage object by virtue of parsing the MXF file bitstream

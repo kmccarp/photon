@@ -41,7 +41,7 @@ public final class JPEG2000PictureSubDescriptor extends SubDescriptor {
      * Constructor for a JPEG2000PictureSubDescriptor object
      * @param subDescriptorBO the parsed JPEG2000PictureSubDescriptor object
      */
-    public JPEG2000PictureSubDescriptor(JPEG2000PictureSubDescriptorBO subDescriptorBO){
+    public JPEG2000PictureSubDescriptor(JPEG2000PictureSubDescriptorBO subDescriptorBO) {
         this.subDescriptorBO = subDescriptorBO;
     }
 
@@ -59,21 +59,35 @@ public final class JPEG2000PictureSubDescriptor extends SubDescriptor {
      * Object corresponding to a parsed JPEG2000PictureSubDescriptor as defined in st429-4-2006
      */
     @Immutable
-    public static final class JPEG2000PictureSubDescriptorBO extends SubDescriptorBO{
-        @MXFProperty(size=16) protected final byte[] generation_uid = null;
-        @MXFProperty(size=2) protected final Short rSiz = null;
-        @MXFProperty(size=4) protected final Integer xSiz = null;
-        @MXFProperty(size=4) protected final Integer ySiz = null;
-        @MXFProperty(size=4) protected final Integer xoSiz = null;
-        @MXFProperty(size=4) protected final Integer yoSiz = null;
-        @MXFProperty(size=4) protected final Integer xtSiz = null;
-        @MXFProperty(size=4) protected final Integer ytSiz = null;
-        @MXFProperty(size=4) protected final Integer xtoSiz = null;
-        @MXFProperty(size=4) protected final Integer ytoSiz = null;
-        @MXFProperty(size=2) protected final Short cSiz = null;
-        @MXFProperty(size=0, depends=true) private final CompoundDataTypes.MXFCollections.MXFCollection<JPEG2000PictureComponent.JPEG2000PictureComponentBO> picture_component_sizing = null;
-        @MXFProperty(size=0, depends=false) private final byte[] coding_style_default = null;
-        @MXFProperty(size=0, depends=false) private final byte[] quantisation_default = null;
+    public static final class JPEG2000PictureSubDescriptorBO extends SubDescriptorBO {
+        @MXFProperty(size = 16)
+        protected final byte[] generation_uid = null;
+        @MXFProperty(size = 2)
+        protected final Short rSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer xSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer ySiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer xoSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer yoSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer xtSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer ytSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer xtoSiz = null;
+        @MXFProperty(size = 4)
+        protected final Integer ytoSiz = null;
+        @MXFProperty(size = 2)
+        protected final Short cSiz = null;
+        @MXFProperty(size = 0, depends = true)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<JPEG2000PictureComponent.JPEG2000PictureComponentBO> picture_component_sizing = null;
+        @MXFProperty(size = 0, depends = false)
+        private final byte[] coding_style_default = null;
+        @MXFProperty(size = 0, depends = false)
+        private final byte[] quantisation_default = null;
 
         /**
          * Instantiates a new JPEG2000 picture sub descriptor ByteObject.
@@ -126,12 +140,12 @@ public final class JPEG2000PictureSubDescriptor extends SubDescriptor {
             sb.append(String.format("cSiz = %d", this.cSiz));
             sb.append(this.picture_component_sizing.toString());
             String codingStyleDefaultString = "";
-            for(byte b: coding_style_default){
+            for (byte b : coding_style_default) {
                 codingStyleDefaultString = codingStyleDefaultString.concat(String.format("%02x", b));
             }
             sb.append(String.format("coding_style_default = %s", codingStyleDefaultString));
             String quantisationDefaultString = "";
-            for(byte b: coding_style_default){
+            for (byte b : coding_style_default) {
                 quantisationDefaultString = quantisationDefaultString.concat(String.format("%02x", b));
             }
             sb.append(String.format("quantisation_default = %s", quantisationDefaultString));

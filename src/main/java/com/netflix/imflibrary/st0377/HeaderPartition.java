@@ -94,12 +94,12 @@ public final class HeaderPartition
         int numErrors = imfErrorLogger.getNumberOfErrors(); //Number of errors prior to parsing and reading the HeaderPartition
 
         //read partition pack
-        if(byteOffset != IMF_MXF_HEADER_PARTITION_OFFSET){
+        if (byteOffset != IMF_MXF_HEADER_PARTITION_OFFSET) {
             throw new MXFException(String.format("Expected the header partition to be at offset %d, whereas it is located at offset %d in the MXF file", IMF_MXF_HEADER_PARTITION_OFFSET, byteOffset));
         }
 
         this.partitionPack = new PartitionPack(byteProvider, IMF_MXF_HEADER_PARTITION_OFFSET, false, imfErrorLogger);
-        if(!this.partitionPack.isValidHeaderPartition())
+        if (!this.partitionPack.isValidHeaderPartition())
         {
             throw new MXFException("Found an invalid header partition");
         }
@@ -149,18 +149,18 @@ public final class HeaderPartition
             if (StructuralMetadata.isStructuralMetadata(Arrays.copyOf(header.getKey(), header.getKey().length)) || StructuralMetadata.isDescriptiveMetadata(Arrays.copyOf(header.getKey(), header.getKey().length)))
             {
                 Class clazz = StructuralMetadata.getStructuralMetadataSetClass(key);
-                if(!clazz.getSimpleName().equals(Object.class.getSimpleName())){
+                if (!clazz.getSimpleName().equals(Object.class.getSimpleName())) {
                     //logger.info(String.format("KLV item with key = %s corresponds to class %s", new MXFUID(header.getKey()), clazz.getSimpleName()));
                     InterchangeObject.InterchangeObjectBO interchangeObjectBO = this.constructInterchangeObjectBO(clazz, header, byteProvider, this.primerPack.getLocalTagEntryBatch().getLocalTagToUIDMap(), imfErrorLogger);
                     List<InterchangeObject.InterchangeObjectBO> list = this.interchangeObjectBOsMap.get(interchangeObjectBO.getClass().getSimpleName());
-                    if(list == null){
+                    if (list == null) {
                         list = new ArrayList<>();
                         this.interchangeObjectBOsMap.put(interchangeObjectBO.getClass().getSimpleName(), list);
                     }
                     list.add(interchangeObjectBO);
                     uidToBOs.put(interchangeObjectBO.getInstanceUID(), interchangeObjectBO);
-                    if(interchangeObjectBO instanceof MaterialPackage.MaterialPackageBO
-                            || interchangeObjectBO instanceof SourcePackage.SourcePackageBO){
+                    if (interchangeObjectBO instanceof MaterialPackage.MaterialPackageBO
+                            || interchangeObjectBO instanceof SourcePackage.SourcePackageBO) {
                         GenericPackage.GenericPackageBO genericPackageBO = (GenericPackage.GenericPackageBO)interchangeObjectBO;
                         uidToBOs.put(genericPackageBO.getPackageUID(), genericPackageBO);
                     }
@@ -191,13 +191,13 @@ public final class HeaderPartition
         }
 
         if (imfErrorLogger.getNumberOfErrors() > numErrors)//Flag an exception if any errors were accumulated while parsing and reading the HeaderPartition
-        {
-            List<ErrorLogger.ErrorObject> errorObjectList = imfErrorLogger.getErrors();
-            for(int i=numErrors; i< errorObjectList.size(); i++) {
-                logger.error(errorObjectList.get(i).getErrorDescription());
+            {
+                List<ErrorLogger.ErrorObject> errorObjectList = imfErrorLogger.getErrors();
+                for (int i = numErrors; i < errorObjectList.size(); i++) {
+                    logger.error(errorObjectList.get(i).getErrorDescription());
+                }
+                throw new MXFException(String.format("%d errors encountered when reading header partition", imfErrorLogger.getNumberOfErrors() - numErrors));
             }
-            throw new MXFException(String.format("%d errors encountered when reading header partition", imfErrorLogger.getNumberOfErrors() - numErrors));
-        }
 
         Set<InterchangeObject.InterchangeObjectBO> parsedInterchangeObjectBOs = new LinkedHashSet<>();
         for (Map.Entry<MXFUID, InterchangeObject.InterchangeObjectBO> entry : uidToBOs.entrySet())
@@ -206,7 +206,7 @@ public final class HeaderPartition
         }
         Map<MXFUID, Node> instanceIDToNodes = new LinkedHashMap<>();
 
-        for(InterchangeObject.InterchangeObjectBO interchangeObjectBO : parsedInterchangeObjectBOs)
+        for (InterchangeObject.InterchangeObjectBO interchangeObjectBO : parsedInterchangeObjectBOs)
         {
             instanceIDToNodes.put(interchangeObjectBO.getInstanceUID(), new Node(interchangeObjectBO.getInstanceUID()));
         }
@@ -216,7 +216,7 @@ public final class HeaderPartition
             Node node = entry.getValue();
             InterchangeObject.InterchangeObjectBO interchangeObjectBO = uidToBOs.get(node.uid);
             List<MXFUID> dependentUIDs = MXFPropertyPopulator.getDependentUIDs(interchangeObjectBO);
-            for(MXFUID MXFUID : dependentUIDs)
+            for (MXFUID MXFUID : dependentUIDs)
             {
                 InterchangeObject.InterchangeObjectBO dependentInterchangeObjectBO = uidToBOs.get(MXFUID);
                 if (dependentInterchangeObjectBO != null)
@@ -231,17 +231,17 @@ public final class HeaderPartition
         List<Node> nodeList = new ArrayList<>(instanceIDToNodes.values());
         List<Node> resolvedList = resolve(nodeList);
 
-        for(Node node : resolvedList) {
+        for (Node node : resolvedList) {
             InterchangeObject.InterchangeObjectBO interchangeObjectBO = uidToBOs.get(node.uid);
             if (node.depends.size() == 0
                     && !interchangeObjectBO.getClass().equals(SourceClip.SourceClipBO.class)
                     && !interchangeObjectBO.getClass().equals(Sequence.SequenceBO.class)
-                    && !interchangeObjectBO.getClass().equals(TimedTextDescriptor.TimedTextDescriptorBO.class)){
+                    && !interchangeObjectBO.getClass().equals(TimedTextDescriptor.TimedTextDescriptorBO.class)) {
                 InterchangeObject interchangeObject = this.constructInterchangeObject(interchangeObjectBO.getClass().getEnclosingClass(), interchangeObjectBO, node);
                 this.cacheInterchangeObject(interchangeObject);
                 this.uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), interchangeObject);
                 if (interchangeObjectBO instanceof GenericPackage.GenericPackageBO) {
-                    this.uidToMetadataSets.put(((GenericPackage.GenericPackageBO) interchangeObjectBO).getPackageUID(), interchangeObject);
+                    this.uidToMetadataSets.put(((GenericPackage.GenericPackageBO)interchangeObjectBO).getPackageUID(), interchangeObject);
                 }
             }
             else {
@@ -250,158 +250,172 @@ public final class HeaderPartition
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof GenericPackage) {
-                            genericPackage = (GenericPackage) dependentInterchangeObject;
+                            genericPackage = (GenericPackage)dependentInterchangeObject;
                         }
                     }
-                    SourceClip sourceClip = new SourceClip((SourceClip.SourceClipBO) interchangeObjectBO, genericPackage);
+                    SourceClip sourceClip = new SourceClip((SourceClip.SourceClipBO)interchangeObjectBO, genericPackage);
                     this.cacheInterchangeObject(sourceClip);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), sourceClip);
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(Sequence.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(Sequence.class)) {
                     List<StructuralComponent> structuralComponents = new ArrayList<>();
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof StructuralComponent) {
-                            structuralComponents.add((StructuralComponent) dependentInterchangeObject);
+                            structuralComponents.add((StructuralComponent)dependentInterchangeObject);
                         }
                     }
-                    Sequence sequence = new Sequence((Sequence.SequenceBO) interchangeObjectBO, structuralComponents);
+                    Sequence sequence = new Sequence((Sequence.SequenceBO)interchangeObjectBO, structuralComponents);
                     this.cacheInterchangeObject(sequence);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), sequence);
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(TimelineTrack.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(TimelineTrack.class)) {
                     Sequence sequence = null;
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof Sequence) {
-                            sequence = (Sequence) dependentInterchangeObject;
+                            sequence = (Sequence)dependentInterchangeObject;
                         }
-                        TimelineTrack timelineTrack = new TimelineTrack((TimelineTrack.TimelineTrackBO) interchangeObjectBO, sequence);
+                        TimelineTrack timelineTrack = new TimelineTrack((TimelineTrack.TimelineTrackBO)interchangeObjectBO, sequence);
                         this.cacheInterchangeObject(timelineTrack);
                         uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), timelineTrack);
                     }
 
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(StaticTrack.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(StaticTrack.class)) {
                     Sequence sequence = null;
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof Sequence) {
-                            sequence = (Sequence) dependentInterchangeObject;
+                            sequence = (Sequence)dependentInterchangeObject;
                         }
-                        StaticTrack staticTrack = new StaticTrack((StaticTrack.StaticTrackBO) interchangeObjectBO, sequence);
+                        StaticTrack staticTrack = new StaticTrack((StaticTrack.StaticTrackBO)interchangeObjectBO, sequence);
                         this.cacheInterchangeObject(staticTrack);
                         uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), staticTrack);
                     }
 
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(SourcePackage.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(SourcePackage.class)) {
                     List<GenericTrack> genericTracks = new ArrayList<>();
                     GenericDescriptor genericDescriptor = null;
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof GenericTrack) {
-                            genericTracks.add((GenericTrack) dependentInterchangeObject);
-                        } else if (dependentInterchangeObject instanceof GenericDescriptor) {
-                            genericDescriptor = (GenericDescriptor) dependentInterchangeObject;
+                            genericTracks.add((GenericTrack)dependentInterchangeObject);
+                        }
+                        else if (dependentInterchangeObject instanceof GenericDescriptor) {
+                            genericDescriptor = (GenericDescriptor)dependentInterchangeObject;
                         }
                     }
-                    SourcePackage sourcePackage = new SourcePackage((SourcePackage.SourcePackageBO) interchangeObjectBO, genericTracks, genericDescriptor);
+                    SourcePackage sourcePackage = new SourcePackage((SourcePackage.SourcePackageBO)interchangeObjectBO, genericTracks, genericDescriptor);
                     this.cacheInterchangeObject(sourcePackage);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), sourcePackage);
-                    uidToMetadataSets.put(((SourcePackage.SourcePackageBO) interchangeObjectBO).getPackageUID(), sourcePackage);
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(MaterialPackage.class)) {
+                    uidToMetadataSets.put(((SourcePackage.SourcePackageBO)interchangeObjectBO).getPackageUID(), sourcePackage);
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(MaterialPackage.class)) {
                     List<GenericTrack> genericTracks = new ArrayList<>();
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof GenericTrack) {
-                            genericTracks.add((GenericTrack) dependentInterchangeObject);
+                            genericTracks.add((GenericTrack)dependentInterchangeObject);
                         }
                     }
-                    MaterialPackage materialPackage = new MaterialPackage((MaterialPackage.MaterialPackageBO) interchangeObjectBO, genericTracks);
+                    MaterialPackage materialPackage = new MaterialPackage((MaterialPackage.MaterialPackageBO)interchangeObjectBO, genericTracks);
                     this.cacheInterchangeObject(materialPackage);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), materialPackage);
-                    uidToMetadataSets.put(((MaterialPackage.MaterialPackageBO) interchangeObjectBO).getPackageUID(), materialPackage);
+                    uidToMetadataSets.put(((MaterialPackage.MaterialPackageBO)interchangeObjectBO).getPackageUID(), materialPackage);
 
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(EssenceContainerData.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(EssenceContainerData.class)) {
                     GenericPackage genericPackage = null;
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof GenericPackage) {
-                            genericPackage = (GenericPackage) dependentInterchangeObject;
+                            genericPackage = (GenericPackage)dependentInterchangeObject;
                         }
                     }
                     EssenceContainerData essenceContainerData = new EssenceContainerData(
-                            (EssenceContainerData.EssenceContainerDataBO) interchangeObjectBO, genericPackage);
+                            (EssenceContainerData.EssenceContainerDataBO)interchangeObjectBO, genericPackage);
                     this.cacheInterchangeObject(essenceContainerData);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), essenceContainerData);
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(ContentStorage.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(ContentStorage.class)) {
                     List<GenericPackage> genericPackageList = new ArrayList<>();
                     List<EssenceContainerData> essenceContainerDataList = new ArrayList<>();
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof GenericPackage) {
-                            genericPackageList.add((GenericPackage) dependentInterchangeObject);
-                        } else if (dependentInterchangeObject instanceof EssenceContainerData) {
-                            essenceContainerDataList.add((EssenceContainerData) dependentInterchangeObject);
+                            genericPackageList.add((GenericPackage)dependentInterchangeObject);
+                        }
+                        else if (dependentInterchangeObject instanceof EssenceContainerData) {
+                            essenceContainerDataList.add((EssenceContainerData)dependentInterchangeObject);
                         }
                     }
                     ContentStorage contentStorage = new ContentStorage(
-                            (ContentStorage.ContentStorageBO) interchangeObjectBO, genericPackageList, essenceContainerDataList);
+                            (ContentStorage.ContentStorageBO)interchangeObjectBO, genericPackageList, essenceContainerDataList);
                     this.cacheInterchangeObject(contentStorage);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), contentStorage);
 
-                } else if (interchangeObjectBO.getClass().getEnclosingClass().equals(Preface.class)) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(Preface.class)) {
                     GenericPackage genericPackage = null;
                     ContentStorage contentStorage = null;
                     for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         if (dependentInterchangeObject instanceof GenericPackage) {
-                            genericPackage = (GenericPackage) dependentInterchangeObject;
-                        } else if (dependentInterchangeObject instanceof ContentStorage) {
-                            contentStorage = (ContentStorage) dependentInterchangeObject;
+                            genericPackage = (GenericPackage)dependentInterchangeObject;
+                        }
+                        else if (dependentInterchangeObject instanceof ContentStorage) {
+                            contentStorage = (ContentStorage)dependentInterchangeObject;
                         }
                     }
-                    Preface preface = new Preface((Preface.PrefaceBO) interchangeObjectBO, genericPackage, contentStorage);
+                    Preface preface = new Preface((Preface.PrefaceBO)interchangeObjectBO, genericPackage, contentStorage);
                     this.cacheInterchangeObject(preface);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), preface);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(CDCIPictureEssenceDescriptor.class)){
-                    for(Node dependent : node.depends) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(CDCIPictureEssenceDescriptor.class)) {
+                    for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         /*Although we do retrieve the dependent SubDescriptor for this CDCIPictureEssenceDescriptor we do not really have a need for it,
                         * since it can always be retrieved using the strong reference present in the subDescriptors collection of the CDCIPictureEssenceDescriptor
                         * on the other hand passing a reference to the SubDescriptor to the constructor can be problematic since SubDescriptors are optional*/
                         JPEG2000PictureSubDescriptor jpeg2000PictureSubDescriptor = null;
-                        if(dependentInterchangeObject instanceof JPEG2000PictureSubDescriptor){
-                            jpeg2000PictureSubDescriptor = (JPEG2000PictureSubDescriptor) dependentInterchangeObject;
+                        if (dependentInterchangeObject instanceof JPEG2000PictureSubDescriptor) {
+                            jpeg2000PictureSubDescriptor = (JPEG2000PictureSubDescriptor)dependentInterchangeObject;
                         }
                         /*Add similar casting code for other sub descriptors when relevant*/
                     }
-                    CDCIPictureEssenceDescriptor cdciPictureEssenceDescriptor = new CDCIPictureEssenceDescriptor((CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO) interchangeObjectBO);
+                    CDCIPictureEssenceDescriptor cdciPictureEssenceDescriptor = new CDCIPictureEssenceDescriptor((CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO)interchangeObjectBO);
                     this.cacheInterchangeObject(cdciPictureEssenceDescriptor);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), cdciPictureEssenceDescriptor);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(RGBAPictureEssenceDescriptor.class)){
-                    for(Node dependent : node.depends) {
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(RGBAPictureEssenceDescriptor.class)) {
+                    for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         /*Although we do retrieve the dependent SubDescriptor for this RGBAPictureEssenceDescriptor we do not really have a need for it,
                         * since it can always be retrieved using the strong reference present in the subDescriptors collection of the RGBAPictureEssenceDescriptor
                         * on the other hand passing a reference to the SubDescriptor to the constructor can be problematic since SubDescriptors are optional*/
                         JPEG2000PictureSubDescriptor jpeg2000PictureSubDescriptor = null;
-                        if(dependentInterchangeObject instanceof JPEG2000PictureSubDescriptor){
-                            jpeg2000PictureSubDescriptor = (JPEG2000PictureSubDescriptor) dependentInterchangeObject;
+                        if (dependentInterchangeObject instanceof JPEG2000PictureSubDescriptor) {
+                            jpeg2000PictureSubDescriptor = (JPEG2000PictureSubDescriptor)dependentInterchangeObject;
                         }
                         ACESPictureSubDescriptor acesPictureSubDescriptor = null;
-                        if(dependentInterchangeObject instanceof ACESPictureSubDescriptor){
-                            acesPictureSubDescriptor = (ACESPictureSubDescriptor) dependentInterchangeObject;
+                        if (dependentInterchangeObject instanceof ACESPictureSubDescriptor) {
+                            acesPictureSubDescriptor = (ACESPictureSubDescriptor)dependentInterchangeObject;
                         }
                         TargetFrameSubDescriptor targetFrameSubDescriptor = null;
-                        if(dependentInterchangeObject instanceof TargetFrameSubDescriptor){
-                            targetFrameSubDescriptor = (TargetFrameSubDescriptor) dependentInterchangeObject;
+                        if (dependentInterchangeObject instanceof TargetFrameSubDescriptor) {
+                            targetFrameSubDescriptor = (TargetFrameSubDescriptor)dependentInterchangeObject;
                         }
                         /*Add similar casting code for other sub descriptors when relevant*/
                     }
-                    RGBAPictureEssenceDescriptor rgbaPictureEssenceDescriptor = new RGBAPictureEssenceDescriptor((RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO) interchangeObjectBO);
+                    RGBAPictureEssenceDescriptor rgbaPictureEssenceDescriptor = new RGBAPictureEssenceDescriptor((RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO)interchangeObjectBO);
                     this.cacheInterchangeObject(rgbaPictureEssenceDescriptor);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), rgbaPictureEssenceDescriptor);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(WaveAudioEssenceDescriptor.class)){
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(WaveAudioEssenceDescriptor.class)) {
                     List<InterchangeObject> subDescriptors = new ArrayList<InterchangeObject>();
-                    for(Node dependent : node.depends) {
+                    for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
                         /*
                          * Although we do retrieve the dependent SubDescriptors for this WaveAudioEssenceDescriptor we do not really have a need for it,
@@ -411,57 +425,61 @@ public final class HeaderPartition
                          */
                         AudioChannelLabelSubDescriptor audioChannelLabelSubDescriptor = null;
                         SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = null;
-                        if(dependentInterchangeObject instanceof AudioChannelLabelSubDescriptor){
-                            audioChannelLabelSubDescriptor = (AudioChannelLabelSubDescriptor) dependentInterchangeObject;
+                        if (dependentInterchangeObject instanceof AudioChannelLabelSubDescriptor) {
+                            audioChannelLabelSubDescriptor = (AudioChannelLabelSubDescriptor)dependentInterchangeObject;
                             subDescriptors.add(audioChannelLabelSubDescriptor);
                         }
-                        else if (dependentInterchangeObject instanceof SoundFieldGroupLabelSubDescriptor){
-                            soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor) dependentInterchangeObject;
+                        else if (dependentInterchangeObject instanceof SoundFieldGroupLabelSubDescriptor) {
+                            soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor)dependentInterchangeObject;
                             subDescriptors.add(soundFieldGroupLabelSubDescriptor);
                         }
                     }
-                    if(node.depends.size() > 0
-                        && subDescriptors.size() == 0){
+                    if (node.depends.size() > 0
+                            && subDescriptors.size() == 0) {
                         throw new MXFException(String.format("The WaveAudioEssenceDescriptor in the essence has dependencies, but neither of them is a AudioChannelLabelSubDescriptor nor SoundFieldGroupLabelSubDescriptor"));
                     }
-                    WaveAudioEssenceDescriptor waveAudioEssenceDescriptor = new WaveAudioEssenceDescriptor((WaveAudioEssenceDescriptor.WaveAudioEssenceDescriptorBO) interchangeObjectBO);
+                    WaveAudioEssenceDescriptor waveAudioEssenceDescriptor = new WaveAudioEssenceDescriptor((WaveAudioEssenceDescriptor.WaveAudioEssenceDescriptorBO)interchangeObjectBO);
                     this.cacheInterchangeObject(waveAudioEssenceDescriptor);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), waveAudioEssenceDescriptor);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(IABEssenceDescriptor.class)){
-                    IABEssenceDescriptor iabEssenceDescriptor = new IABEssenceDescriptor((IABEssenceDescriptor.IABEssenceDescriptorBO) interchangeObjectBO);
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(IABEssenceDescriptor.class)) {
+                    IABEssenceDescriptor iabEssenceDescriptor = new IABEssenceDescriptor((IABEssenceDescriptor.IABEssenceDescriptorBO)interchangeObjectBO);
                     this.cacheInterchangeObject(iabEssenceDescriptor);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), iabEssenceDescriptor);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(TimedTextDescriptor.class)){
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(TimedTextDescriptor.class)) {
                     List<TimeTextResourceSubDescriptor> subDescriptorList = new ArrayList<>();
-                    for(Node dependent : node.depends) {
+                    for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
-                        if(dependentInterchangeObject instanceof TimeTextResourceSubDescriptor) {
+                        if (dependentInterchangeObject instanceof TimeTextResourceSubDescriptor) {
                             subDescriptorList.add((TimeTextResourceSubDescriptor)dependentInterchangeObject);
                         }
                     }
-                    TimedTextDescriptor timedTextDescriptor = new TimedTextDescriptor((TimedTextDescriptor.TimedTextDescriptorBO) interchangeObjectBO, subDescriptorList);
+                    TimedTextDescriptor timedTextDescriptor = new TimedTextDescriptor((TimedTextDescriptor.TimedTextDescriptorBO)interchangeObjectBO, subDescriptorList);
                     this.cacheInterchangeObject(timedTextDescriptor);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), timedTextDescriptor);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(TextBasedDMFramework.class)){
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(TextBasedDMFramework.class)) {
                     TextBasedObject textBasedObject = null;
-                    for(Node dependent : node.depends) {
+                    for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
-                        if(dependentInterchangeObject instanceof TextBasedObject) {
+                        if (dependentInterchangeObject instanceof TextBasedObject) {
                             textBasedObject = (TextBasedObject)dependentInterchangeObject;
                         }
                     }
-                    TextBasedDMFramework textBasedDMFramework = new TextBasedDMFramework((TextBasedDMFramework.TextBasedDMFrameworkBO) interchangeObjectBO, textBasedObject);
+                    TextBasedDMFramework textBasedDMFramework = new TextBasedDMFramework((TextBasedDMFramework.TextBasedDMFrameworkBO)interchangeObjectBO, textBasedObject);
                     this.cacheInterchangeObject(textBasedDMFramework);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), textBasedDMFramework);
-                } else if(interchangeObjectBO.getClass().getEnclosingClass().equals(DescriptiveMarkerSegment.class)){
+                }
+                else if (interchangeObjectBO.getClass().getEnclosingClass().equals(DescriptiveMarkerSegment.class)) {
                     DMFramework dmFramework = null;
-                    for(Node dependent : node.depends) {
+                    for (Node dependent : node.depends) {
                         InterchangeObject dependentInterchangeObject = uidToMetadataSets.get(dependent.uid);
-                        if(dependentInterchangeObject instanceof TextBasedDMFramework) {
+                        if (dependentInterchangeObject instanceof TextBasedDMFramework) {
                             dmFramework = (TextBasedDMFramework)dependentInterchangeObject;
                         }
                     }
-                    DescriptiveMarkerSegment descriptiveMarkerSegment = new DescriptiveMarkerSegment((DescriptiveMarkerSegment.DescriptiveMarkerSegmentBO) interchangeObjectBO, dmFramework);
+                    DescriptiveMarkerSegment descriptiveMarkerSegment = new DescriptiveMarkerSegment((DescriptiveMarkerSegment.DescriptiveMarkerSegmentBO)interchangeObjectBO, dmFramework);
                     this.cacheInterchangeObject(descriptiveMarkerSegment);
                     uidToMetadataSets.put(interchangeObjectBO.getInstanceUID(), descriptiveMarkerSegment);
                 }
@@ -474,7 +492,7 @@ public final class HeaderPartition
      * A factory method to reflectively construct InterchangeObjectBO types by classname and argument list
      * @return the constructed InterchangeBO
      */
-    private InterchangeObject.InterchangeObjectBO constructInterchangeObjectBO(Class clazz, KLVPacket.Header header, ByteProvider byteProvider, Map localTagToUIDMap, IMFErrorLogger imfErrorLogger) throws IOException{
+    private InterchangeObject.InterchangeObjectBO constructInterchangeObjectBO(Class clazz, KLVPacket.Header header, ByteProvider byteProvider, Map localTagToUIDMap, IMFErrorLogger imfErrorLogger) throws IOException {
         try {
 
             Constructor<?> constructor = clazz.getConstructor(KLVPacket.Header.class, ByteProvider.class, Map.class, IMFErrorLogger.class);
@@ -483,7 +501,7 @@ public final class HeaderPartition
             logger.debug(String.format("Parsed and read %s metadata in the header partition.", simpleClassName.substring(0, simpleClassName.length() - 2)));
             return interchangeObjectBO;
         }
-        catch(NoSuchMethodException|IllegalAccessException|InstantiationException|InvocationTargetException e){
+        catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new IOException(String.format("No matching constructor for class %s", clazz.getSimpleName()));
         }
     }
@@ -492,14 +510,14 @@ public final class HeaderPartition
      * A factory method to reflectively construct InterchangeObject types by classname
      * @return the constructed InterchangeObject
      */
-    private InterchangeObject constructInterchangeObject(Class clazz, InterchangeObject.InterchangeObjectBO interchangeObjectBO, Node node) throws IOException{
+    private InterchangeObject constructInterchangeObject(Class clazz, InterchangeObject.InterchangeObjectBO interchangeObjectBO, Node node) throws IOException {
         try {
             Constructor<?> constructor = clazz.getConstructor(interchangeObjectBO.getClass());
             InterchangeObject interchangeObject = (InterchangeObject)constructor.newInstance(interchangeObjectBO);
             logger.debug(String.format("Constructing the object model for %s metadata in the header partition.", interchangeObject.getClass().getSimpleName()));
             return interchangeObject;
         }
-        catch(NoSuchMethodException|IllegalAccessException|InstantiationException|InvocationTargetException e){
+        catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new IOException(String.format("No matching constructor for class %s", clazz.getSimpleName()));
         }
     }
@@ -507,9 +525,9 @@ public final class HeaderPartition
     /**
      * A helper method to cache an InterchangeObject
      */
-    private void cacheInterchangeObject(InterchangeObject interchangeObject){
+    private void cacheInterchangeObject(InterchangeObject interchangeObject) {
         List<InterchangeObject> list = this.interchangeObjectsMap.get(interchangeObject.getClass().getSimpleName());
-        if(list == null){
+        if (list == null) {
             list = new ArrayList<InterchangeObject>();
             this.interchangeObjectsMap.put(interchangeObject.getClass().getSimpleName(), list);
         }
@@ -525,8 +543,8 @@ public final class HeaderPartition
     {
         List<InterchangeObject> list = this.interchangeObjectsMap.get(Preface.class.getSimpleName());
         Preface preface = null;
-        if(list != null) {
-            preface = (Preface) list.get(0);
+        if (list != null) {
+            preface = (Preface)list.get(0);
         }
         return preface;
     }
@@ -582,12 +600,12 @@ public final class HeaderPartition
      * the Source Packages in this header partition
      * @return list of EssenceDescriptor objects referenced by the Source Packages in this HeaderPartition
      */
-    public List<InterchangeObject.InterchangeObjectBO> getEssenceDescriptors(){
+    public List<InterchangeObject.InterchangeObjectBO> getEssenceDescriptors() {
         List<InterchangeObject.InterchangeObjectBO> sourcePackageBOs = this.interchangeObjectBOsMap.get(SourcePackage.SourcePackageBO.class.getSimpleName());
         List<InterchangeObject.InterchangeObjectBO> essenceDescriptors = new ArrayList<>();
-        for(int i=0; i<sourcePackageBOs.size(); i++){
-            SourcePackage.SourcePackageBO sourcePackageBO = (SourcePackage.SourcePackageBO) sourcePackageBOs.get(i);
-            if(uidToBOs.get(sourcePackageBO.getDescriptorUID()) != null) {
+        for (int i = 0; i < sourcePackageBOs.size(); i++) {
+            SourcePackage.SourcePackageBO sourcePackageBO = (SourcePackage.SourcePackageBO)sourcePackageBOs.get(i);
+            if (uidToBOs.get(sourcePackageBO.getDescriptorUID()) != null) {
                 essenceDescriptors.add(uidToBOs.get(sourcePackageBO.getDescriptorUID()));
             }
         }
@@ -599,17 +617,17 @@ public final class HeaderPartition
      * the source packages in this header partition
      * @return list of SubDescriptor objects referenced by the Source Packages in this HeaderPartition
      */
-    public List<InterchangeObject.InterchangeObjectBO> getSubDescriptors(){
+    public List<InterchangeObject.InterchangeObjectBO> getSubDescriptors() {
         List<InterchangeObject.InterchangeObjectBO> sourcePackageBOs = this.interchangeObjectBOsMap.get(SourcePackage.SourcePackageBO.class.getSimpleName());
         List<InterchangeObject.InterchangeObjectBO>subDescriptors = new ArrayList<>();
-        for(int i=0; i<sourcePackageBOs.size(); i++){
-            SourcePackage.SourcePackageBO sourcePackageBO = (SourcePackage.SourcePackageBO) sourcePackageBOs.get(i);
+        for (int i = 0; i < sourcePackageBOs.size(); i++) {
+            SourcePackage.SourcePackageBO sourcePackageBO = (SourcePackage.SourcePackageBO)sourcePackageBOs.get(i);
             GenericDescriptor.GenericDescriptorBO genericDescriptorBO = (GenericDescriptor.GenericDescriptorBO)uidToBOs.get(sourcePackageBO.getDescriptorUID());
             CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef> strongRefsCollection = genericDescriptorBO.getSubdescriptors();
-            if(strongRefsCollection != null) {
+            if (strongRefsCollection != null) {
                 List<InterchangeObject.InterchangeObjectBO.StrongRef> strongRefs = strongRefsCollection.getEntries();
                 for (InterchangeObject.InterchangeObjectBO.StrongRef strongRef : strongRefs) {
-                    if(uidToBOs.get(strongRef.getInstanceUID()) != null) {
+                    if (uidToBOs.get(strongRef.getInstanceUID()) != null) {
                         subDescriptors.add(uidToBOs.get(strongRef.getInstanceUID()));
                     }
                 }
@@ -624,7 +642,7 @@ public final class HeaderPartition
      * @param essenceDescriptor the essence descriptor whose referred subdescriptors are requested
      * @return list of SubDescriptor objects referenced by the Essence Descriptors in this HeaderPartition
      */
-    public List<InterchangeObject.InterchangeObjectBO> getSubDescriptors(InterchangeObject.InterchangeObjectBO essenceDescriptor){
+    public List<InterchangeObject.InterchangeObjectBO> getSubDescriptors(InterchangeObject.InterchangeObjectBO essenceDescriptor) {
         GenericDescriptor.GenericDescriptorBO genericDescriptorBO = (GenericDescriptor.GenericDescriptorBO)essenceDescriptor;
         return this.getSubDescriptors(genericDescriptorBO.getSubdescriptors());
     }
@@ -635,12 +653,12 @@ public final class HeaderPartition
      * @param strongRefCollection collection strong references corresponding to the SubDescriptors
      * @return list of SubDescriptors corresponding to the collection of strong references passed in
      */
-    List<InterchangeObject.InterchangeObjectBO> getSubDescriptors(CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef> strongRefCollection){
+    List<InterchangeObject.InterchangeObjectBO> getSubDescriptors(CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef> strongRefCollection) {
         List<InterchangeObject.InterchangeObjectBO>subDescriptors = new ArrayList<>();
-        if(strongRefCollection != null) { /*There might be essences that have no SubDescriptors*/
+        if (strongRefCollection != null) { /*There might be essences that have no SubDescriptors*/
             List<InterchangeObject.InterchangeObjectBO.StrongRef> strongRefList = strongRefCollection.getEntries();
             for (InterchangeObject.InterchangeObjectBO.StrongRef strongRef : strongRefList) {
-                if(uidToBOs.get(strongRef.getInstanceUID()) != null) {
+                if (uidToBOs.get(strongRef.getInstanceUID()) != null) {
                     subDescriptors.add(uidToBOs.get(strongRef.getInstanceUID()));
                 }
             }
@@ -653,7 +671,7 @@ public final class HeaderPartition
      * associated with this HeaderPartition object
      * @return the largest duration of all the Timeline tracks within the first Material Package associated with this Header partition
      */
-    public BigInteger getEssenceDuration(){
+    public BigInteger getEssenceDuration() {
         MaterialPackage materialPackage = (MaterialPackage)this.getMaterialPackages().get(0);
         Long maxDuration = 0L;
         for (TimelineTrack timelineTrack : materialPackage.getTimelineTracks())
@@ -661,18 +679,18 @@ public final class HeaderPartition
             Long duration = 0L;
             List<MXFUID> uids = timelineTrack.getSequence().getStructuralComponentInstanceUIDs();
             List<InterchangeObject.InterchangeObjectBO> structuralComponentBOs = new ArrayList<>();
-            for(MXFUID uid : uids){
-                if(this.uidToBOs.get(uid) != null){
+            for (MXFUID uid : uids) {
+                if (this.uidToBOs.get(uid) != null) {
                     structuralComponentBOs.add(this.uidToBOs.get(uid));
                 }
             }
 
-            for(InterchangeObject.InterchangeObjectBO interchangeObjectBO : structuralComponentBOs){
-                StructuralComponent.StructuralComponentBO structuralComponentBO = (StructuralComponent.StructuralComponentBO) interchangeObjectBO;
+            for (InterchangeObject.InterchangeObjectBO interchangeObjectBO : structuralComponentBOs) {
+                StructuralComponent.StructuralComponentBO structuralComponentBO = (StructuralComponent.StructuralComponentBO)interchangeObjectBO;
                 duration += structuralComponentBO.getDuration();
             }
 
-            if(duration > maxDuration){
+            if (duration > maxDuration) {
                 maxDuration = duration;
             }
         }
@@ -687,13 +705,14 @@ public final class HeaderPartition
     @Nullable
     public String getAudioEssenceSpokenLanguage() throws IOException {
         String rfc5646SpokenLanguage = null;
-        if(this.hasWaveAudioEssenceDescriptor()){
+        if (this.hasWaveAudioEssenceDescriptor()) {
             List<InterchangeObject> soundfieldGroupLabelSubDescriptors = this.getSoundFieldGroupLabelSubDescriptors();
             for (InterchangeObject subDescriptor : soundfieldGroupLabelSubDescriptors) {
-                SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor) subDescriptor;
+                SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor)subDescriptor;
                 if (rfc5646SpokenLanguage == null) {
                     rfc5646SpokenLanguage = soundFieldGroupLabelSubDescriptor.getRFC5646SpokenLanguage();
-                } else if (!rfc5646SpokenLanguage.equals(soundFieldGroupLabelSubDescriptor.getRFC5646SpokenLanguage())) {
+                }
+                else if (!rfc5646SpokenLanguage.equals(soundFieldGroupLabelSubDescriptor.getRFC5646SpokenLanguage())) {
                     this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, String.format("Language Codes (%s, %s) do not match across the SoundFieldGroupLabelSubDescriptors", rfc5646SpokenLanguage, soundFieldGroupLabelSubDescriptor.getRFC5646SpokenLanguage()));
                 }
             }
@@ -711,13 +730,15 @@ public final class HeaderPartition
                     throw new MXFException(String.format("Language Codes (%s, %s) do not match across SoundFieldGroupLabelSubdescriptors and AudioChannelLabelSubDescriptors", rfc5646SpokenLanguage, audioChannelLabelSubDescriptor.getRFC5646SpokenLanguage()));
                 }
             }*/
-        } else if (this.hasIABEssenceDescriptor()) {
+        }
+        else if (this.hasIABEssenceDescriptor()) {
             List<InterchangeObject> iabSoundFieldLabelSubDescriptors = this.getIABSoundFieldLabelSubDescriptors();
             for (InterchangeObject subDescriptor : iabSoundFieldLabelSubDescriptors) {
-                IABSoundfieldLabelSubDescriptor iabSoundfieldLabelSubDescriptor = (IABSoundfieldLabelSubDescriptor) subDescriptor;
+                IABSoundfieldLabelSubDescriptor iabSoundfieldLabelSubDescriptor = (IABSoundfieldLabelSubDescriptor)subDescriptor;
                 if (rfc5646SpokenLanguage == null) {
                     rfc5646SpokenLanguage = iabSoundfieldLabelSubDescriptor.getRFC5646SpokenLanguage();
-                } else if (!rfc5646SpokenLanguage.equals(iabSoundfieldLabelSubDescriptor.getRFC5646SpokenLanguage())) {
+                }
+                else if (!rfc5646SpokenLanguage.equals(iabSoundfieldLabelSubDescriptor.getRFC5646SpokenLanguage())) {
                     this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, String.format("Language Codes (%s, %s) do not match across the IABSoundFieldLabelSubDescriptors", rfc5646SpokenLanguage, iabSoundfieldLabelSubDescriptor.getRFC5646SpokenLanguage()));
                 }
             }
@@ -732,13 +753,14 @@ public final class HeaderPartition
      */
     public AudioContentKind getAudioContentKind() throws IOException {
         String audioContentKind = null;
-        if(this.hasWaveAudioEssenceDescriptor()){
+        if (this.hasWaveAudioEssenceDescriptor()) {
             List<InterchangeObject> soundfieldGroupLabelSubDescriptors = this.getSoundFieldGroupLabelSubDescriptors();
             for (InterchangeObject subDescriptor : soundfieldGroupLabelSubDescriptors) {
-                SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor) subDescriptor;
+                SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor)subDescriptor;
                 if (audioContentKind == null) {
                     audioContentKind = soundFieldGroupLabelSubDescriptor.getAudioContentKind();
-                } else if (!audioContentKind.equals(soundFieldGroupLabelSubDescriptor.getAudioContentKind())) {
+                }
+                else if (!audioContentKind.equals(soundFieldGroupLabelSubDescriptor.getAudioContentKind())) {
                     this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, String.format("AudioContentKind (%s, %s) do not match across the SoundFieldGroupLabelSubDescriptors", audioContentKind, soundFieldGroupLabelSubDescriptor.getAudioContentKind()));
                 }
             }
@@ -757,7 +779,7 @@ public final class HeaderPartition
         Map<Long, AudioChannelLabelSubDescriptor> audioChannelLabelSubDescriptorMap = new HashMap<>();
         subDescriptors.stream()
                 .map(e -> AudioChannelLabelSubDescriptor.class.cast(e))
-                .forEach(e -> audioChannelLabelSubDescriptorMap.put(e.getMCAChannelId() == null? Long.valueOf(1L) : e.getMCAChannelId(), e));
+                .forEach(e -> audioChannelLabelSubDescriptorMap.put(e.getMCAChannelId() == null ? Long.valueOf(1L) : e.getMCAChannelId(), e));
         return audioChannelLabelSubDescriptorMap;
     }
 
@@ -766,7 +788,7 @@ public final class HeaderPartition
      * @param structuralMetadataID identifier for the structural metadata set
      * @return the InterchangeObjectBO corresponding to the class name
      */
-    public List<InterchangeObject.InterchangeObjectBO> getStructuralMetadata(StructuralMetadataID structuralMetadataID){
+    public List<InterchangeObject.InterchangeObjectBO> getStructuralMetadata(StructuralMetadataID structuralMetadataID) {
         String key = structuralMetadataID.getName() + "BO";
         return this.interchangeObjectBOsMap.get(key);
     }
@@ -840,10 +862,10 @@ public final class HeaderPartition
      */
     public List<InterchangeObject> getAudioChannelLabelSubDescriptors()
     {
-        if(this.hasWaveAudioEssenceDescriptor()) {
+        if (this.hasWaveAudioEssenceDescriptor()) {
             return this.getInterchangeObjects(AudioChannelLabelSubDescriptor.class);
         }
-        else{
+        else {
             return new ArrayList<InterchangeObject>();
         }
     }
@@ -997,14 +1019,14 @@ public final class HeaderPartition
      * A method to verify the presence of an InterchangeObject
      * @boolean
      */
-    private boolean hasInterchangeObject(Class clazz){
+    private boolean hasInterchangeObject(Class clazz) {
         String simpleName = clazz.getSimpleName();
         return  (this.interchangeObjectsMap.containsKey(simpleName) && (this.interchangeObjectsMap.get(simpleName) != null && this.interchangeObjectsMap.get(simpleName).size() > 0));
     }
 
-    private List<InterchangeObject> getInterchangeObjects(Class clazz){
+    private List<InterchangeObject> getInterchangeObjects(Class clazz) {
         String simpleName = clazz.getSimpleName();
-        if(this.interchangeObjectsMap.get(simpleName) == null){
+        if (this.interchangeObjectsMap.get(simpleName) == null) {
             return Collections.unmodifiableList(new ArrayList<InterchangeObject>());
         }
         else {
@@ -1016,14 +1038,14 @@ public final class HeaderPartition
      * A method to verify the presence of an InterchangeObjectBO
      * @boolean
      */
-    private boolean hasInterchangeObjectBO(Class clazz){
+    private boolean hasInterchangeObjectBO(Class clazz) {
         String simpleName = clazz.getSimpleName();
         return  (this.interchangeObjectBOsMap.containsKey(simpleName) && (this.interchangeObjectBOsMap.get(simpleName) != null && this.interchangeObjectBOsMap.get(simpleName).size() > 0));
     }
 
-    private List<InterchangeObject.InterchangeObjectBO> getInterchangeObjectBOs(Class clazz){
+    private List<InterchangeObject.InterchangeObjectBO> getInterchangeObjectBOs(Class clazz) {
         String simpleName = clazz.getSimpleName();
-        if(this.interchangeObjectBOsMap.get(simpleName) == null){
+        if (this.interchangeObjectBOsMap.get(simpleName) == null) {
             return Collections.unmodifiableList(new ArrayList<InterchangeObject.InterchangeObjectBO>());
         }
         else {
@@ -1038,11 +1060,11 @@ public final class HeaderPartition
     public Colorimetry.CodingEquation getImageCodingEquation() {
         Colorimetry.CodingEquation codingEquation = Colorimetry.CodingEquation.Unknown;
         Class clazz = RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class;
-        if(hasCDCIPictureEssenceDescriptor()) {
+        if (hasCDCIPictureEssenceDescriptor()) {
             clazz = CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class;
         }
         List<InterchangeObject.InterchangeObjectBO> interchangeObjectBOList = this.getInterchangeObjectBOs(clazz);
-        if(interchangeObjectBOList.size() >0) {
+        if (interchangeObjectBOList.size() > 0) {
             GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO genericPictureEssenceDescriptorBO =
                     GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO.class.cast(interchangeObjectBOList.get(0));
             codingEquation = Colorimetry.CodingEquation.valueOf(genericPictureEssenceDescriptorBO.getCodingEquationsUL());
@@ -1057,11 +1079,11 @@ public final class HeaderPartition
     public Colorimetry.TransferCharacteristic getImageTransferCharacteristic() {
         Colorimetry.TransferCharacteristic transferCharacteristic = Colorimetry.TransferCharacteristic.Unknown;
         Class clazz = RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class;
-        if(hasCDCIPictureEssenceDescriptor()) {
+        if (hasCDCIPictureEssenceDescriptor()) {
             clazz = CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class;
         }
         List<InterchangeObject.InterchangeObjectBO> interchangeObjectBOList = this.getInterchangeObjectBOs(clazz);
-        if(interchangeObjectBOList.size() >0) {
+        if (interchangeObjectBOList.size() > 0) {
             GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO genericPictureEssenceDescriptorBO =
                     GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO.class.cast(interchangeObjectBOList.get(0));
             transferCharacteristic = Colorimetry.TransferCharacteristic.valueOf(genericPictureEssenceDescriptorBO.getTransferCharacteristicUL());
@@ -1076,11 +1098,11 @@ public final class HeaderPartition
     public Colorimetry.ColorPrimaries getImageColorPrimaries() {
         Colorimetry.ColorPrimaries colorPrimaries = Colorimetry.ColorPrimaries.Unknown;
         Class clazz = RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class;
-        if(hasCDCIPictureEssenceDescriptor()) {
+        if (hasCDCIPictureEssenceDescriptor()) {
             clazz = CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class;
         }
         List<InterchangeObject.InterchangeObjectBO> interchangeObjectBOList = this.getInterchangeObjectBOs(clazz);
-        if(interchangeObjectBOList.size() >0) {
+        if (interchangeObjectBOList.size() > 0) {
             GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO genericPictureEssenceDescriptorBO =
                     GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO.class.cast(interchangeObjectBOList.get(0));
             colorPrimaries = Colorimetry.ColorPrimaries.valueOf(genericPictureEssenceDescriptorBO.getColorPrimariesUL());
@@ -1095,12 +1117,13 @@ public final class HeaderPartition
     public Integer getImagePixelBitDepth() {
         Integer pixelBitDepth = 0;
 
-        if(hasCDCIPictureEssenceDescriptor()) {
+        if (hasCDCIPictureEssenceDescriptor()) {
             CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO cdciPictureEssenceDescriptorBO = CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class.cast(this.getInterchangeObjectBOs
                     (CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class).get(0));
             pixelBitDepth = Colorimetry.Quantization.componentRangeToBitDepth(cdciPictureEssenceDescriptorBO.getBlackRefLevel(),
                     cdciPictureEssenceDescriptorBO.getWhiteRefLevel());
-        } else if(hasRGBAPictureEssenceDescriptor()) {
+        }
+        else if (hasRGBAPictureEssenceDescriptor()) {
             RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO rgbaPictureEssenceDescriptorBO = RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class.cast(this
                     .getInterchangeObjectBOs
                             (RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class).get(0));
@@ -1119,19 +1142,20 @@ public final class HeaderPartition
         Integer pixelBitDepth = getImagePixelBitDepth();
         Long signalMin = null;
         Long signalMax = null;
-        if(hasCDCIPictureEssenceDescriptor()) {
+        if (hasCDCIPictureEssenceDescriptor()) {
             CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO cdciPictureEssenceDescriptorBO = CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class.cast(this.getInterchangeObjectBOs
                     (CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class).get(0));
             signalMin = cdciPictureEssenceDescriptorBO.getBlackRefLevel();
             signalMax = cdciPictureEssenceDescriptorBO.getWhiteRefLevel();
-        } else if(hasRGBAPictureEssenceDescriptor()) {
+        }
+        else if (hasRGBAPictureEssenceDescriptor()) {
             RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO rgbaPictureEssenceDescriptorBO = RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class.cast(this
                     .getInterchangeObjectBOs
-                    (RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class).get(0));
+                            (RGBAPictureEssenceDescriptor.RGBAPictureEssenceDescriptorBO.class).get(0));
             signalMin = rgbaPictureEssenceDescriptorBO.getComponentMinRef();
             signalMax = rgbaPictureEssenceDescriptorBO.getComponentMaxRef();
         }
-        if(pixelBitDepth != 0 && signalMax != null && signalMin != null) {
+        if (pixelBitDepth != 0 && signalMax != null && signalMin != null) {
             quantization = Colorimetry.Quantization.valueOf(pixelBitDepth, signalMin, signalMax);
         }
 
@@ -1143,10 +1167,10 @@ public final class HeaderPartition
      * @return Enum representing the color model
      */
     public Colorimetry.ColorModel getImageColorModel() {
-        if(hasCDCIPictureEssenceDescriptor()) {
+        if (hasCDCIPictureEssenceDescriptor()) {
             return Colorimetry.ColorModel.YUV;
         }
-        else if(hasRGBAPictureEssenceDescriptor()) {
+        else if (hasRGBAPictureEssenceDescriptor()) {
             return Colorimetry.ColorModel.RGB;
         }
         return Colorimetry.ColorModel.Unknown;
@@ -1159,14 +1183,15 @@ public final class HeaderPartition
     public Colorimetry.Sampling getImageSampling() {
         if (hasRGBAPictureEssenceDescriptor()) {
             return Colorimetry.Sampling.Sampling444;
-        } else if (hasCDCIPictureEssenceDescriptor()) {
+        }
+        else if (hasCDCIPictureEssenceDescriptor()) {
             Colorimetry.Sampling sampling = Colorimetry.Sampling.Unknown;
             CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO cdciPictureEssenceDescriptorBO = CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class.cast(this.getInterchangeObjectBOs
                     (CDCIPictureEssenceDescriptor.CDCIPictureEssenceDescriptorBO.class).get(0));
-            Long horizontalSubSampling   = cdciPictureEssenceDescriptorBO.getHorizontal_subsampling();
-            Long verticalSubSampling     = cdciPictureEssenceDescriptorBO.getVertical_subsampling();
+            Long horizontalSubSampling = cdciPictureEssenceDescriptorBO.getHorizontal_subsampling();
+            Long verticalSubSampling = cdciPictureEssenceDescriptorBO.getVertical_subsampling();
 
-            if( horizontalSubSampling != null && verticalSubSampling != null) {
+            if (horizontalSubSampling != null && verticalSubSampling != null) {
                 sampling = Colorimetry.Sampling.valueOf(horizontalSubSampling.intValue(), verticalSubSampling.intValue());
             }
             return sampling;
@@ -1193,13 +1218,13 @@ public final class HeaderPartition
         List<Node> sortedList = new LinkedList<>();
 
         Node node = getUnmarkedNode(adjacencyList);
-        while(node != null)
+        while (node != null)
         {
             visit(node, sortedList);
             node = getUnmarkedNode(adjacencyList);
         }
 
-         return sortedList;
+        return sortedList;
     }
 
     private static void visit(Node node, List<Node> sortedList)
@@ -1272,30 +1297,30 @@ public final class HeaderPartition
      */
     public List<EssenceTypeEnum> getEssenceTypes() {
         List<EssenceTypeEnum> essenceTypes = new ArrayList<>();
-        for(InterchangeObject.InterchangeObjectBO interchangeObjectBO : this.getEssenceDescriptors()){
-            if(interchangeObjectBO.getClass().getEnclosingClass().equals(WaveAudioEssenceDescriptor.class)){
+        for (InterchangeObject.InterchangeObjectBO interchangeObjectBO : this.getEssenceDescriptors()) {
+            if (interchangeObjectBO.getClass().getEnclosingClass().equals(WaveAudioEssenceDescriptor.class)) {
                 essenceTypes.add(EssenceTypeEnum.MainAudioEssence);
             }
-            if(interchangeObjectBO.getClass().getEnclosingClass().equals(IABEssenceDescriptor.class)){
+            if (interchangeObjectBO.getClass().getEnclosingClass().equals(IABEssenceDescriptor.class)) {
                 essenceTypes.add(EssenceTypeEnum.IABEssence);
             }
-            else if(interchangeObjectBO.getClass().getEnclosingClass().equals(CDCIPictureEssenceDescriptor.class)){
+            else if (interchangeObjectBO.getClass().getEnclosingClass().equals(CDCIPictureEssenceDescriptor.class)) {
                 essenceTypes.add(EssenceTypeEnum.MainImageEssence);
             }
-            else if(interchangeObjectBO.getClass().getEnclosingClass().equals(RGBAPictureEssenceDescriptor.class)){
+            else if (interchangeObjectBO.getClass().getEnclosingClass().equals(RGBAPictureEssenceDescriptor.class)) {
                 essenceTypes.add(EssenceTypeEnum.MainImageEssence);
             }
-            else if(interchangeObjectBO.getClass().getEnclosingClass().equals(TimedTextDescriptor.class)){
+            else if (interchangeObjectBO.getClass().getEnclosingClass().equals(TimedTextDescriptor.class)) {
                 essenceTypes.add(EssenceTypeEnum.SubtitlesEssence);
             }
         }
 
-        if (essenceTypes.size() == 0){
+        if (essenceTypes.size() == 0) {
             List<EssenceTypeEnum> essenceTypeList = new ArrayList<>();
             essenceTypeList.add(EssenceTypeEnum.UnsupportedEssence);
             return Collections.unmodifiableList(essenceTypeList);
         }
-        else{
+        else {
             return Collections.unmodifiableList(essenceTypes);
         }
     }
@@ -1390,7 +1415,7 @@ public final class HeaderPartition
             }
         }
 
-        public String toString(){
+        public String toString() {
             return this.name;
         }
     }
@@ -1424,12 +1449,12 @@ public final class HeaderPartition
          * Map.get(key) to access the value corresponding to a key in the map.
          */
         Set<Map.Entry<String, List<InterchangeObject>>> entrySet = this.interchangeObjectsMap.entrySet();
-        for(Map.Entry<String, List<InterchangeObject>> entry : entrySet){
-            if(entry.getKey().equals(ContentStorage.class.getSimpleName())){
+        for (Map.Entry<String, List<InterchangeObject>> entry : entrySet) {
+            if (entry.getKey().equals(ContentStorage.class.getSimpleName())) {
                 sb.append(this.interchangeObjectsMap.get(ContentStorage.class.getSimpleName()).get(0).toString());
             }
-            else if(!entry.getKey().equals(Preface.class.getSimpleName())){
-                for(InterchangeObject object : entry.getValue()){
+            else if (!entry.getKey().equals(Preface.class.getSimpleName())) {
+                for (InterchangeObject object : entry.getValue()) {
                     sb.append(object.toString());
                 }
             }
@@ -1477,15 +1502,15 @@ public final class HeaderPartition
      */
     public long getGenericStreamIdFromGenericStreamTextBaseSetDescription(@Nonnull String description) {
         long sid = -1;
-        for (SourcePackage sourcePackage: this.getPreface().getContentStorage().getSourcePackageList()) {
-            for (StaticTrack staticTrack: sourcePackage.getStaticTracks()) {
-                for (DescriptiveMarkerSegment segment: staticTrack.getSequence().getDescriptiveMarkerSegments()) {
+        for (SourcePackage sourcePackage : this.getPreface().getContentStorage().getSourcePackageList()) {
+            for (StaticTrack staticTrack : sourcePackage.getStaticTracks()) {
+                for (DescriptiveMarkerSegment segment : staticTrack.getSequence().getDescriptiveMarkerSegments()) {
                     DMFramework dmFramework = segment.getDmFramework();
                     if (dmFramework instanceof TextBasedDMFramework) {
-                        TextBasedObject textBasedObject =((TextBasedDMFramework) dmFramework).getTextBaseObject();
+                        TextBasedObject textBasedObject = ((TextBasedDMFramework)dmFramework).getTextBaseObject();
                         if (textBasedObject instanceof GenericStreamTextBasedSet) {
                             if (description.equals(textBasedObject.getDescription())) {
-                                sid = ((GenericStreamTextBasedSet) textBasedObject).getGenericStreamId();
+                                sid = ((GenericStreamTextBasedSet)textBasedObject).getGenericStreamId();
                                 break;
                             }
                         }

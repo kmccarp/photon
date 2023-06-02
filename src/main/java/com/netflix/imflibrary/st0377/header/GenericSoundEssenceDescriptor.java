@@ -27,7 +27,7 @@ import com.netflix.imflibrary.st0377.CompoundDataTypes;
 /**
  * Object model corresponding to GenericSoundEssenceDescriptor structural metadata set defined in st377-1:2011
  */
-public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
+public abstract class GenericSoundEssenceDescriptor extends FileDescriptor {
 
     public enum ElectroSpatialFormulation {
         TWO_CHANNEL_MODE_DEFAULT(0),
@@ -63,7 +63,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
     public int getAudioSamplingRateNumerator() throws MXFException
     {
         long value = this.genericSoundEssenceDescriptorBO.audio_sampling_rate.getNumerator();
-        if ((value <=0) || (value > Integer.MAX_VALUE))
+        if ((value <= 0) || (value > Integer.MAX_VALUE))
         {
             throw new MXFException(String.format("Observed audio sampling rate numerator = %d, which is not supported at this time", value));
         }
@@ -79,7 +79,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
     public int getAudioSamplingRateDenominator() throws MXFException
     {
         long value = this.genericSoundEssenceDescriptorBO.audio_sampling_rate.getDenominator();
-        if ((value <=0) || (value > Integer.MAX_VALUE))
+        if ((value <= 0) || (value > Integer.MAX_VALUE))
         {
             throw new MXFException(String.format("Observed audio sampling rate denominator = %d, which is not supported at this time", value));
         }
@@ -95,7 +95,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
     public int getChannelCount() throws MXFException
     {
         long value = this.genericSoundEssenceDescriptorBO.channelcount;
-        if ((value <0) || (value > Integer.MAX_VALUE))
+        if ((value < 0) || (value > Integer.MAX_VALUE))
         {
             throw new MXFException(String.format("Observed channel count = %d, which is not supported at this time", value));
         }
@@ -111,7 +111,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
     public int getQuantizationBits() throws MXFException
     {
         long value = this.genericSoundEssenceDescriptorBO.quantization_bits;
-        if ((value <=0) || (value > Integer.MAX_VALUE))
+        if ((value <= 0) || (value > Integer.MAX_VALUE))
         {
             throw new MXFException(String.format("Observed quantization bits = %d, which is not supported at this time", value));
         }
@@ -162,21 +162,29 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
      * Getter for the Essence Container UL of this FileDescriptor
      * @return a UL representing the Essence Container
      */
-    public UL getEssenceContainerUL(){
+    public UL getEssenceContainerUL() {
         return this.genericSoundEssenceDescriptorBO.getEssenceContainerUL();
     }
 
-    public static abstract class GenericSoundEssenceDescriptorBO extends FileDescriptorBO{
+    public static abstract class GenericSoundEssenceDescriptorBO extends FileDescriptorBO {
 
-        @MXFProperty(size=0) protected final CompoundDataTypes.Rational audio_sampling_rate = null;
-        @MXFProperty(size=4) protected final Long channelcount = null;
-        @MXFProperty(size=4) protected final Long quantization_bits = null;
-        @MXFProperty(size=16) protected final UL sound_essence_coding = null;
-        @MXFProperty(size=8) protected final CompoundDataTypes.Rational reference_image_edit_rate = null;
-        @MXFProperty(size=1) protected final Short reference_audio_alignment_level = null;
-        @MXFProperty(size=1) protected  final ElectroSpatialFormulation electro_spatial_formulation = null;
+        @MXFProperty(size = 0)
+        protected final CompoundDataTypes.Rational audio_sampling_rate = null;
+        @MXFProperty(size = 4)
+        protected final Long channelcount = null;
+        @MXFProperty(size = 4)
+        protected final Long quantization_bits = null;
+        @MXFProperty(size = 16)
+        protected final UL sound_essence_coding = null;
+        @MXFProperty(size = 8)
+        protected final CompoundDataTypes.Rational reference_image_edit_rate = null;
+        @MXFProperty(size = 1)
+        protected final Short reference_audio_alignment_level = null;
+        @MXFProperty(size = 1)
+        protected  final ElectroSpatialFormulation electro_spatial_formulation = null;
 
         private final IMFErrorLogger imfErrorLogger;
+
         /**
          * Constructor for a File descriptor ByteObject.
          *
@@ -218,7 +226,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
          * Accessor for the Essence Container UL of this FileDescriptor
          * @return a UL representing the Essence Container
          */
-        public UL getSoundEssenceCodingUL(){
+        public UL getSoundEssenceCodingUL() {
             return this.sound_essence_coding;
         }
 
@@ -227,7 +235,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
          * Accessor for the Essence Container UL of this FileDescriptor
          * @return a UL representing the Essence Container
          */
-        public ElectroSpatialFormulation getElectroSpatialFormulation(){
+        public ElectroSpatialFormulation getElectroSpatialFormulation() {
             return this.electro_spatial_formulation;
         }
 
@@ -236,7 +244,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
          * Accessor for the Reference Audio Alignment Level of this Generic Sound Essence Descriptor
          * @return a Short representing the Reference Audio Alignment Level of this Generic Sound Essence Descriptor
          */
-        public Short getReferenceAudioAlignmentLevel(){
+        public Short getReferenceAudioAlignmentLevel() {
             return this.reference_audio_alignment_level;
         }
 
@@ -245,7 +253,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
          * Accessor for the Reference Image Edit Rate for this Generic Sound Essence Descriptor
          * @return a Rational representing the Reference Image Edit Rate for this Generic Sound Essence Descriptor
          */
-        public CompoundDataTypes.Rational getReferenceImageEditRate(){
+        public CompoundDataTypes.Rational getReferenceImageEditRate() {
             return this.reference_image_edit_rate;
         }
 
@@ -258,7 +266,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
          * @return result of comparing this parsed GenericSoundEssenceDescriptorBO with the object that was passed in
          */
         public boolean equals(Object other) {
-            if(!(other instanceof GenericSoundEssenceDescriptorBO))
+            if (!(other instanceof GenericSoundEssenceDescriptorBO))
             {
                 return false;
             }
@@ -269,7 +277,7 @@ public abstract class GenericSoundEssenceDescriptor extends FileDescriptor{
                 return false;
             }
 
-            if ((this.channelcount== null) || (!this.channelcount.equals(otherObject.channelcount)))
+            if ((this.channelcount == null) || (!this.channelcount.equals(otherObject.channelcount)))
             {
                 return false;
             }

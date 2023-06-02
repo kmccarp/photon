@@ -34,17 +34,17 @@ public abstract class Macro {
     private final List<Sequence> outputs;
 
     public Macro(String name, String annotaion, Sequence input, Sequence output) {
-        this.name       = name;
-        this.annotaion  = annotaion;
-        this.inputs      = Collections.unmodifiableList(Arrays.asList(input));
-        this.outputs     = Collections.unmodifiableList(Arrays.asList(output));
+        this.name = name;
+        this.annotaion = annotaion;
+        this.inputs = Collections.unmodifiableList(Arrays.asList(input));
+        this.outputs = Collections.unmodifiableList(Arrays.asList(output));
     }
 
     public Macro(String name, String annotaion, List<Sequence> inputs, List<Sequence> outputs) {
-        this.name       = name;
-        this.annotaion  = annotaion;
-        this.inputs      = Collections.unmodifiableList(inputs);
-        this.outputs     = Collections.unmodifiableList(outputs);
+        this.name = name;
+        this.annotaion = annotaion;
+        this.inputs = Collections.unmodifiableList(inputs);
+        this.outputs = Collections.unmodifiableList(outputs);
     }
 
     public List<Sequence> getInputs() {

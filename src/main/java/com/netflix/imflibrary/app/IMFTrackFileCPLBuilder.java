@@ -165,14 +165,14 @@ public final class IMFTrackFileCPLBuilder {
         return outputFile;
     }
 
-    private ContentKindType buildContentKindType(String value, String scope){
+    private ContentKindType buildContentKindType(String value, String scope) {
         ContentKindType contentKindType = this.cplRoot.getContentKind();
         contentKindType.setValue(value);
         contentKindType.setScope(scope);
         return contentKindType;
     }
 
-    private void buildContentVersionList(){
+    private void buildContentVersionList() {
         /*Content Version List*/
         List<ContentVersionType> contentVersionTypeList = this.cplRoot.getContentVersionList().getContentVersion();
         ContentVersionType contentVersionType = new ContentVersionType();
@@ -187,16 +187,16 @@ public final class IMFTrackFileCPLBuilder {
         contentVersionTypeList.add(contentVersionType);
     }
 
-    private void buildExtensionProperties(){
+    private void buildExtensionProperties() {
         this.cplRoot.setExtensionProperties(null);
     }
 
-    private void buildEssenceDescriptorList(List<String> uuidList, IMFErrorLogger imfErrorLogger) throws IOException{
+    private void buildEssenceDescriptorList(List<String> uuidList, IMFErrorLogger imfErrorLogger) throws IOException {
 
         try {
             List<EssenceDescriptorBaseType> essenceDescriptorList = this.cplRoot.getEssenceDescriptorList().getEssenceDescriptor();
             List<InterchangeObject.InterchangeObjectBO> essenceDescriptors = this.imfTrackFileReader.getEssenceDescriptors(imfErrorLogger);
-            for(InterchangeObject.InterchangeObjectBO essenceDescriptor : essenceDescriptors) {
+            for (InterchangeObject.InterchangeObjectBO essenceDescriptor : essenceDescriptors) {
                 KLVPacket.Header essenceDescriptorHeader = essenceDescriptor.getHeader();
                 List<KLVPacket.Header> subDescriptorHeaders = this.imfTrackFileReader.getSubDescriptorKLVHeader(essenceDescriptor, imfErrorLogger);
                 /*Create a dom*/
@@ -216,14 +216,14 @@ public final class IMFTrackFileCPLBuilder {
                 essenceDescriptorList.add(essenceDescriptorBaseType);
             }
         }
-        catch(ParserConfigurationException e){
+        catch(ParserConfigurationException e) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors
                     .ErrorLevels.FATAL, e.getMessage());
             throw new IMFException(e);
         }
     }
 
-    private void buildCompositionTimeCode(){
+    private void buildCompositionTimeCode() {
         this.cplRoot.setCompositionTimecode(null);
     }
 
@@ -235,11 +235,11 @@ public final class IMFTrackFileCPLBuilder {
         compositionTimecodeType.setTimecodeStartAddress(IMFUtils.generateTimecodeStartAddress());
     }
 
-    private void buildLocaleList(){
+    private void buildLocaleList() {
         this.cplRoot.setLocaleList(null);
     }
 
-    private void buildSampleLocaleList(){
+    private void buildSampleLocaleList() {
         /*Following serves as SampleCode to getCompositionPlaylist a SampleLocaleList*/
         List<LocaleType> list = this.cplRoot.getLocaleList().getLocale();
         LocaleType localeType = new LocaleType();
@@ -283,16 +283,16 @@ public final class IMFTrackFileCPLBuilder {
         SequenceType sequenceType = this.buildSequenceType(uuidList, index, imfErrorLogger);
         ObjectFactory objectFactory = new ObjectFactory();
         JAXBElement<SequenceType> element = null;
-        if(this.imfTrackFileReader.getEssenceType(imfErrorLogger).equals(HeaderPartition.EssenceTypeEnum.MainImageEssence)){
+        if (this.imfTrackFileReader.getEssenceType(imfErrorLogger).equals(HeaderPartition.EssenceTypeEnum.MainImageEssence)) {
             element = objectFactory.createMainImageSequence(sequenceType);
         }
-        else if(this.imfTrackFileReader.getEssenceType(imfErrorLogger).equals(HeaderPartition.EssenceTypeEnum.MainAudioEssence)){
+        else if (this.imfTrackFileReader.getEssenceType(imfErrorLogger).equals(HeaderPartition.EssenceTypeEnum.MainAudioEssence)) {
             element = objectFactory.createMainAudioSequence(sequenceType);
         }
-        else{
+        else {
             String message = String.format("Currently only Audio/Image sequence types are supported");
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors
-                    .ErrorLevels.FATAL,
+                            .ErrorLevels.FATAL,
                     message);
             throw new IMFException(message, imfErrorLogger);
         }
@@ -347,10 +347,10 @@ public final class IMFTrackFileCPLBuilder {
         return resourceList;
     }
 
-    private void buildSignatureElements(){
-       /**
-        * For now set the signature related elements to null - TO DO populate accordingly
-        */
+    private void buildSignatureElements() {
+        /**
+         * For now set the signature related elements to null - TO DO populate accordingly
+         */
         this.cplRoot.setSigner(null);
         this.cplRoot.setSignature(null);
     }
@@ -403,7 +403,7 @@ public final class IMFTrackFileCPLBuilder {
         //DocumentFragment documentFragment = this.regXMLLibHelper.getDocumentFragment(essenceDescriptorTriplet, document);
         /*Get the Triplets corresponding to the SubDescriptors*/
         List<Triplet> subDescriptorTriplets = new ArrayList<>();
-        for(KLVPacket.Header subDescriptorHeader : subDescriptors){
+        for (KLVPacket.Header subDescriptorHeader : subDescriptors) {
             subDescriptorTriplets.add(this.regXMLLibHelper.getTripletFromKLVHeader(subDescriptorHeader, this.imfTrackFileReader.getByteProvider(subDescriptorHeader)));
         }
         return this.regXMLLibHelper.getEssenceDescriptorDocumentFragment(essenceDescriptorTriplet, subDescriptorTriplets, document, imfErrorLogger);
@@ -417,7 +417,7 @@ public final class IMFTrackFileCPLBuilder {
         return sb.toString();
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
         if (args.length != 2)
         {
@@ -426,7 +426,7 @@ public final class IMFTrackFileCPLBuilder {
         }
 
         File inputFile = new File(args[0]);
-        if(!inputFile.exists()){
+        if (!inputFile.exists()) {
             logger.error(String.format("File %s does not exist", inputFile.getAbsolutePath()));
             System.exit(-1);
         }
@@ -451,21 +451,21 @@ public final class IMFTrackFileCPLBuilder {
             throw new IMFException(e);
         }
         List<ErrorLogger.ErrorObject> errors = imfErrorLogger.getErrors();
-        if(errors.size() > 0){
+        if (errors.size() > 0) {
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("IMFTrackFile has %d errors and %d warnings",
                     errors.size() - warningCount, warningCount));
-            for(ErrorLogger.ErrorObject errorObject : errors){
-                if(errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+            for (ErrorLogger.ErrorObject errorObject : errors) {
+                if (errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.error(errorObject.toString());
                 }
-                else if(errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+                else if (errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.warn(errorObject.toString());
                 }
             }
         }
-        else{
+        else {
             logger.info(imfTrackFileReader.toString());
             logger.info("No errors were detected in the IMFTrackFile");
         }

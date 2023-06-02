@@ -52,7 +52,7 @@ public final class RegXMLLibDictionary {
      *
      * @throws IMFException - if any error occurs loading registers
      */
-    public RegXMLLibDictionary() throws IMFException{
+    public RegXMLLibDictionary() throws IMFException {
 
         try
         {
@@ -79,19 +79,19 @@ public final class RegXMLLibDictionary {
             if (handler.hasErrors()) {
                 handler.getErrors().stream()
                         .map(e -> new ErrorLogger.ErrorObject(
-                                IMFErrorLogger.IMFErrors.ErrorCodes.SMPTE_REGISTER_PARSING_ERROR,
-                                e.getValidationEventSeverity(),
-                                "Error code : " + e.getCode().name() + " - " + e.getErrorMessage())
+                                        IMFErrorLogger.IMFErrors.ErrorCodes.SMPTE_REGISTER_PARSING_ERROR,
+                                        e.getValidationEventSeverity(),
+                                        "Error code : " + e.getCode().name() + " - " + e.getErrorMessage())
                         )
                         .forEach(imfErrorLogger::addError);
 
-                if(imfErrorLogger.hasFatalErrors()) {
+                if (imfErrorLogger.hasFatalErrors()) {
                     throw new IMFException(handler.toString(), imfErrorLogger);
                 }
             }
             in.close();
         }
-        catch (Exception e){
+        catch(Exception e) {
             throw new IMFException(String.format("Unable to load resources corresponding to registers"));
         }
     }
@@ -113,7 +113,7 @@ public final class RegXMLLibDictionary {
     public String getSymbolNameFromURN(String URN) {
         DefinitionResolver definitionResolver = this.metaDictionaryCollection;
         Definition definition = definitionResolver.getDefinition(AUID.fromURN(URN));
-        return definition != null ? definition.getSymbol( ) : null;
+        return definition != null ? definition.getSymbol() : null;
     }
 
     /**
@@ -126,12 +126,13 @@ public final class RegXMLLibDictionary {
         Integer enumValue = null;
         DefinitionResolver definitionResolver = this.metaDictionaryCollection;
         Definition definition = definitionResolver.getDefinition(AUID.fromURN(typeURN));
-        if(definition == null ) {
+        if (definition == null) {
             return null;
-        } else if (definition instanceof EnumerationTypeDefinition) {
+        }
+        else if (definition instanceof EnumerationTypeDefinition) {
             EnumerationTypeDefinition enumerationTypeDefinition = EnumerationTypeDefinition.class.cast(definition);
             List<Integer> enumList = enumerationTypeDefinition.getElements().stream().filter(e -> e.getName().equals(name)).map(e -> e.getValue()).collect(Collectors.toList());
-            enumValue = (enumList.size() > 0)  ? enumList.get(0) : null;
+            enumValue = (enumList.size() > 0) ? enumList.get(0) : null;
         }
         return enumValue;
     }
@@ -146,12 +147,13 @@ public final class RegXMLLibDictionary {
         String fieldName = null;
         DefinitionResolver definitionResolver = this.metaDictionaryCollection;
         Definition definition = definitionResolver.getDefinition(AUID.fromURN(typeURN));
-        if(definition == null ) {
+        if (definition == null) {
             return null;
-        } else if (definition instanceof RecordTypeDefinition) {
+        }
+        else if (definition instanceof RecordTypeDefinition) {
             RecordTypeDefinition recordTypeDefinition = RecordTypeDefinition.class.cast(definition);
             List<String> enumList = recordTypeDefinition.getMembers().stream().filter(e -> e.getType().equals(AUID.fromURN(fieldURN))).map(e -> e.getName()).collect(Collectors.toList());
-            fieldName = (enumList.size() > 0)  ? enumList.get(0) : null;
+            fieldName = (enumList.size() > 0) ? enumList.get(0) : null;
         }
         return fieldName;
     }

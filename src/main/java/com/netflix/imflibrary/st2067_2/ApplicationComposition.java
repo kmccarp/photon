@@ -59,7 +59,7 @@ public interface ApplicationComposition {
      * @return value of Annotation child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getAnnotation();
 
     /**
@@ -68,7 +68,7 @@ public interface ApplicationComposition {
      * @return value of Issuer child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getIssuer();
 
     /**
@@ -77,7 +77,7 @@ public interface ApplicationComposition {
      * @return value of Creator child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getCreator();
 
     /**
@@ -86,7 +86,7 @@ public interface ApplicationComposition {
      * @return value of ContentOriginator child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getContentOriginator();
 
     /**
@@ -95,7 +95,7 @@ public interface ApplicationComposition {
      * @return value of ContentTitle child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getContentTitle();
 
     /**
@@ -118,7 +118,8 @@ public interface ApplicationComposition {
      * Getter for the Core Constraints schema URI.
      * @return URI for the Core Constraints schema
      */
-    @Nonnull public String getCoreConstraintsSchema();
+    @Nonnull
+    public String getCoreConstraintsSchema();
 
     /**
      * Getter for the essence VirtualTracks in this Composition
@@ -182,7 +183,8 @@ public interface ApplicationComposition {
      * @param  descriptorName EssenceDescriptor name
      * @return A list of DOMNodeObjectModels representing EssenceDescriptors with given name.
      */
-    @Nonnull List<DOMNodeObjectModel> getEssenceDescriptors(String descriptorName);
+    @Nonnull
+    List<DOMNodeObjectModel> getEssenceDescriptors(String descriptorName);
 
     /**
      * A utility method to retrieve the EssenceDescriptor within a Composition for a Resource with given track file ID.
@@ -190,7 +192,8 @@ public interface ApplicationComposition {
      * @param trackFileId the track file id of the resource
      * @return  the DOMNodeObjectModel representing the EssenceDescriptor
      */
-    @Nullable DOMNodeObjectModel getEssenceDescriptor(UUID trackFileId);
+    @Nullable
+    DOMNodeObjectModel getEssenceDescriptor(UUID trackFileId);
 
     public Map<Set<DOMNodeObjectModel>, ? extends Composition.VirtualTrack> getAudioVirtualTracksMap();
 
@@ -205,8 +208,8 @@ public interface ApplicationComposition {
      * @throws IOException        - any I/O related error is exposed through an IOException.
      */
     public List<ErrorLogger.ErrorObject> conformVirtualTracksInComposition(List<Composition.HeaderPartitionTuple>
-                                                                   headerPartitionTuples,
-                                                     boolean conformAllVirtualTracksInCpl) throws IOException;
+            headerPartitionTuples,
+            boolean conformAllVirtualTracksInCpl) throws IOException;
 
     /**
      * A method to get Application Composition type.
@@ -220,7 +223,8 @@ public interface ApplicationComposition {
      *
      * @return Application CompositionImageEssenceDescriptorModel
      */
-    @Nullable CompositionImageEssenceDescriptorModel getCompositionImageEssenceDescriptorModel();
+    @Nullable
+    CompositionImageEssenceDescriptorModel getCompositionImageEssenceDescriptorModel();
 
     /**
      * A method to get map of essence descriptor dom nodes

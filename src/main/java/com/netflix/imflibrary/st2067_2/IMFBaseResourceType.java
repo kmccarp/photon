@@ -37,11 +37,11 @@ public abstract class IMFBaseResourceType {
     protected final IMFErrorLoggerImpl imfErrorLogger;
 
     public IMFBaseResourceType(String id,
-                               List<Long> editRate,
-                               BigInteger intrinsicDuration,
-                               BigInteger entryPoint,
-                               BigInteger sourceDuration,
-                               BigInteger repeatCount)
+            List<Long> editRate,
+            BigInteger intrinsicDuration,
+            BigInteger entryPoint,
+            BigInteger sourceDuration,
+            BigInteger repeatCount)
     {
         imfErrorLogger = new IMFErrorLoggerImpl();
         this.id = id;
@@ -57,11 +57,11 @@ public abstract class IMFBaseResourceType {
 
         this.editRate = rate;
         this.intrinsicDuration = intrinsicDuration;
-        this.entryPoint = (entryPoint != null)? entryPoint: BigInteger.ZERO;
-        this.sourceDuration = (sourceDuration != null) ? sourceDuration: this.intrinsicDuration.subtract(this.entryPoint);
-        this.repeatCount = (repeatCount != null)? repeatCount: BigInteger.ONE;
+        this.entryPoint = (entryPoint != null) ? entryPoint : BigInteger.ZERO;
+        this.sourceDuration = (sourceDuration != null) ? sourceDuration : this.intrinsicDuration.subtract(this.entryPoint);
+        this.repeatCount = (repeatCount != null) ? repeatCount : BigInteger.ONE;
 
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             throw new IMFException("Failed to create IMFBaseResourceType", imfErrorLogger);
         }
@@ -72,7 +72,7 @@ public abstract class IMFBaseResourceType {
      * Getter for the Resource ID
      * @return a string representing the urn:uuid of the Resource
      */
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -80,7 +80,7 @@ public abstract class IMFBaseResourceType {
      * Getter for the EditRate of the Resource
      * @return a Composition.EditRate object of the Resource
      */
-    public Composition.EditRate getEditRate(){
+    public Composition.EditRate getEditRate() {
         return this.editRate;
     }
 
@@ -88,7 +88,7 @@ public abstract class IMFBaseResourceType {
      * Getter for the IntrinsicDuration of the Resource
      * @return a BigInteger representing the Resource's IntrinsicDuration
      */
-    public BigInteger getIntrinsicDuration(){
+    public BigInteger getIntrinsicDuration() {
         return this.intrinsicDuration;
     }
 
@@ -96,7 +96,7 @@ public abstract class IMFBaseResourceType {
      * Getter for the EntryPoint of the Resource
      * @return a BigInteger representing the Resource's EntryPoint
      */
-    public BigInteger getEntryPoint(){
+    public BigInteger getEntryPoint() {
         return this.entryPoint;
     }
 
@@ -104,7 +104,7 @@ public abstract class IMFBaseResourceType {
      * Getter for the SourceDuration of the Resource
      * @return a BigInteger representing the Resource's SourceDuration
      */
-    public BigInteger getSourceDuration(){
+    public BigInteger getSourceDuration() {
         return this.sourceDuration;
     }
 
@@ -112,7 +112,7 @@ public abstract class IMFBaseResourceType {
      * Getter for the RepeatCount of the Resource
      * @return a BigInteger representing the Resource's RepeatCount
      */
-    public BigInteger getRepeatCount(){
+    public BigInteger getRepeatCount() {
         return this.repeatCount;
     }
 
@@ -121,7 +121,7 @@ public abstract class IMFBaseResourceType {
      * @return a Long integer representing this Resource's duration on the timeline
      *          in units of the Resource Edit Rate
      */
-    public long getDuration(){
+    public long getDuration() {
         return this.getSourceDuration().longValue() * this.getRepeatCount().longValue();
     }
 
@@ -133,7 +133,7 @@ public abstract class IMFBaseResourceType {
      */
     public boolean equivalent(IMFBaseResourceType other)
     {
-        if(other == null){
+        if (other == null) {
             return false;
         }
         boolean result = true;

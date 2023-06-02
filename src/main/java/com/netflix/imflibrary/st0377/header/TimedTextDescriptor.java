@@ -72,7 +72,7 @@ public final class TimedTextDescriptor extends GenericDataEssenceDescriptor
      * @return a String representing the URI value which is the XML namespace name of the top-level
      * XML element in the essence data
      */
-    public String getNamespaceURI(){
+    public String getNamespaceURI() {
         return this.timedTextDescriptorBO.namespace_uri;
     }
 
@@ -80,7 +80,7 @@ public final class TimedTextDescriptor extends GenericDataEssenceDescriptor
      * Getter for the Essence Container UL of this FileDescriptor
      * @return a UL representing the Essence Container
      */
-    public UL getEssenceContainerUL(){
+    public UL getEssenceContainerUL() {
         return this.timedTextDescriptorBO.getEssenceContainerUL();
     }
 
@@ -101,10 +101,12 @@ public final class TimedTextDescriptor extends GenericDataEssenceDescriptor
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class TimedTextDescriptorBO extends FileDescriptorBO
     {
-        @MXFProperty(size=16) private final UL resource_id = null;
-        @MXFProperty(size=0, charset="UTF-16") private final String ucs_encoding = null;
-        @MXFProperty(size=0, charset="UTF-16") private final String namespace_uri = null;
-
+        @MXFProperty(size = 16)
+        private final UL resource_id = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        private final String ucs_encoding = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        private final String namespace_uri = null;
 
 
         /**

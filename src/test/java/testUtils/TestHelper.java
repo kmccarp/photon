@@ -51,7 +51,7 @@ public final class TestHelper
         byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 
         int numBytesRead = 0;
-        while((numBytesRead = inputStream.read(buffer)) != EOF)
+        while ((numBytesRead = inputStream.read(buffer)) != EOF)
         {
             baos.write(buffer, 0, numBytesRead);
         }

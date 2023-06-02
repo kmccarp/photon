@@ -9,6 +9,7 @@ import java.util.UUID;
 public final class UUIDHelper
 {
     private static final String UUID_as_a_URN_PREFIX = "urn:uuid:";
+
     private UUIDHelper()
     {
         //to prevent instantiation
@@ -41,7 +42,7 @@ public final class UUIDHelper
      * @param uuid the UUID type
      * @return a UUID with the "urn:uuid:" prefix as a String
      */
-    public static String fromUUID(UUID uuid){
+    public static String fromUUID(UUID uuid) {
         return "urn:uuid:" + uuid.toString();
     }
 }

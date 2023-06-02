@@ -48,7 +48,8 @@ public final class RandomIndexPack
     private final KLVPacket.Header header;
     private final Map<Long, List<Long>> partitionMap = new LinkedHashMap<Long, List<Long>>();
     private final List<Long> allPartitionByteOffsets = new ArrayList<Long>();
-    @MXFProperty(size=4) private final Long length = null;
+    @MXFProperty(size = 4)
+    private final Long length = null;
 
     /**
      * Instantiates a new Random index pack.
@@ -66,7 +67,7 @@ public final class RandomIndexPack
             throw new MXFException(String.format("Expected random index pack key = %s, found %s", Arrays.asList(RandomIndexPack.KEY), Arrays.asList(this.header.getKey())));
         }
 
-        if((fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize()) != this.header.getVSize())
+        if ((fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize()) != this.header.getVSize())
         {
             throw new MXFException(String.format("fullPackLength = %d is not consistent with length of length field = %d and length of value field = %d",
                     fullPackLength, this.header.getLSize(), this.header.getVSize()));
@@ -74,22 +75,22 @@ public final class RandomIndexPack
 
         //Get the bytestream size of a BodySIDByteOffsetPair 2-tuple
         Integer bodySIDByteOffsetPairSize = 0;
-        Field[] fields =  BodySIDByteOffsetPair.class.getDeclaredFields();
-        for(Field field : fields){
-            if(field.isAnnotationPresent(MXFProperty.class)){
+        Field[] fields = BodySIDByteOffsetPair.class.getDeclaredFields();
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(MXFProperty.class)) {
                 bodySIDByteOffsetPairSize += field.getAnnotation(MXFProperty.class).size();
             }
         }
 
-        if (((fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize() - RANDOM_INDEX_PACK_LENGTH_FIELD_SIZE)%bodySIDByteOffsetPairSize) != 0)
+        if (((fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize() - RANDOM_INDEX_PACK_LENGTH_FIELD_SIZE) % bodySIDByteOffsetPairSize) != 0)
         {
             throw new MXFException(String.format("Length of BodySIDByteOffsetPairs portion of RandomIndexPack = %d is not a multiple of %d",
                     fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize() - RANDOM_INDEX_PACK_LENGTH_FIELD_SIZE, bodySIDByteOffsetPairSize));
         }
 
-        long numBodySIDByteOffsetPairs = (fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize() - RANDOM_INDEX_PACK_LENGTH_FIELD_SIZE)/bodySIDByteOffsetPairSize;
+        long numBodySIDByteOffsetPairs = (fullPackLength - KLVPacket.KEY_FIELD_SIZE - this.header.getLSize() - RANDOM_INDEX_PACK_LENGTH_FIELD_SIZE) / bodySIDByteOffsetPairSize;
 
-        for (long i=0; i < numBodySIDByteOffsetPairs; i++)
+        for (long i = 0; i < numBodySIDByteOffsetPairs; i++)
         {
             BodySIDByteOffsetPair bodySIDByteOffsetPair = new BodySIDByteOffsetPair(byteProvider);
             List<Long> partitions = partitionMap.get(bodySIDByteOffsetPair.getBodySID());
@@ -157,10 +158,10 @@ public final class RandomIndexPack
          * Map.get(key) to access the value corresponding to a key in the map.
          */
         Set<Map.Entry<Long, List<Long>>> entrySet = this.partitionMap.entrySet();
-        for(Map.Entry<Long, List<Long>> entry : entrySet){
+        for (Map.Entry<Long, List<Long>> entry : entrySet) {
             sb.append(String.format("SID = %d%n", entry.getKey()));
             long number = 0;
-            for(long byteOffset : entry.getValue()){
+            for (long byteOffset : entry.getValue()) {
                 sb.append(String.format("%02d: byteOffset = %013d(0x%011x)%n", number++, byteOffset, byteOffset));
             }
         }
@@ -175,8 +176,10 @@ public final class RandomIndexPack
     @Immutable
     public static final class BodySIDByteOffsetPair
     {
-        @MXFProperty(size=4) private final Long bodySID = null;
-        @MXFProperty(size=8) private final Long byteOffset = null;
+        @MXFProperty(size = 4)
+        private final Long bodySID = null;
+        @MXFProperty(size = 8)
+        private final Long byteOffset = null;
 
         /**
          * Instantiates a new Body sID byte offset pair.

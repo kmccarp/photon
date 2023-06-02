@@ -31,7 +31,7 @@ final class IMFSegmentType {
     protected final List<IMFSequenceType> sequenceList;
 
     public IMFSegmentType(String id,
-                          List<IMFSequenceType> sequenceList){
+            List<IMFSequenceType> sequenceList) {
         this.id = id;
         this.sequenceList = Collections.unmodifiableList(sequenceList);
     }
@@ -40,7 +40,7 @@ final class IMFSegmentType {
      * Getter for the Segment ID
      * @return a string representing the urn:uuid of the segment
      */
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -48,7 +48,7 @@ final class IMFSegmentType {
      * Getter for the Sequence list
      * @return a list containing all the sequences of the Segment
      */
-    public List<IMFSequenceType> getSequenceList(){
+    public List<IMFSequenceType> getSequenceList() {
         return this.sequenceList;
     }
 

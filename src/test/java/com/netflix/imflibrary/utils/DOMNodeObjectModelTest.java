@@ -58,7 +58,7 @@ public class DOMNodeObjectModelTest {
                     subDescriptorHeaders.add(subDescriptorBO.getHeader());
                 }
             }
-                /*Create a dom*/
+            /*Create a dom*/
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
             Document document = docBuilder.newDocument();
@@ -96,7 +96,7 @@ public class DOMNodeObjectModelTest {
         ignoreSet.add("InstanceUID");
         DOMNodeObjectModel curr = domNodeObjectModels.get(0).createDOMNodeObjectModelIgnoreSet(domNodeObjectModels.get(0), ignoreSet);
         boolean result = true;
-        for(int i=1; i<domNodeObjectModels.size(); i++){
+        for (int i = 1; i < domNodeObjectModels.size(); i++) {
             result &= curr.equals(domNodeObjectModels.get(i).createDOMNodeObjectModelIgnoreSet(domNodeObjectModels.get(i), ignoreSet));
         }
         Assert.assertTrue(result == false);
@@ -114,7 +114,7 @@ public class DOMNodeObjectModelTest {
         ignoreSet.add("InstanceUID");
         DOMNodeObjectModel curr = domNodeObjectModels.get(0).createDOMNodeObjectModelIgnoreSet(domNodeObjectModels.get(0), ignoreSet);
         boolean result = true;
-        for(int i=1; i<domNodeObjectModels.size(); i++){
+        for (int i = 1; i < domNodeObjectModels.size(); i++) {
             result &= curr.equals(domNodeObjectModels.get(i).createDOMNodeObjectModelIgnoreSet(domNodeObjectModels.get(i), ignoreSet));
         }
         Assert.assertTrue(result == true);

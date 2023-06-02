@@ -35,15 +35,15 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
     private final String hashAlgorithm;
 
     public IMFTrackFileResourceType(String id,
-                                    String trackFileId,
-                                    List<Long> editRate,
-                                    BigInteger intrinsicDuration,
-                                    BigInteger entryPoint,
-                                    BigInteger sourceDuration,
-                                    BigInteger repeatCount,
-                                    String sourceEncoding,
-                                    byte[] hash,
-                                    String hashAlgorithm )
+            String trackFileId,
+            List<Long> editRate,
+            BigInteger intrinsicDuration,
+            BigInteger entryPoint,
+            BigInteger sourceDuration,
+            BigInteger repeatCount,
+            String sourceEncoding,
+            byte[] hash,
+            String hashAlgorithm)
     {
         super(id, editRate, intrinsicDuration, entryPoint, sourceDuration, repeatCount);
         this.trackFileId = trackFileId;
@@ -56,7 +56,7 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
      * Getter for the Track Resource's track file Id
      * @return a string representing the urn:uuid of the Track Resource's track file Id
      */
-    public String getTrackFileId(){
+    public String getTrackFileId() {
         return this.trackFileId;
     }
 
@@ -64,7 +64,7 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
      * Getter for the SourceEncoding of the Track's Resource
      * @return a String representing the Track Resource's SourceEncoding
      */
-    public String getSourceEncoding(){
+    public String getSourceEncoding() {
         return this.sourceEncoding;
     }
 
@@ -73,7 +73,7 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
      * @return a byte[] copy of the hash
      */
     @Nullable
-    public byte[] getHash(){
+    public byte[] getHash() {
         return (this.hash == null) ? null : Arrays.copyOf(this.hash, this.hash.length);
     }
 
@@ -82,7 +82,7 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
      * @return a String representing the HashAlgorithm
      */
     @Nullable
-    public String getHashAlgorithm(){
+    public String getHashAlgorithm() {
         return this.hashAlgorithm;
     }
 
@@ -95,7 +95,7 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
     @Override
     public boolean equivalent(IMFBaseResourceType other)
     {
-        if(other == null || !(other instanceof IMFTrackFileResourceType)){
+        if (other == null || !(other instanceof IMFTrackFileResourceType)) {
             return false;
         }
 
@@ -104,7 +104,7 @@ public final class IMFTrackFileResourceType extends IMFBaseResourceType {
         boolean result = true;
         //Compare the following fields of the track file resources that have to be equal
         //for the 2 resources to be considered equivalent/representing the same timeline.
-        result &= super.equivalent( otherTrackFileResource );
+        result &= super.equivalent(otherTrackFileResource);
         result &= trackFileId.equals(otherTrackFileResource.getTrackFileId());
 
         return  result;

@@ -145,7 +145,7 @@ public interface IMFErrorLogger extends ErrorLogger
 
             private final String error;
 
-            ErrorCodes(String error){
+            ErrorCodes(String error) {
                 this.error = error;
             }
 
@@ -153,7 +153,7 @@ public interface IMFErrorLogger extends ErrorLogger
              * A toString() method
              * @return string representation of this enumeration constant
              */
-            public String toString(){
+            public String toString() {
                 return this.error;
             }
 
@@ -180,7 +180,8 @@ public interface IMFErrorLogger extends ErrorLogger
             FATAL("FATAL");
 
             private final String errorLevel;
-            ErrorLevels(String errorLevel){
+
+            ErrorLevels(String errorLevel) {
                 this.errorLevel = errorLevel;
             }
 
@@ -188,7 +189,7 @@ public interface IMFErrorLogger extends ErrorLogger
              * A toString() method
              * @return string representation of this enumeration constant
              */
-            public String toString(){
+            public String toString() {
                 return this.errorLevel;
             }
         }

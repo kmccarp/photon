@@ -79,13 +79,13 @@ public class AssetMapBuilder {
      * @param imfErrorLogger a logger object to record errors that occur during the creation of the AssetMap document
      */
     public AssetMapBuilder(@Nonnull UUID uuid,
-                           @Nonnull org.smpte_ra.schemas._429_9._2007.am.UserText annotationText,
-                           @Nonnull org.smpte_ra.schemas._429_9._2007.am.UserText creator,
-                           @Nonnull XMLGregorianCalendar issueDate,
-                           @Nonnull org.smpte_ra.schemas._429_9._2007.am.UserText issuer,
-                           @Nonnull List<AssetMapBuilder.Asset> assets,
-                           @Nonnull File workingDirectory,
-                           @Nonnull IMFErrorLogger imfErrorLogger){
+            @Nonnull org.smpte_ra.schemas._429_9._2007.am.UserText annotationText,
+            @Nonnull org.smpte_ra.schemas._429_9._2007.am.UserText creator,
+            @Nonnull XMLGregorianCalendar issueDate,
+            @Nonnull org.smpte_ra.schemas._429_9._2007.am.UserText issuer,
+            @Nonnull List<AssetMapBuilder.Asset> assets,
+            @Nonnull File workingDirectory,
+            @Nonnull IMFErrorLogger imfErrorLogger) {
         this.uuid = uuid;
         this.annotationText = annotationText;
         this.creator = creator;
@@ -103,7 +103,7 @@ public class AssetMapBuilder {
      * @param language the language code of the annotation text
      * @return a UserTextType
      */
-    public static org.smpte_ra.schemas._429_9._2007.am.UserText buildAssetMapUserTextType_2007(String value, String language){
+    public static org.smpte_ra.schemas._429_9._2007.am.UserText buildAssetMapUserTextType_2007(String value, String language) {
         org.smpte_ra.schemas._429_9._2007.am.UserText userTextType = new org.smpte_ra.schemas._429_9._2007.am.UserText();
         userTextType.setValue(value);
         userTextType.setLanguage(language);
@@ -128,7 +128,7 @@ public class AssetMapBuilder {
          */
         org.smpte_ra.schemas._429_9._2007.am.AssetMapType.AssetList assetList = new org.smpte_ra.schemas._429_9._2007.am.AssetMapType.AssetList();
         List<org.smpte_ra.schemas._429_9._2007.am.AssetType> assetMapTypeAssets = assetList.getAsset();
-        for(AssetMapBuilder.Asset assetMapBuilderAsset : this.assets){
+        for (AssetMapBuilder.Asset assetMapBuilderAsset : this.assets) {
             org.smpte_ra.schemas._429_9._2007.am.AssetType assetType = new AssetType();
             assetType.setId(assetMapBuilderAsset.uuid);
             assetType.setPackingList(assetMapBuilderAsset.packingList);
@@ -136,7 +136,7 @@ public class AssetMapBuilder {
             assetType.setChunkList(chunkList);
             List<org.smpte_ra.schemas._429_9._2007.am.ChunkType> chunkTypes = chunkList.getChunk();
             List<AssetMapBuilder.Chunk> chunks = assetMapBuilderAsset.getChunks();
-            for(Chunk chunk : chunks){
+            for (Chunk chunk : chunks) {
                 org.smpte_ra.schemas._429_9._2007.am.ChunkType assetMapAssetChunk = new org.smpte_ra.schemas._429_9._2007.am.ChunkType();
                 assetMapAssetChunk.setPath(chunk.getPath());
                 assetMapAssetChunk.setVolumeIndex(chunk.getVolumeIndex());
@@ -159,7 +159,7 @@ public class AssetMapBuilder {
      * A thin Immutable class roughly modeling the Asset Type in an AssetMap
      */
     @Immutable
-    public static final class Asset{
+    public static final class Asset {
         private final String uuid;
         private final org.smpte_ra.schemas._429_9._2007.am.UserText annotationText;
         private final boolean packingList;
@@ -173,9 +173,9 @@ public class AssetMapBuilder {
          * @param chunks a list of AssetMapBuilder.Chunk type roughly modeling an AssetMap Asset's chunk
          */
         public Asset(UUID uuid,
-                     org.smpte_ra.schemas._429_9._2007.am.UserText annotationText,
-                     boolean packingList,
-                     List<Chunk> chunks){
+                org.smpte_ra.schemas._429_9._2007.am.UserText annotationText,
+                boolean packingList,
+                List<Chunk> chunks) {
             this.uuid = UUIDHelper.fromUUID(uuid);
             this.annotationText = annotationText;
             this.packingList = packingList;
@@ -186,7 +186,7 @@ public class AssetMapBuilder {
          * Getter for the urn:uuid: that uniquely identifies this asset
          * @return a "urn:uuid:" string
          */
-        public String getUuid(){
+        public String getUuid() {
             return this.uuid;
         }
 
@@ -194,7 +194,7 @@ public class AssetMapBuilder {
          * Getter for the Asset's annotation text
          * @return org.smpte_ra.schemas._429_9._2007.am.UserText of the Asset
          */
-        public org.smpte_ra.schemas._429_9._2007.am.UserText getAnnotationText(){
+        public org.smpte_ra.schemas._429_9._2007.am.UserText getAnnotationText() {
             return this.annotationText;
         }
 
@@ -202,7 +202,7 @@ public class AssetMapBuilder {
          * Getter for the boolean indicating PackingList
          * @return boolean to indicate if this asset is a PackingList or not
          */
-        public boolean isPackingList(){
+        public boolean isPackingList() {
             return this.packingList;
         }
 
@@ -210,7 +210,7 @@ public class AssetMapBuilder {
          * Getter for the list of Chunks representing the Asset
          * @return a list of chunks corresponding to the Asset
          */
-        public List<Chunk> getChunks(){
+        public List<Chunk> getChunks() {
             return this.chunks;
         }
     }
@@ -234,12 +234,12 @@ public class AssetMapBuilder {
         public Chunk(String path, Long length) throws URISyntaxException {
             String[] pathSegments = path.split("/");
             List<String> invalidPathSegments = new ArrayList<>();
-            for(String pathSegment : pathSegments) {
+            for (String pathSegment : pathSegments) {
                 if (pathSegment.matches("^[a-zA-Z0-9._-]+") == false) {
                     invalidPathSegments.add(pathSegment);
                 }
             }
-            if(invalidPathSegments.size() > 0){
+            if (invalidPathSegments.size() > 0) {
                 throw new URISyntaxException(path,
                         String.format("The Asset path %s does not conform to the specified URI syntax in Annex-A of st429-9:2014 (a-z, A-Z, 0-9, ., _, -) for a path segment, the following path segments do not comply %s", path, Utilities.serializeObjectCollectionToString(invalidPathSegments)));
             }
@@ -251,7 +251,7 @@ public class AssetMapBuilder {
          * Getter for the path of a chunk
          * @return a string representation of the path to a chunk of an Asset
          */
-        public String getPath(){
+        public String getPath() {
             return this.path;
         }
 
@@ -260,7 +260,7 @@ public class AssetMapBuilder {
          * @return a BigInteger corresponding to the VolumeIndex of the chunk
          */
         @Nonnull
-        public BigInteger getVolumeIndex(){
+        public BigInteger getVolumeIndex() {
             return this.volumeIndex;
         }
 
@@ -269,7 +269,7 @@ public class AssetMapBuilder {
          * @return a BigInteger representing the offset of the chunk
          */
         @Nonnull
-        public BigInteger getOffset(){
+        public BigInteger getOffset() {
             return this.offset;
         }
 
@@ -278,7 +278,7 @@ public class AssetMapBuilder {
          * @return a BigInteger representing the length of the chunk in bytes
          */
         @Nonnull
-        public BigInteger getLength(){
+        public BigInteger getLength() {
             return this.length;
         }
     }
@@ -301,10 +301,10 @@ public class AssetMapBuilder {
             marshaller.setSchema(schema);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, formatted);
 
-        /*marshaller.marshal(cplType, output);
-        workaround for 'Error: unable to marshal type "AssetMapType" as an element because it is missing an @XmlRootElement annotation'
-        as found at https://weblogs.java.net/blog/2006/03/03/why-does-jaxb-put-xmlrootelement-sometimes-not-always
-         */
+            /*marshaller.marshal(cplType, output);
+            workaround for 'Error: unable to marshal type "AssetMapType" as an element because it is missing an @XmlRootElement annotation'
+            as found at https://weblogs.java.net/blog/2006/03/03/why-does-jaxb-put-xmlrootelement-sometimes-not-always
+             */
             marshaller.marshal(new JAXBElement<>(new QName("http://www.smpte-ra.org/schemas/429-9/2007/AM", "AssetMap"), org.smpte_ra.schemas._429_9._2007.am.AssetMapType.class, assetMapType), outputStream);
             outputStream.close();
 
@@ -315,7 +315,7 @@ public class AssetMapBuilder {
                 }
             }
         }
-        catch( SAXException | JAXBException e)
+        catch(SAXException | JAXBException e)
         {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors
                     .ErrorLevels.FATAL, e.getMessage());

@@ -35,11 +35,13 @@ public abstract class StructuralComponent extends InterchangeObject
         /**
          * The Data _ definition.
          */
-        @MXFProperty(size=16) protected final byte[] data_definition = null;
+        @MXFProperty(size = 16)
+        protected final byte[] data_definition = null;
         /**
          * The Duration.
          */
-        @MXFProperty(size=8) protected final Long duration = null;
+        @MXFProperty(size = 8)
+        protected final Long duration = null;
 
         /**
          * Instantiates a new Structural component ByteObject.
@@ -55,7 +57,7 @@ public abstract class StructuralComponent extends InterchangeObject
          * Accessor for the duration
          * @return the duration of this structural component
          */
-        public Long getDuration(){
+        public Long getDuration() {
             return this.duration;
         }
     }

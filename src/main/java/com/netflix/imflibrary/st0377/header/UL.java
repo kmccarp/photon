@@ -38,7 +38,7 @@ public class UL {
      * Constructor for a UL
      * @param ul byte array corresponding to the Universal Label bytes
      */
-    public UL(byte[] ul){
+    public UL(byte[] ul) {
         this.ul = Arrays.copyOf(ul, ul.length);
     }
 
@@ -46,7 +46,7 @@ public class UL {
      * MXFUid representation of a UL
      * @return The UL represented as a MXFUId
      */
-    public MXFUID getULAsMXFUid(){
+    public MXFUID getULAsMXFUid() {
         return new MXFUID(this.ul);
     }
 
@@ -54,7 +54,7 @@ public class UL {
      * Getter for the ul byte[] representing this UL
      * @return byte[] representation of a UL
      */
-    public byte[] getULAsBytes(){
+    public byte[] getULAsBytes() {
         return Arrays.copyOf(this.ul, this.ul.length);
     }
 
@@ -63,7 +63,7 @@ public class UL {
      * @param index Index of a byte within the UL, with 0 corresponding to the first byte
      * @return byte `index` of the UL
      */
-    public byte getByte(int index){
+    public byte getByte(int index) {
         return this.ul[index];
     }
 
@@ -71,7 +71,7 @@ public class UL {
      * Getter for UL length
      * @return length of the UL in bytes
      */
-    public int getLength(){
+    public int getLength() {
         return this.ul.length;
     }
 
@@ -79,10 +79,10 @@ public class UL {
      * toString() method
      * @return string representation of the UL object
      */
-    public String toString(){
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("0x"));
-        for(byte b : this.ul) {
+        for (byte b : this.ul) {
             stringBuilder.append(String.format("%02x", b));
         }
         return stringBuilder.toString();
@@ -92,10 +92,10 @@ public class UL {
      * toStringBytes() method
      * @return string representation of the UL object with a "." separation between bytes
      */
-    public String toStringBytes(){
+    public String toStringBytes() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(String.format("%02x", this.ul[0]));
-        for(int i = 1; i < this.ul.length; i++) {
+        for (int i = 1; i < this.ul.length; i++) {
             stringBuilder.append(String.format(".%02x", this.ul[i]));
         }
         return stringBuilder.toString();
@@ -120,8 +120,8 @@ public class UL {
         }
         String ulValue = ULasURN.split(UL.UL_as_a_URN_PREFIX)[1].replace(".", "");
         byte[] bytes = new byte[16];
-        for( int i =0; i < 16; i++) {
-            bytes[i] = (byte)Integer.parseInt(ulValue.substring(i*2, i*2+2), 16);
+        for (int i = 0; i < 16; i++) {
+            bytes[i] = (byte)Integer.parseInt(ulValue.substring(i * 2, i * 2 + 2), 16);
         }
         return new UL(bytes);
     }

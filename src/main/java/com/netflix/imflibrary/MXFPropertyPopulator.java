@@ -91,7 +91,7 @@ public final class MXFPropertyPopulator
                 byte[] byteArray = byteProvider.getBytes(byteArraySize);
                 field.set(object, new InterchangeObject.InterchangeObjectBO.StrongRef(byteArray));
             }
-            else if(field.getType() == UL.class){
+            else if (field.getType() == UL.class) {
                 byte[] byteArray = byteProvider.getBytes(byteArraySize);
                 field.set(object, new UL(byteArray));
             }
@@ -115,7 +115,7 @@ public final class MXFPropertyPopulator
             {
                 CompoundDataTypes.MXFCollections.Header cHeader = new CompoundDataTypes.MXFCollections.Header(byteProvider);
                 ParameterizedType parameterizedType = (ParameterizedType)field.getGenericType();
-                if(parameterizedType.getActualTypeArguments().length > 1)
+                if (parameterizedType.getActualTypeArguments().length > 1)
                 {
                     throw new MXFException(String.format("Found %d type arguments, however only 1 is supported at this time",
                             parameterizedType.getActualTypeArguments().length));
@@ -124,7 +124,7 @@ public final class MXFPropertyPopulator
                         (parameterizedType.getActualTypeArguments()[0].toString().equals("byte[]")))
                 {
                     List<byte[]> cList = new ArrayList<>();
-                    for (long i=0; i<cHeader.getNumberOfElements(); i++)
+                    for (long i = 0; i < cHeader.getNumberOfElements(); i++)
                     {
                         cList.add(byteProvider.getBytes((int)cHeader.getSizeOfElement()));
                     }
@@ -133,31 +133,31 @@ public final class MXFPropertyPopulator
                 else if (parameterizedType.getActualTypeArguments()[0] == Integer.class)
                 {
                     List<Integer> cList = new ArrayList<>();
-                    for (long i=0; i<cHeader.getNumberOfElements(); i++)
+                    for (long i = 0; i < cHeader.getNumberOfElements(); i++)
                     {
                         cList.add(getInt(byteProvider.getBytes(4), KLVPacket.BYTE_ORDER));
                     }
                     field.set(object, new CompoundDataTypes.MXFCollections.MXFCollection<>(cHeader, cList, fieldName));
                 }
-                else if (parameterizedType.getActualTypeArguments()[0] == InterchangeObject.InterchangeObjectBO.StrongRef.class){
+                else if (parameterizedType.getActualTypeArguments()[0] == InterchangeObject.InterchangeObjectBO.StrongRef.class) {
                     List<InterchangeObject.InterchangeObjectBO.StrongRef> cList = new ArrayList<>();
-                    for (long i=0; i<cHeader.getNumberOfElements(); i++)
+                    for (long i = 0; i < cHeader.getNumberOfElements(); i++)
                     {
                         cList.add(new InterchangeObject.InterchangeObjectBO.StrongRef(byteProvider.getBytes((int)cHeader.getSizeOfElement())));
                     }
                     field.set(object, new CompoundDataTypes.MXFCollections.MXFCollection<>(cHeader, cList, fieldName));
                 }
-                else if (parameterizedType.getActualTypeArguments()[0] == UL.class){
+                else if (parameterizedType.getActualTypeArguments()[0] == UL.class) {
                     List<UL> cList = new ArrayList<>();
-                    for (long i=0; i<cHeader.getNumberOfElements(); i++)
+                    for (long i = 0; i < cHeader.getNumberOfElements(); i++)
                     {
                         cList.add(new UL(byteProvider.getBytes((int)cHeader.getSizeOfElement())));
                     }
                     field.set(object, new CompoundDataTypes.MXFCollections.MXFCollection<>(cHeader, cList, fieldName));
                 }
-                else if (parameterizedType.getActualTypeArguments()[0] == JPEG2000PictureComponent.JPEG2000PictureComponentBO.class){
+                else if (parameterizedType.getActualTypeArguments()[0] == JPEG2000PictureComponent.JPEG2000PictureComponentBO.class) {
                     List<JPEG2000PictureComponent.JPEG2000PictureComponentBO> cList = new ArrayList<>();
-                    for (long i=0; i<cHeader.getNumberOfElements(); i++)
+                    for (long i = 0; i < cHeader.getNumberOfElements(); i++)
                     {
                         cList.add(new JPEG2000PictureComponent.JPEG2000PictureComponentBO(byteProvider.getBytes((int)cHeader.getSizeOfElement())));
                     }
@@ -285,9 +285,9 @@ public final class MXFPropertyPopulator
     public static Long getUnsignedIntAsLong(byte[] byteArray, ByteOrder byteOrder)
     {
         long value;
-        long firstByte  = (0xFFL & ((long)byteArray[0]));
+        long firstByte = (0xFFL & ((long)byteArray[0]));
         long secondByte = (0xFFL & ((long)byteArray[1]));
-        long thirdByte  = (0xFFL & ((long)byteArray[2]));
+        long thirdByte = (0xFFL & ((long)byteArray[2]));
         long fourthByte = (0xFFL & ((long)byteArray[3]));
         if (byteOrder == ByteOrder.LITTLE_ENDIAN)
         {
@@ -295,7 +295,7 @@ public final class MXFPropertyPopulator
         }
         else
         {
-            value = ((firstByte << 24) | (secondByte << 16) | (thirdByte << 8) | (fourthByte )) & 0xFFFFFFFFL;
+            value = ((firstByte << 24) | (secondByte << 16) | (thirdByte << 8) | (fourthByte)) & 0xFFFFFFFFL;
         }
         return value;
     }
@@ -322,7 +322,7 @@ public final class MXFPropertyPopulator
     public static Integer getUnsignedShortAsInt(byte[] byteArray, ByteOrder byteOrder)
     {
         int value;
-        int firstByte  = (0xFF & ((int)byteArray[0]));
+        int firstByte = (0xFF & ((int)byteArray[0]));
         int secondByte = (0xFF & ((int)byteArray[1]));
         if (byteOrder == ByteOrder.LITTLE_ENDIAN)
         {
@@ -448,7 +448,7 @@ public final class MXFPropertyPopulator
         {
             return aClass.getDeclaredField(fieldName);
         }
-        catch (NoSuchFieldException e)
+        catch(NoSuchFieldException e)
         {
             Class superClass = aClass.getSuperclass();
             if (superClass == null)
@@ -490,31 +490,31 @@ public final class MXFPropertyPopulator
                             {
                                 if (object instanceof CompoundDataTypes.MXFCollections.MXFCollection)
                                 {
-                                    CompoundDataTypes.MXFCollections.MXFCollection<Object> collection = (CompoundDataTypes.MXFCollections.MXFCollection<Object>) object;
-                                    if(collection.getEntries().get(0) instanceof InterchangeObject.InterchangeObjectBO.StrongRef) {
-                                        CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef> collectionStrongRefs = (CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef>) object;
+                                    CompoundDataTypes.MXFCollections.MXFCollection<Object> collection = (CompoundDataTypes.MXFCollections.MXFCollection<Object>)object;
+                                    if (collection.getEntries().get(0) instanceof InterchangeObject.InterchangeObjectBO.StrongRef) {
+                                        CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef> collectionStrongRefs = (CompoundDataTypes.MXFCollections.MXFCollection<InterchangeObject.InterchangeObjectBO.StrongRef>)object;
                                         for (InterchangeObject.InterchangeObjectBO.StrongRef entry : collectionStrongRefs.getEntries()) {
                                             dependentUIDs.add(entry.getInstanceUID());
                                         }
                                     }
-                                    else if(collection.getEntries().get(0) instanceof UL){
-                                        CompoundDataTypes.MXFCollections.MXFCollection<UL> collectionULs = (CompoundDataTypes.MXFCollections.MXFCollection<UL>) object;
+                                    else if (collection.getEntries().get(0) instanceof UL) {
+                                        CompoundDataTypes.MXFCollections.MXFCollection<UL> collectionULs = (CompoundDataTypes.MXFCollections.MXFCollection<UL>)object;
                                         for (UL entry : collectionULs.getEntries()) {
                                             dependentUIDs.add(entry.getULAsMXFUid());
                                         }
                                     }
                                 }
-                                else if(object instanceof InterchangeObject.InterchangeObjectBO.StrongRef){
-                                    InterchangeObject.InterchangeObjectBO.StrongRef strongRef = (InterchangeObject.InterchangeObjectBO.StrongRef) object;
+                                else if (object instanceof InterchangeObject.InterchangeObjectBO.StrongRef) {
+                                    InterchangeObject.InterchangeObjectBO.StrongRef strongRef = (InterchangeObject.InterchangeObjectBO.StrongRef)object;
                                     dependentUIDs.add(strongRef.getInstanceUID());
                                 }
-                                else if(object instanceof UL){
+                                else if (object instanceof UL) {
                                     UL ul = (UL)object;
                                     dependentUIDs.add(ul.getULAsMXFUid());
                                 }
                                 else
                                 {
-                                    byte[] bytes = (byte[]) object;
+                                    byte[] bytes = (byte[])object;
                                     dependentUIDs.add(new MXFUID(bytes));
                                 }
                             }

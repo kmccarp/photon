@@ -71,7 +71,7 @@ public class IMPFixer {
         try {
             HeaderPartition headerPartition = new HeaderPartition(new ByteArrayDataProvider(headerPartitionPayloadRecord.getPayload()),
                     0L,
-                    (long) headerPartitionPayloadRecord.getPayload().length,
+                    (long)headerPartitionPayloadRecord.getPayload().length,
                     imfErrorLogger);
 
             /**
@@ -82,11 +82,11 @@ public class IMPFixer {
             IMFConstraints.HeaderPartitionIMF headerPartitionIMF = IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
             Preface preface = headerPartitionIMF.getHeaderPartitionOP1A().getHeaderPartition().getPreface();
             GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-            SourcePackage filePackage = (SourcePackage) genericPackage;
+            SourcePackage filePackage = (SourcePackage)genericPackage;
             packageUUID = filePackage.getPackageMaterialNumberasUUID();
-        } catch (IMFException e) {
+        } catch(IMFException e) {
             imfErrorLogger.addAllErrors(e.getErrors());
-        } catch (MXFException e) {
+        } catch(MXFException e) {
             imfErrorLogger.addAllErrors(e.getErrors());
         }
 
@@ -94,7 +94,7 @@ public class IMPFixer {
     }
 
     private static Map<UUID, PayloadRecord> getTrackFileIdToHeaderPartitionPayLoadMap(List<PayloadRecord>
-                                                                                              headerPartitionPayloadRecords) throws
+            headerPartitionPayloadRecords) throws
             IOException {
 
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -111,7 +111,7 @@ public class IMPFixer {
             try {
                 HeaderPartition headerPartition = new HeaderPartition(new ByteArrayDataProvider(payloadRecord.getPayload()),
                         0L,
-                        (long) payloadRecord.getPayload().length,
+                        (long)payloadRecord.getPayload().length,
                         imfErrorLogger);
 
                 /**
@@ -122,12 +122,12 @@ public class IMPFixer {
                 IMFConstraints.HeaderPartitionIMF headerPartitionIMF = IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
                 Preface preface = headerPartitionIMF.getHeaderPartitionOP1A().getHeaderPartition().getPreface();
                 GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-                SourcePackage filePackage = (SourcePackage) genericPackage;
+                SourcePackage filePackage = (SourcePackage)genericPackage;
                 UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
                 trackFileIDMap.put(packageUUID, payloadRecord);
-            } catch (IMFException e) {
+            } catch(IMFException e) {
                 imfErrorLogger.addAllErrors(e.getErrors());
-            } catch (MXFException e) {
+            } catch(MXFException e) {
                 imfErrorLogger.addAllErrors(e.getErrors());
             }
         }
@@ -157,7 +157,7 @@ public class IMPFixer {
         long archiveFileSize = resourceByteRangeProvider.getResourceSize();
         long rangeEnd = archiveFileSize - 1;
         long rangeStart = archiveFileSize - 4;
-        if(rangeStart < 0 ) {
+        if (rangeStart < 0) {
             return null;
         }
         byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(rangeStart, rangeEnd);
@@ -166,7 +166,7 @@ public class IMPFixer {
 
         rangeStart = archiveFileSize - randomIndexPackSize;
         rangeEnd = archiveFileSize - 1;
-        if(rangeStart < 0 ) {
+        if (rangeStart < 0) {
             return null;
         }
 
@@ -206,7 +206,7 @@ public class IMPFixer {
                     headerPartitionPayloadRecords.add(headerPartitionPayloadRecord);
                     byte[] bytes = headerPartitionPayloadRecord.getPayload();
                     byte[] hash = asset.getHash();
-                    if( generateHash) {
+                    if (generateHash) {
                         hash = IMFUtils.generateSHA1Hash(resourceByteRangeProvider);
                     }
                     imfTrackFileMetadataMap.put(getTrackFileId(headerPartitionPayloadRecord),
@@ -216,7 +216,7 @@ public class IMPFixer {
                                     assetFile.getName(),
                                     resourceByteRangeProvider.getResourceSize())
                     );
-                    if(copyTrackfile) {
+                    if (copyTrackfile) {
                         File outputFile = new File(targetFile.toString() + File.separator + assetFile.getName());
                         Files.copy(assetFile.toPath(), outputFile.toPath(), REPLACE_EXISTING);
                     }
@@ -232,55 +232,55 @@ public class IMPFixer {
                 ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(assetFile);
                 if (asset.getType().equals(PackingList.Asset.TEXT_XML_TYPE) && ApplicationComposition.isCompositionPlaylist(resourceByteRangeProvider)) {
                     ApplicationComposition applicationComposition = ApplicationCompositionFactory.getApplicationComposition(resourceByteRangeProvider, new IMFErrorLoggerImpl());
-                    if(applicationComposition == null){
+                    if (applicationComposition == null) {
                         continue;
                     }
                     Set<UUID> trackFileIDsSet = trackFileIDToHeaderPartitionPayLoadMap.keySet();
-                        if(versionCPLSchema.equals(""))
-                        {
-                            String coreConstraintsSchema = applicationComposition.getCoreConstraintsSchema();
-                            if (coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2013)) {
-                                versionCPLSchema = "2013";
-                            }
-                            else if (coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2016)
-                                    || coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2020)) {
-                                versionCPLSchema = "2016";
-                            }
-                            else {
-                                imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR,
-                                        IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
-                                        String.format("Input package CoreConstraints Schema %s not supported", applicationComposition.getCoreConstraintsSchema()));
-                            }
+                    if (versionCPLSchema.equals(""))
+                    {
+                        String coreConstraintsSchema = applicationComposition.getCoreConstraintsSchema();
+                        if (coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2013)) {
+                            versionCPLSchema = "2013";
                         }
-
-                        if(versionCPLSchema.equals("2016"))
-                        {
-                            imfErrorLogger.addAllErrors(IMPBuilder.buildIMP_2016("IMP",
-                                    "Netflix",
-                                    applicationComposition.getEssenceVirtualTracks(),
-                                    applicationComposition.getEditRate(),
-                                    "http://www.smpte-ra.org/schemas/2067-21/2016",
-                                    imfTrackFileMetadataMap,
-                                    targetFile));
-
-                        }
-                        else if(versionCPLSchema.equals("2013")) {
-                            imfErrorLogger.addAllErrors(IMPBuilder.buildIMP_2013("IMP",
-                                    "Netflix",
-                                    applicationComposition.getEssenceVirtualTracks(),
-                                    applicationComposition.getEditRate(),
-                                    "http://www.smpte-ra.org/schemas/2067-21/2016",
-                                    imfTrackFileMetadataMap,
-                                    targetFile));
+                        else if (coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2016)
+                                || coreConstraintsSchema.equals(CoreConstraints.NAMESPACE_IMF_2020)) {
+                            versionCPLSchema = "2016";
                         }
                         else {
                             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR,
                                     IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
-                                    String.format("Invalid CPL schema %s for output", versionCPLSchema.equals("2013")));
+                                    String.format("Input package CoreConstraints Schema %s not supported", applicationComposition.getCoreConstraintsSchema()));
                         }
+                    }
+
+                    if (versionCPLSchema.equals("2016"))
+                    {
+                        imfErrorLogger.addAllErrors(IMPBuilder.buildIMP_2016("IMP",
+                                "Netflix",
+                                applicationComposition.getEssenceVirtualTracks(),
+                                applicationComposition.getEditRate(),
+                                "http://www.smpte-ra.org/schemas/2067-21/2016",
+                                imfTrackFileMetadataMap,
+                                targetFile));
+
+                    }
+                    else if (versionCPLSchema.equals("2013")) {
+                        imfErrorLogger.addAllErrors(IMPBuilder.buildIMP_2013("IMP",
+                                "Netflix",
+                                applicationComposition.getEssenceVirtualTracks(),
+                                applicationComposition.getEditRate(),
+                                "http://www.smpte-ra.org/schemas/2067-21/2016",
+                                imfTrackFileMetadataMap,
+                                targetFile));
+                    }
+                    else {
+                        imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR,
+                                IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
+                                String.format("Invalid CPL schema %s for output", versionCPLSchema.equals("2013")));
                     }
                 }
             }
+        }
         return imfErrorLogger.getErrors();
     }
 
@@ -289,7 +289,7 @@ public class IMPFixer {
         IMFErrorLogger trackFileErrorLogger = new IMFErrorLoggerImpl();
 
         PayloadRecord headerPartitionPayload = getHeaderPartitionPayloadRecord(resourceByteRangeProvider, trackFileErrorLogger);
-        if(headerPartitionPayload == null) {
+        if (headerPartitionPayload == null) {
             trackFileErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMP_VALIDATOR_PAYLOAD_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
                     String.format("Failed to get header partition"));
         }
@@ -342,22 +342,22 @@ public class IMPFixer {
         Boolean copyTrackFile = true;
         Boolean generateHash = true;
 
-        for(int argIdx = 2; argIdx < args.length; ++argIdx)
+        for (int argIdx = 2; argIdx < args.length; ++argIdx)
         {
             String curArg = args[argIdx];
             String nextArg = argIdx < args.length - 1 ? args[argIdx + 1] : "";
-            if(curArg.equalsIgnoreCase("--cpl-schema") || curArg.equalsIgnoreCase("-cs")) {
-                if(nextArg.length() == 0 || nextArg.charAt(0) == '-') {
+            if (curArg.equalsIgnoreCase("--cpl-schema") || curArg.equalsIgnoreCase("-cs")) {
+                if (nextArg.length() == 0 || nextArg.charAt(0) == '-') {
                     logger.error(usage());
                     System.exit(-1);
                 }
                 versionCPLSchema = nextArg;
                 argIdx++;
             }
-            else if(curArg.equalsIgnoreCase("--no-copy") || curArg.equalsIgnoreCase("-nc")) {
+            else if (curArg.equalsIgnoreCase("--no-copy") || curArg.equalsIgnoreCase("-nc")) {
                 copyTrackFile = false;
             }
-            else if(curArg.equalsIgnoreCase("--no-hash") || curArg.equalsIgnoreCase("-nh")) {
+            else if (curArg.equalsIgnoreCase("--no-hash") || curArg.equalsIgnoreCase("-nh")) {
                 generateHash = false;
             }
             else {
@@ -378,12 +378,14 @@ public class IMPFixer {
                 for (ErrorLogger.ErrorObject errorObject : errors) {
                     if (errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                         logger.error(errorObject.toString());
-                    } else if (errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+                    }
+                    else if (errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                         logger.warn(errorObject.toString());
                     }
                 }
                 System.exit(-1);
-            } else {
+            }
+            else {
                 logger.info(String.format("Created %s IMP successfully", outputFile.getName()));
             }
         }

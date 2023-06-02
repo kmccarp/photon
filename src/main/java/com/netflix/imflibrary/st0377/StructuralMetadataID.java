@@ -99,11 +99,12 @@ public enum StructuralMetadataID {
     MCALabelSubDescriptor("MCALabelSubDescriptor");
 
     private final String structuralMetadataName;
-    private StructuralMetadataID(String structuralMetadataName){
+
+    private StructuralMetadataID(String structuralMetadataName) {
         this.structuralMetadataName = structuralMetadataName;
     }
 
-    public final String getName(){
+    public final String getName() {
         return this.structuralMetadataName;
     }
 }

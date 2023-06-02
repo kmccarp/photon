@@ -30,14 +30,15 @@ public final class IABTrackFileConstraints {
     private static final String IMF_IAB_EXCEPTION_PREFIX = "IMF IAB check: ";
 
     // Prevent instantiation
-    public IABTrackFileConstraints() {}
+    public IABTrackFileConstraints() {
+    }
 
     public static void checkCompliance(IMFConstraints.HeaderPartitionIMF headerPartitionIMF, @Nonnull IMFErrorLogger imfErrorLogger) throws IOException {
         HeaderPartition headerPartition = headerPartitionIMF.getHeaderPartitionOP1A().getHeaderPartition();
         Preface preface = headerPartition.getPreface();
         GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
         SourcePackage filePackage;
-        filePackage = (SourcePackage) genericPackage;
+        filePackage = (SourcePackage)genericPackage;
         UUID packageID = filePackage.getPackageMaterialNumberasUUID();
 
         for (TimelineTrack timelineTrack : filePackage.getTimelineTracks()) {
@@ -45,7 +46,8 @@ public final class IABTrackFileConstraints {
             if (sequence == null) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMF_IAB_EXCEPTION_PREFIX + String.format("TimelineTrack with instanceUID = %s in the IMFTrackFile represented by ID %s has no sequence.",
                         timelineTrack.getInstanceUID(), packageID.toString()));
-            } else {
+            }
+            else {
                 GenericDescriptor genericDescriptor = filePackage.getGenericDescriptor();
                 if (genericDescriptor instanceof IABEssenceDescriptor) { // Support for st2067-201
 
@@ -54,18 +56,20 @@ public final class IABTrackFileConstraints {
                     if (conformsToSpecifications == null) {
                         imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                 String.format("Preface in the IMFTrackFile represented by ID %s does not have the required conformsToSpecifications item.", packageID.toString()));
-                    } else {
+                    }
+                    else {
                         List specificationsULs = conformsToSpecifications.getEntries();
                         if (specificationsULs.size() == 0) {
                             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                     String.format("Preface in the IMFTrackFile represented by ID %s does not have a single UL in the conformsToSpecifications item.", packageID.toString()));
-                        } else if (!specificationsULs.contains(IABEssenceDescriptor.IMF_IAB_TRACK_FILE_LEVEL0_UL)) {
+                        }
+                        else if (!specificationsULs.contains(IABEssenceDescriptor.IMF_IAB_TRACK_FILE_LEVEL0_UL)) {
                             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                     String.format("Preface in the IMFTrackFile represented by ID %s does not indicate the required IAB Level 0 Plugin UL in the conformsToSpecifications item, but to %s", packageID.toString(), specificationsULs));
                         }
                     }
 
-                    IABEssenceDescriptor iabEssenceDescriptor = (IABEssenceDescriptor) genericDescriptor;
+                    IABEssenceDescriptor iabEssenceDescriptor = (IABEssenceDescriptor)genericDescriptor;
 
                     // Section 5.4
                     if (timelineTrack.getEditRateNumerator() != iabEssenceDescriptor.getSampleRate().get(0) || timelineTrack.getEditRateDenominator() != iabEssenceDescriptor.getSampleRate().get(1)) {
@@ -116,7 +120,8 @@ public final class IABTrackFileConstraints {
                     if (subDescriptors.size() == 0) {
                         imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                 String.format("IABEssenceDescriptor in the IMFTrackFile represented by ID %s does not have subdescriptors", packageID.toString()));
-                    } else {
+                    }
+                    else {
                         List<InterchangeObject.InterchangeObjectBO> soundFieldGroupLabelSubDescriptors = subDescriptors.subList(0, subDescriptors.size()).stream().filter(interchangeObjectBO -> interchangeObjectBO.getClass().getEnclosingClass().equals(SoundFieldGroupLabelSubDescriptor.class)).collect(Collectors.toList());
                         if (soundFieldGroupLabelSubDescriptors.size() != 0) {
                             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
@@ -139,14 +144,16 @@ public final class IABTrackFileConstraints {
                         if (iabSoundFieldLabelSubDescriptors.size() != 1) {
                             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                     String.format("IABEssenceDescriptor in the IMFTrackFile represented by ID %s refers to %d IABSoundfieldLabelSubDescriptor, exactly 1 is required", packageID.toString(), iabSoundFieldLabelSubDescriptors.size()));
-                        } else {
+                        }
+                        else {
                             // Section 5.10.3
                             IABSoundfieldLabelSubDescriptor.IABSoundfieldLabelSubDescriptorBO iabSoundFieldLabelSubDescriptorBO = IABSoundfieldLabelSubDescriptor.IABSoundfieldLabelSubDescriptorBO.class.cast(iabSoundFieldLabelSubDescriptors.get(0));
 
                             if (iabSoundFieldLabelSubDescriptorBO.getMCATagName() == null) {
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                         String.format("IABSoundfieldLabelSubDescriptor in the IMFTrackFile represented by ID %s is missing MCATagName", packageID.toString()));
-                            } else {
+                            }
+                            else {
                                 // Section 5.10.4
                                 if (!iabSoundFieldLabelSubDescriptorBO.getMCATagName().equals(IABSoundfieldLabelSubDescriptor.IAB_MCA_TAG_NAME)) {
                                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
@@ -157,7 +164,8 @@ public final class IABTrackFileConstraints {
                             if (iabSoundFieldLabelSubDescriptorBO.getMCATagSymbol() == null) {
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                         String.format("IABSoundfieldLabelSubDescriptor in the IMFTrackFile represented by ID %s is missing MCATagSymbol", packageID.toString()));
-                            } else {
+                            }
+                            else {
                                 // Section 5.10.4
                                 if (!iabSoundFieldLabelSubDescriptorBO.getMCATagSymbol().equals(IABSoundfieldLabelSubDescriptor.IAB_MCA_TAG_SYMBOL)) {
                                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
@@ -168,7 +176,8 @@ public final class IABTrackFileConstraints {
                             if (iabSoundFieldLabelSubDescriptorBO.getMCALabelDictionnaryId() == null) {
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
                                         String.format("IABSoundfieldLabelSubDescriptor in the IMFTrackFile represented by ID %s is missing MCALabelDictionaryId", packageID.toString()));
-                            } else {
+                            }
+                            else {
                                 // Section 5.10.4
                                 if (!iabSoundFieldLabelSubDescriptorBO.getMCALabelDictionnaryId().equals(IABSoundfieldLabelSubDescriptor.IAB_MCA_LABEL_DICTIONNARY_ID_UL)) {
                                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMF_IAB_EXCEPTION_PREFIX +
@@ -215,7 +224,7 @@ public final class IABTrackFileConstraints {
         Preface preface = headerPartition.getPreface();
         GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
         SourcePackage filePackage;
-        filePackage = (SourcePackage) genericPackage;
+        filePackage = (SourcePackage)genericPackage;
         UUID packageID = filePackage.getPackageMaterialNumberasUUID();
 
         for (TimelineTrack timelineTrack : filePackage.getTimelineTracks()) {
@@ -223,10 +232,11 @@ public final class IABTrackFileConstraints {
             if (sequence == null) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMF_IAB_EXCEPTION_PREFIX + String.format("TimelineTrack with instanceUID = %s in the IMFTrackFile represented by ID %s has no sequence.",
                         timelineTrack.getInstanceUID(), packageID.toString()));
-            } else {
+            }
+            else {
                 GenericDescriptor genericDescriptor = filePackage.getGenericDescriptor();
                 if (genericDescriptor instanceof IABEssenceDescriptor) { // Support for st2067-201
-                    IABEssenceDescriptor iabEssenceDescriptor = (IABEssenceDescriptor) genericDescriptor;
+                    IABEssenceDescriptor iabEssenceDescriptor = (IABEssenceDescriptor)genericDescriptor;
 
                     // Section 5.7
                     if (timelineTrack.getEditRateNumerator() != indexTableSegment.getIndexEditRate().getNumerator() || timelineTrack.getEditRateDenominator() != indexTableSegment.getIndexEditRate().getDenominator()) {

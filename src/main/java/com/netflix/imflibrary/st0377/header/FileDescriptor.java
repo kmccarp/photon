@@ -52,7 +52,7 @@ public abstract class FileDescriptor extends GenericDescriptor {
          * Accessor for the SampleRate field
          * @return returns a list of long integers representing the numerator and denominator of the sample rate in that order
          */
-        public List<Long> getSampleRate(){
+        public List<Long> getSampleRate() {
             List<Long> list = new ArrayList<>();
             Long numerator = this.sample_rate.getNumerator();
             list.add(numerator);
@@ -65,7 +65,7 @@ public abstract class FileDescriptor extends GenericDescriptor {
          * Accessor for the Essence Container UL of this FileDescriptor
          * @return a UL representing the Essence Container
          */
-        public UL getEssenceContainerUL(){
+        public UL getEssenceContainerUL() {
             return this.essence_container;
         }
 
@@ -73,7 +73,7 @@ public abstract class FileDescriptor extends GenericDescriptor {
          * Accessor for the Codec UL of this FileDescriptor
          * @return a UL to identify a codec compatible with this Essence Container.
          */
-        public UL getCodecUL(){
+        public UL getCodecUL() {
             return this.codec;
         }
     }

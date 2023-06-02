@@ -53,7 +53,7 @@ public class MXFException extends RuntimeException
 
     public MXFException(String s, Throwable t)
     {
-        super(s,t);
+        super(s, t);
         this.imfErrorLogger = null;
     }
 
@@ -66,7 +66,7 @@ public class MXFException extends RuntimeException
     public List<ErrorLogger.ErrorObject> getErrors()
     {
         List errorList = new ArrayList<ErrorLogger.ErrorObject>();
-        if(this.imfErrorLogger != null)
+        if (this.imfErrorLogger != null)
         {
             errorList.addAll(this.imfErrorLogger.getErrors());
         }

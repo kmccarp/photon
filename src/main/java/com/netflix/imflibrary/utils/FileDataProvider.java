@@ -51,7 +51,7 @@ public final class FileDataProvider implements ByteProvider {
      */
     public byte[] getBytes(int totalNumBytesToRead) throws IOException
     {
-        if(totalNumBytesToRead < 0){
+        if (totalNumBytesToRead < 0) {
             throw new IOException(String.format("Cannot read %d bytes, should be non-negative and non-zero", totalNumBytesToRead));
         }
         byte[] bytes = new byte[totalNumBytesToRead];
@@ -67,7 +67,7 @@ public final class FileDataProvider implements ByteProvider {
                 }
             }
         }
-        if(totalBytesRead < totalNumBytesToRead) {
+        if (totalBytesRead < totalNumBytesToRead) {
             throw new IOException(String.format("Could not read %d bytes of data, only read %d bytes of data, possible truncated data", totalNumBytesToRead, totalBytesRead));
         }
         this.position += totalBytesRead;
@@ -100,7 +100,7 @@ public final class FileDataProvider implements ByteProvider {
                 totalBytesSkipped += bytesSkipped;
             }
         }
-        if(totalBytesSkipped != totalNumBytesToSkip){
+        if (totalBytesSkipped != totalNumBytesToSkip) {
             throw new IOException(String.format("Could not skip %d bytes of data, possible truncated data", totalNumBytesToSkip));
         }
 

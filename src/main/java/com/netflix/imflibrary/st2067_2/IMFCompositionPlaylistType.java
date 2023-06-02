@@ -71,33 +71,33 @@ final class IMFCompositionPlaylistType {
      */
     @Deprecated
     public IMFCompositionPlaylistType(String id,
-                                      List<Long> editRate,
-                                      String annotation,
-                                      String issuer,
-                                      String creator,
-                                      String contentOriginator,
-                                      String contentTitle,
-                                      List<IMFSegmentType> segmentList,
-                                      List<IMFEssenceDescriptorBaseType> essenceDescriptorList,
-                                      String coreConstraintsSchema,
-                                      String applicationId)
+            List<Long> editRate,
+            String annotation,
+            String issuer,
+            String creator,
+            String contentOriginator,
+            String contentTitle,
+            List<IMFSegmentType> segmentList,
+            List<IMFEssenceDescriptorBaseType> essenceDescriptorList,
+            String coreConstraintsSchema,
+            String applicationId)
     {
         this(id, editRate, annotation, issuer, creator, contentOriginator, contentTitle, segmentList, essenceDescriptorList, coreConstraintsSchema, (applicationId == null ? new HashSet<>() : new HashSet<String>(Arrays.asList(applicationId))));
     }
 
     public IMFCompositionPlaylistType(String id,
-                                   List<Long> editRate,
-                                   String annotation,
-                                   String issuer,
-                                   String creator,
-                                   String contentOriginator,
-                                   String contentTitle,
-                                   List<IMFSegmentType> segmentList,
-                                   List<IMFEssenceDescriptorBaseType> essenceDescriptorList,
-                                   String coreConstraintsSchema,
-                                   @Nonnull Set<String> applicationIds)
+            List<Long> editRate,
+            String annotation,
+            String issuer,
+            String creator,
+            String contentOriginator,
+            String contentTitle,
+            List<IMFSegmentType> segmentList,
+            List<IMFEssenceDescriptorBaseType> essenceDescriptorList,
+            String coreConstraintsSchema,
+            @Nonnull Set<String> applicationIds)
     {
-        this.id                = UUIDHelper.fromUUIDAsURNStringToUUID(id);
+        this.id = UUIDHelper.fromUUIDAsURNStringToUUID(id);
         Composition.EditRate rate = null;
         imfErrorLogger = new IMFErrorLoggerImpl();
         try
@@ -109,34 +109,36 @@ final class IMFCompositionPlaylistType {
             imfErrorLogger.addAllErrors(e.getErrors());
         }
 
-        this.editRate          = rate;
-        this.annotation        = annotation;
-        this.issuer            = issuer;
-        this.creator           = creator;
+        this.editRate = rate;
+        this.annotation = annotation;
+        this.issuer = issuer;
+        this.creator = creator;
         this.contentOriginator = contentOriginator;
-        this.contentTitle      = contentTitle;
-        this.segmentList       = Collections.unmodifiableList(segmentList);
-        this.essenceDescriptorList  = Collections.unmodifiableList(essenceDescriptorList);
+        this.contentTitle = contentTitle;
+        this.segmentList = Collections.unmodifiableList(segmentList);
+        this.essenceDescriptorList = Collections.unmodifiableList(essenceDescriptorList);
         this.coreConstraintsSchema = coreConstraintsSchema;
         this.applicationIdSet = Collections.unmodifiableSet(applicationIds);
 
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             throw new IMFException("Failed to create IMFBaseResourceType", imfErrorLogger);
         }
     }
 
-    private static final Set<String> supportedCPLSchemaURIs = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("http://www.smpte-ra.org/schemas/2067-3/2013");
-        add("http://www.smpte-ra.org/schemas/2067-3/2016");
-    }});
+    private static final Set<String> supportedCPLSchemaURIs = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("http://www.smpte-ra.org/schemas/2067-3/2013");
+            add("http://www.smpte-ra.org/schemas/2067-3/2016");
+        }
+    });
 
     @Nonnull
     private static final String getCompositionNamespaceURI(ResourceByteRangeProvider resourceByteRangeProvider, @Nonnull IMFErrorLogger imfErrorLogger) throws IOException {
 
         String result = "";
 
-        try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);) {
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);) {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -167,7 +169,7 @@ final class IMFCompositionPlaylistType {
                     break;
                 }
             }
-        } catch (ParserConfigurationException | SAXException e) {
+        } catch(ParserConfigurationException | SAXException e) {
             String message = String.format("Error occurred while trying to determine the Composition Playlist " +
                     "Namespace URI, XML document appears to be invalid. Error Message : %s", e.getMessage());
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors
@@ -194,7 +196,7 @@ final class IMFCompositionPlaylistType {
      * @throws IOException - any I/O related error is exposed through an IOException
      */
     public static boolean isCompositionPlaylist(ResourceByteRangeProvider resourceByteRangeProvider) throws IOException {
-        try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);) {
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);) {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -209,7 +211,7 @@ final class IMFCompositionPlaylistType {
                     return true;
                 }
             }
-        } catch (ParserConfigurationException | SAXException e) {
+        } catch(ParserConfigurationException | SAXException e) {
             return false;
         }
 
@@ -249,7 +251,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the Composition Playlist ID
      * @return a string representing the urn:uuid of the Composition Playlist
      */
-    public UUID getId(){
+    public UUID getId() {
         return this.id;
     }
 
@@ -257,7 +259,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the EditRate of the Composition Playlist
      * @return a Composition.EditRate object of the Composition Playlist
      */
-    public Composition.EditRate getEditRate(){
+    public Composition.EditRate getEditRate() {
         return this.editRate;
     }
 
@@ -265,7 +267,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the Composition Playlist annotation
      * @return a string representing annotation of the Composition Playlist
      */
-    public String getAnnotation(){
+    public String getAnnotation() {
         return this.annotation;
     }
 
@@ -273,7 +275,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the Composition Playlist issuer
      * @return a string representing issuer of the Composition Playlist
      */
-    public String getIssuer(){
+    public String getIssuer() {
         return this.issuer;
     }
 
@@ -281,7 +283,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the Composition Playlist creator
      * @return a string representing creator of the Composition Playlist
      */
-    public String getCreator(){
+    public String getCreator() {
         return this.creator;
     }
 
@@ -289,7 +291,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the Composition Playlist contentOriginator
      * @return a string representing contentOriginator of the Composition Playlist
      */
-    public String getContentOriginator(){
+    public String getContentOriginator() {
         return this.contentOriginator;
     }
 
@@ -297,7 +299,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the Composition Playlist contentTitle
      * @return a string representing contentTitle of the Composition Playlist
      */
-    public String getContentTitle(){
+    public String getContentTitle() {
         return this.contentTitle;
     }
 
@@ -305,7 +307,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the SegmentList of the Composition Playlist
      * @return a string representing the SegmentList of the Composition Playlist
      */
-    public List<IMFSegmentType> getSegmentList(){
+    public List<IMFSegmentType> getSegmentList() {
         return this.segmentList;
     }
 
@@ -313,7 +315,7 @@ final class IMFCompositionPlaylistType {
      * Getter for the EssenceDescriptorlist of the Composition Playlist
      * @return a string representing the EssenceDescriptorlist of the Composition Playlist
      */
-    public List<IMFEssenceDescriptorBaseType> getEssenceDescriptorList(){
+    public List<IMFEssenceDescriptorBaseType> getEssenceDescriptorList() {
         return this.essenceDescriptorList;
     }
 
@@ -322,7 +324,8 @@ final class IMFCompositionPlaylistType {
      *
      * @return the uri for the CoreConstraints schema for this CompositionPlaylist
      */
-    @Nonnull public String getCoreConstraintsSchema() {
+    @Nonnull
+    public String getCoreConstraintsSchema() {
         return this.coreConstraintsSchema;
     }
 
@@ -338,7 +341,8 @@ final class IMFCompositionPlaylistType {
     public String getApplicationIdentification() {
         if (this.applicationIdSet.size() > 0) {
             return this.applicationIdSet.iterator().next();
-        } else {
+        }
+        else {
             return "";
         }
     }

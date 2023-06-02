@@ -25,6 +25,7 @@ public class TextBasedObject extends InterchangeObject {
     public String getLanguageCode() {
         return this.textBasedObjectBO.language_code;
     }
+
     /**
      * Object corresponding to a parsed TextBasedObject structural metadata set defined in RP 2057:2011
      */
@@ -32,10 +33,14 @@ public class TextBasedObject extends InterchangeObject {
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static class TextBasedObjectBO extends InterchangeObjectBO {
 
-        @MXFProperty(size=16) protected final byte[] metadata_payload_scheme_id = null;
-        @MXFProperty(size=0, charset = "UTF-16") protected final String mime_type = null;
-        @MXFProperty(size=0, charset = "UTF-16") protected final String language_code = null;
-        @MXFProperty(size=0, charset = "UTF-16") protected final String description = null;
+        @MXFProperty(size = 16)
+        protected final byte[] metadata_payload_scheme_id = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mime_type = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String language_code = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String description = null;
         private final IMFErrorLogger imfErrorLogger;
 
         /**

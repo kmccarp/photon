@@ -113,7 +113,7 @@ public class ByteArrayByteRangeProvider implements ResourceByteRangeProvider {
     {
         //validation of range request guarantees that 0 <= rangeStart <= rangeEnd <= (resourceSize - 1)
         ResourceByteRangeProvider.Utilities.validateRangeRequest(this.resourceSize, rangeStart, rangeEnd);
-        if((rangeEnd - rangeStart + 1) > Integer.MAX_VALUE){
+        if ((rangeEnd - rangeStart + 1) > Integer.MAX_VALUE) {
             throw new IOException(String.format("Number of bytes requested = %d is greater than %d", (rangeEnd - rangeStart + 1), Integer.MAX_VALUE));
         }
 
@@ -122,7 +122,7 @@ public class ByteArrayByteRangeProvider implements ResourceByteRangeProvider {
         try(ByteArrayInputStream bis = new ByteArrayInputStream(this.bytes))
         {
             long bytesSkipped = bis.skip(rangeStart);
-            if(bytesSkipped != rangeStart){
+            if (bytesSkipped != rangeStart) {
                 throw new IOException(String.format("Could not skip %d bytes of data, possible truncated data", rangeStart));
             }
 

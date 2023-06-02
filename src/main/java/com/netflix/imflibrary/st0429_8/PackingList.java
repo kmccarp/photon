@@ -77,8 +77,12 @@ public final class PackingList
     private static final Logger logger = LoggerFactory.getLogger(PackingList.class);
     private final IMFErrorLogger imfErrorLogger;
     private static final String xmldsig_core_schema_path = "org/w3/_2000_09/xmldsig/xmldsig-core-schema.xsd";
-    public static final List<String> supportedPKLNamespaces = Collections.unmodifiableList(new ArrayList<String>(){{ add("http://www.smpte-ra.org/schemas/429-8/2007/PKL");
-                                                                                                                        add("http://www.smpte-ra.org/schemas/2067-2/2016/PKL");}});
+    public static final List<String> supportedPKLNamespaces = Collections.unmodifiableList(new ArrayList<String>(){
+        {
+            add("http://www.smpte-ra.org/schemas/429-8/2007/PKL");
+            add("http://www.smpte-ra.org/schemas/2067-2/2016/PKL");
+        }
+    });
 
     private final UUID uuid;
     private final JAXBElement packingListTypeJAXBElement;
@@ -89,22 +93,26 @@ public final class PackingList
         private final String pklSchemaPath;
         private final String pklContext;
 
-        private PKLSchema(String pklSchemaPath, String pklContext){
+        private PKLSchema(String pklSchemaPath, String pklContext) {
             this.pklSchemaPath = pklSchemaPath;
             this.pklContext = pklContext;
         }
 
-        private String getPKLSchemaPath(){
+        private String getPKLSchemaPath() {
             return this.pklSchemaPath;
         }
 
-        private String getPKLContext(){
+        private String getPKLContext() {
             return this.pklContext;
         }
     }
     public static final Map<String, PKLSchema> supportedPKLSchemas = Collections.unmodifiableMap
-            (new HashMap<String, PKLSchema>() {{ put("http://www.smpte-ra.org/schemas/429-8/2007/PKL", new PKLSchema("org/smpte_ra/schemas/st0429_8_2007/PKL/packingList_schema.xsd", "org.smpte_ra.schemas._429_8._2007.pkl"));
-                                            put("http://www.smpte-ra.org/schemas/2067-2/2016/PKL", new PKLSchema("org/smpte_ra/schemas/st2067_2_2016/PKL/packingList_schema.xsd", "org.smpte_ra.schemas._2067_2._2016.pkl"));}});
+            (new HashMap<String, PKLSchema>() {
+                {
+                    put("http://www.smpte-ra.org/schemas/429-8/2007/PKL", new PKLSchema("org/smpte_ra/schemas/st0429_8_2007/PKL/packingList_schema.xsd", "org.smpte_ra.schemas._429_8._2007.pkl"));
+                    put("http://www.smpte-ra.org/schemas/2067-2/2016/PKL", new PKLSchema("org/smpte_ra/schemas/st2067_2_2016/PKL/packingList_schema.xsd", "org.smpte_ra.schemas._2067_2._2016.pkl"));
+                }
+            });
 
     /**
      * Constructor for a {@link com.netflix.imflibrary.st0429_8.PackingList PackingList} object that corresponds to a PackingList XML document
@@ -127,7 +135,7 @@ public final class PackingList
 
         String packingListNamespaceURI = getPackingListSchemaURI(resourceByteRangeProvider, imfErrorLogger);
         PKLSchema pklSchema = supportedPKLSchemas.get(packingListNamespaceURI);
-        if(pklSchema == null){
+        if (pklSchema == null) {
             String message = String.format("Please check the PKL document, currently we only support the " +
                     "following schema URIs %s", serializePKLSchemasToString());
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_PKL_ERROR, IMFErrorLogger.IMFErrors
@@ -137,10 +145,10 @@ public final class PackingList
 
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
-            try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);
+            try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);
                  InputStream xmldsig_core_is = contextClassLoader.getResourceAsStream(PackingList.xmldsig_core_schema_path);
                  InputStream pkl_is = contextClassLoader.getResourceAsStream(pklSchema.getPKLSchemaPath());
-            ) {
+                    ) {
                 StreamSource[] streamSources = new StreamSource[2];
                 streamSources[0] = new StreamSource(xmldsig_core_is);
                 streamSources[1] = new StreamSource(pkl_is);
@@ -154,7 +162,7 @@ public final class PackingList
                 unmarshaller.setEventHandler(validationEventHandlerImpl);
                 unmarshaller.setSchema(schema);
 
-                packingListTypeJAXBElement = (JAXBElement) unmarshaller.unmarshal(inputStream);
+                packingListTypeJAXBElement = (JAXBElement)unmarshaller.unmarshal(inputStream);
 
                 if (validationEventHandlerImpl.hasErrors()) {
                     List<ValidationEventHandlerImpl.ValidationErrorObject> errors = validationEventHandlerImpl.getErrors();
@@ -166,12 +174,12 @@ public final class PackingList
                 }
             }
         }
-        catch(SAXException | JAXBException e){
+        catch(SAXException | JAXBException e) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
                     e.getMessage());
         }
 
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             throw new IMFException("PackingList parsing failed", imfErrorLogger);
         }
@@ -179,31 +187,31 @@ public final class PackingList
         this.pklSchema = pklSchema;
         this.packingListTypeJAXBElement = packingListTypeJAXBElement;
 
-        switch(this.pklSchema.getPKLContext())
+        switch (this.pklSchema.getPKLContext())
         {
             case "org.smpte_ra.schemas._429_8._2007.pkl":
                 //this.packingListType = PackingList.checkConformance(packingListTypeJAXBElement.getValue());
-                org.smpte_ra.schemas._429_8._2007.pkl.PackingListType packingListType_st0429_8_2007_PKL = (org.smpte_ra.schemas._429_8._2007.pkl.PackingListType) this.packingListTypeJAXBElement.getValue();
+                org.smpte_ra.schemas._429_8._2007.pkl.PackingListType packingListType_st0429_8_2007_PKL = (org.smpte_ra.schemas._429_8._2007.pkl.PackingListType)this.packingListTypeJAXBElement.getValue();
                 this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(packingListType_st0429_8_2007_PKL.getId());
 
                 for (org.smpte_ra.schemas._429_8._2007.pkl.AssetType assetType : packingListType_st0429_8_2007_PKL.getAssetList().getAsset())
                 {
                     Asset asset = new Asset(assetType.getId(), Arrays.copyOf(assetType.getHash(), assetType.getHash().length),
-					    assetType.getSize().longValue(), assetType.getType(),
-					    assetType.getOriginalFileName() != null ? assetType.getOriginalFileName().getValue() : null);
+                            assetType.getSize().longValue(), assetType.getType(),
+                            assetType.getOriginalFileName() != null ? assetType.getOriginalFileName().getValue() : null);
                     this.assetList.add(asset);
                 }
                 break;
             case "org.smpte_ra.schemas._2067_2._2016.pkl":
-                org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType packingListType_st2067_2_2016_PKL = (org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType) this.packingListTypeJAXBElement.getValue();
+                org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType packingListType_st2067_2_2016_PKL = (org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType)this.packingListTypeJAXBElement.getValue();
                 this.uuid = UUIDHelper.fromUUIDAsURNStringToUUID(packingListType_st2067_2_2016_PKL.getId());
 
                 for (org.smpte_ra.schemas._2067_2._2016.pkl.AssetType assetType : packingListType_st2067_2_2016_PKL.getAssetList().getAsset())
                 {
                     Asset asset = new Asset(assetType.getId(), Arrays.copyOf(assetType.getHash(), assetType.getHash().length),
-					    assetType.getSize().longValue(), assetType.getType(),
-					    assetType.getOriginalFileName() != null ? assetType.getOriginalFileName().getValue() : null,
-					    assetType.getHashAlgorithm().getAlgorithm());
+                            assetType.getSize().longValue(), assetType.getType(),
+                            assetType.getOriginalFileName() != null ? assetType.getOriginalFileName().getValue() : null,
+                            assetType.getHashAlgorithm().getAlgorithm());
                     this.assetList.add(asset);
                 }
                 break;
@@ -216,12 +224,12 @@ public final class PackingList
         }
 
         Set<UUID> assetUUIDs = new HashSet<>();
-        for(Asset asset : this.assetList){
-            if(assetUUIDs.contains(asset.getUUID())){
+        for (Asset asset : this.assetList) {
+            if (assetUUIDs.contains(asset.getUUID())) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_PKL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
                         String.format("More than one PackingList Asset seems to use AssetUUID %s this is invalid.", asset.getUUID().toString()));
             }
-            else{
+            else {
                 assetUUIDs.add(asset.getUUID());
             }
         }
@@ -230,7 +238,7 @@ public final class PackingList
     private static String getPackingListSchemaURI(ResourceByteRangeProvider resourceByteRangeProvider, IMFErrorLogger imfErrorLogger) throws IOException {
 
         String packingListSchemaURI = "";
-        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize()-1);)
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);)
         {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
@@ -253,7 +261,7 @@ public final class PackingList
             });
             Document document = documentBuilder.parse(inputStream);
             NodeList nodeList = null;
-            for(String supportedSchemaURI : supportedPKLNamespaces) {
+            for (String supportedSchemaURI : supportedPKLNamespaces) {
                 //obtain root node
                 nodeList = document.getElementsByTagNameNS(supportedSchemaURI, "PackingList");
                 if (nodeList != null
@@ -267,12 +275,12 @@ public final class PackingList
         catch(ParserConfigurationException | SAXException e)
         {
             String message = String.format("Error occurred while trying to determine the PackingList Namespace " +
-                            "URI, invalid PKL document Error Message : %s", e.getMessage());
+                    "URI, invalid PKL document Error Message : %s", e.getMessage());
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_PKL_ERROR, IMFErrorLogger.IMFErrors
                     .ErrorLevels.FATAL, message);
             throw new IMFException(message, imfErrorLogger);
         }
-        if(packingListSchemaURI.isEmpty()) {
+        if (packingListSchemaURI.isEmpty()) {
             String message = String.format("Please check the PKL document and namespace URI, currently we only " +
                     "support the following schema URIs %s", serializePKLSchemasToString());
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_PKL_ERROR, IMFErrorLogger.IMFErrors
@@ -282,10 +290,10 @@ public final class PackingList
         return packingListSchemaURI;
     }
 
-    private static final String serializePKLSchemasToString(){
+    private static final String serializePKLSchemasToString() {
         StringBuilder stringBuilder = new StringBuilder();
         Iterator iterator = supportedPKLSchemas.values().iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             stringBuilder.append(String.format("%n"));
             stringBuilder.append(((PKLSchema)iterator.next()).getPKLContext());
         }
@@ -299,16 +307,16 @@ public final class PackingList
      * @return - a boolean indicating if the document represented is an IMF PackingList or not
      * @throws IOException - any I/O related error is exposed through an IOException
      */
-    public static boolean isFileOfSupportedSchema(ResourceByteRangeProvider resourceByteRangeProvider) throws IOException{
+    public static boolean isFileOfSupportedSchema(ResourceByteRangeProvider resourceByteRangeProvider) throws IOException {
 
-        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize()-1);)
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);)
         {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             documentBuilderFactory.setNamespaceAware(true);
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(inputStream);
             NodeList nodeList = null;
-            for(String supportedSchemaURI : supportedPKLNamespaces) {
+            for (String supportedSchemaURI : supportedPKLNamespaces) {
                 //obtain root node
                 nodeList = document.getElementsByTagNameNS(supportedSchemaURI, "PackingList");
                 if (nodeList != null
@@ -452,7 +460,7 @@ public final class PackingList
             return this.original_filename;
         }
 
-        public byte[] getHash(){
+        public byte[] getHash() {
             return Arrays.copyOf(this.hash, this.hash.length);
         }
 
@@ -460,7 +468,7 @@ public final class PackingList
          * Getter for the Hash Algorithm used in generating the Hash of this Asset
          * @return a string corresponding to the HashAlgorithm
          */
-        public String getHashAlgorithm(){
+        public String getHashAlgorithm() {
             return this.hash_algorithm;
         }
 
@@ -488,7 +496,7 @@ public final class PackingList
 
         String pklNamespaceURI = PackingList.getPackingListSchemaURI(resourceByteRangeProvider, imfErrorLogger);
         PKLSchema pklSchema = supportedPKLSchemas.get(pklNamespaceURI);
-        if(pklSchema == null){
+        if (pklSchema == null) {
             String message = String.format("Please check the PKL document, currently we only support the " +
                     "following schema URIs %s", serializePKLSchemasToString());
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_PKL_ERROR, IMFErrorLogger.IMFErrors
@@ -497,10 +505,10 @@ public final class PackingList
         }
 
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-        try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1);
              InputStream xmldsig_core_is = contextClassLoader.getResourceAsStream(PackingList.xmldsig_core_schema_path);
              InputStream pkl_is = contextClassLoader.getResourceAsStream(pklSchema.getPKLSchemaPath());
-        )
+                )
         {
             StreamSource inputSource = new StreamSource(inputStream);
 
@@ -549,30 +557,30 @@ public final class PackingList
         }
 
         File inputFile = new File(args[0]);
-        if(!inputFile.exists()){
+        if (!inputFile.exists()) {
             logger.error(String.format("File %s does not exist", inputFile.getAbsolutePath()));
             System.exit(-1);
         }
         ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(inputFile);
-        byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize()-1);
+        byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize() - 1);
         PayloadRecord payloadRecord = new PayloadRecord(bytes, PayloadRecord.PayloadAssetType.PackingList, 0L, resourceByteRangeProvider.getResourceSize());
         List<ErrorLogger.ErrorObject>errors = IMPValidator.validatePKL(payloadRecord);
 
-        if(errors.size() > 0){
+        if (errors.size() > 0) {
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("PackingList Document has %d errors and %d warnings",
                     errors.size() - warningCount, warningCount));
-            for(ErrorLogger.ErrorObject errorObject : errors){
-                if(errorObject.getErrorLevel()!= IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+            for (ErrorLogger.ErrorObject errorObject : errors) {
+                if (errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.error(errorObject.toString());
                 }
-                else if(errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+                else if (errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.warn(errorObject.toString());
                 }
             }
         }
-        else{
+        else {
             logger.info("No errors were detected in the PackingList Document");
         }
     }

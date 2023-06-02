@@ -9,7 +9,8 @@ import java.util.List;
 
 public final class CoreConstraints
 {
-    private CoreConstraints() {} // Prevent instantiation. This class is constants and utilities only
+    private CoreConstraints() {
+    } // Prevent instantiation. This class is constants and utilities only
 
     // SMPTE ST 2067-2 version namespaces
     public static final String NAMESPACE_IMF_2013 = "http://www.smpte-ra.org/schemas/2067-2/2013";
@@ -36,7 +37,8 @@ public final class CoreConstraints
     }
 
     // Determine the highest Core Constraints version based on the ApplicationIds used
-    @Nullable public static String fromApplicationId(@Nonnull Collection<String> applicationIds)
+    @Nullable
+    public static String fromApplicationId(@Nonnull Collection<String> applicationIds)
     {
         // NOTE- When adding new namespaces or core constraint versions, be sure that the most recent core constraints
         // are checked first. That way if there are multiple ApplicationIdentifications, the newest version is returned.

@@ -46,7 +46,7 @@ import java.util.List;
 public class IMFTrackFileCPLBuilderFunctionalTests {
 
     @Test
-    public void IMFCPLFactoryTest(){
+    public void IMFCPLFactoryTest() {
         org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType = IMFCPLObjectFieldsFactory.constructCompositionPlaylistType_2013();
         Assert.assertTrue(compositionPlaylistType.getContentTitle() != null);
         Assert.assertTrue(compositionPlaylistType.getContentVersionList() != null);
@@ -89,7 +89,7 @@ public class IMFTrackFileCPLBuilderFunctionalTests {
         HeaderPartition headerPartition = new HeaderPartition(byteProvider, 0L, headerPartitionBytes.length, imfErrorLogger);
         List<InterchangeObject.InterchangeObjectBO> list = headerPartition.getEssenceDescriptors();
         List<KLVPacket.Header> essenceDescriptorHeaders = new ArrayList<>();
-        for(InterchangeObject.InterchangeObjectBO descriptorBO : list){
+        for (InterchangeObject.InterchangeObjectBO descriptorBO : list) {
             essenceDescriptorHeaders.add(descriptorBO.getHeader());
         }
         Assert.assertTrue(essenceDescriptorHeaders.size() == 1);
@@ -101,7 +101,7 @@ public class IMFTrackFileCPLBuilderFunctionalTests {
         headerPartition = new HeaderPartition(byteProvider, 0L, headerPartitionBytes.length, imfErrorLogger);
         list = headerPartition.getEssenceDescriptors();
         essenceDescriptorHeaders = new ArrayList<>();
-        for(InterchangeObject.InterchangeObjectBO descriptorBO : list){
+        for (InterchangeObject.InterchangeObjectBO descriptorBO : list) {
             essenceDescriptorHeaders.add(descriptorBO.getHeader());
         }
         Assert.assertTrue(essenceDescriptorHeaders.size() == 1);

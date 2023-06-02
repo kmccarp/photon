@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 @Immutable
 public class InputEntity extends Sequence {
     private final BigDecimal gain;
+
     public InputEntity(String annotaion, String handle, BigDecimal gain) {
         super(annotaion, handle);
         this.gain = gain;

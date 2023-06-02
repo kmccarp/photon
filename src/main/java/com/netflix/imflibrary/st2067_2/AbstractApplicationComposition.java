@@ -83,7 +83,6 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
     private final Set<String> essenceDescriptorKeyIgnoreSet;
 
 
-
     private final String coreConstraintsSchema;
     private final Map<UUID, ? extends Composition.VirtualTrack> virtualTrackMap;
     private final IMFCompositionPlaylistType compositionPlaylistType;
@@ -110,7 +109,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @throws IOException        any I/O related error is exposed through an IOException
      */
     public AbstractApplicationComposition(ResourceByteRangeProvider resourceByteRangeProvider) throws IOException {
-        this(IMFCompositionPlaylistType.getCompositionPlayListType( resourceByteRangeProvider, new IMFErrorLoggerImpl()), new HashSet<String>());
+        this(IMFCompositionPlaylistType.getCompositionPlayListType(resourceByteRangeProvider, new IMFErrorLoggerImpl()), new HashSet<String>());
     }
 
     /**
@@ -145,7 +144,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
         this.essenceDescriptorKeyIgnoreSet = Collections.unmodifiableSet(ignoreSet);
 
         this.virtualTrackMap = this.getVirtualTracksMap(compositionPlaylistType, imfErrorLogger);
-        Map<UUID, DOMNodeObjectModel> essenceDescriptorListMap= this.getEssenceDescriptorListMap(ignoreSet);
+        Map<UUID, DOMNodeObjectModel> essenceDescriptorListMap = this.getEssenceDescriptorListMap(ignoreSet);
 
         imfErrorLogger.addAllErrors(IMFCoreConstraintsChecker.checkVirtualTracks(compositionPlaylistType, this
                 .virtualTrackMap, essenceDescriptorListMap, this.regXMLLibDictionary, homogeneitySelectionSet));
@@ -176,7 +175,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return a map containing mappings of a UUID to the corresponding Composition.VirtualTrack
      */
     private static Map<UUID, Composition.VirtualTrack> getVirtualTracksMap(@Nonnull IMFCompositionPlaylistType
-                                                                             compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger) {
+            compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger) {
         Map<UUID, Composition.VirtualTrack> virtualTrackMap = new LinkedHashMap<>();
 
         Map<UUID, List<IMFBaseResourceType>> virtualTrackResourceMap = getVirtualTrackResourceMap(compositionPlaylistType, imfErrorLogger);
@@ -189,7 +188,8 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                 List<? extends IMFBaseResourceType> virtualTrackResourceList = null;
                 if (virtualTrackResourceMap.get(uuid) == null) {
                     virtualTrackResourceList = new ArrayList<IMFBaseResourceType>();
-                } else {
+                }
+                else {
                     virtualTrackResourceList = virtualTrackResourceMap.get(uuid);
                 }
                 Composition.VirtualTrack virtualTrack = null;
@@ -197,17 +197,19 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                     if (virtualTrackResourceList.get(0) instanceof IMFTrackFileResourceType) {
                         virtualTrack = new IMFEssenceComponentVirtualTrack(uuid,
                                 sequence.getType(),
-                                (List<IMFTrackFileResourceType>) virtualTrackResourceList,
+                                (List<IMFTrackFileResourceType>)virtualTrackResourceList,
                                 compositionPlaylistType.getEditRate());
-                    } else if (virtualTrackResourceList.get(0) instanceof IMFMarkerResourceType) {
+                    }
+                    else if (virtualTrackResourceList.get(0) instanceof IMFMarkerResourceType) {
                         virtualTrack = new IMFMarkerVirtualTrack(uuid,
                                 sequence.getType(),
-                                (List<IMFMarkerResourceType>) virtualTrackResourceList,
+                                (List<IMFMarkerResourceType>)virtualTrackResourceList,
                                 compositionPlaylistType.getEditRate());
                     }
                 }
                 virtualTrackMap.put(uuid, virtualTrack);
-            } else {
+            }
+            else {
                 //Section 6.9.3 st2067-3:2016
                 String message = String.format(
                         "First segment in Composition XML file has multiple occurrences of virtual track UUID %s this is invalid.", uuid);
@@ -228,7 +230,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return map of VirtualTrack identifier to the list of all the Track's resources, for every Composition.VirtualTrack of the Composition
      */
     private static Map<UUID, List<IMFBaseResourceType>> getVirtualTrackResourceMap(@Nonnull IMFCompositionPlaylistType
-                                                                                     compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger) {
+            compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger) {
         Map<UUID, List<IMFBaseResourceType>> virtualTrackResourceMap = new LinkedHashMap<>();
         for (IMFSegmentType segment : compositionPlaylistType.getSegmentList()) {
             for (IMFSequenceType sequence : segment.getSequenceList()) {
@@ -238,13 +240,14 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                 }
 
                 for (IMFBaseResourceType baseResource : sequence.getResourceList()) {
-                   /* Ignore track file resource with zero or negative duration */
+                    /* Ignore track file resource with zero or negative duration */
                     if (baseResource.getSourceDuration().longValue() <= 0) {
                         imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR,
                                 IMFErrorLogger.IMFErrors.ErrorLevels.WARNING, String.format("Resource with zero source duration ignored: VirtualTrackID %s ResourceID %s",
                                         uuid.toString(),
                                         baseResource.getId()));
-                    } else {
+                    }
+                    else {
                         virtualTrackResourceMap.get(uuid).add(baseResource);
                     }
                 }
@@ -298,7 +301,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return value of Annotation child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getAnnotation() {
         return this.compositionPlaylistType.getAnnotation();
     }
@@ -309,7 +312,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return value of Issuer child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getIssuer() {
         return this.compositionPlaylistType.getIssuer();
     }
@@ -320,7 +323,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return value of Creator child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getCreator() {
         return this.compositionPlaylistType.getCreator();
     }
@@ -331,7 +334,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return value of ContentOriginator child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getContentOriginator() {
         return this.compositionPlaylistType.getContentOriginator();
     }
@@ -342,7 +345,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @return value of ContentTitle child element or null if it is not exist
      */
     public
-    @Nullable
+            @Nullable
     String getContentTitle() {
         return this.compositionPlaylistType.getContentTitle();
     }
@@ -389,7 +392,8 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * Getter for the Core Constraints schema URI.
      * @return URI for the Core Constraints schema
      */
-    @Nonnull public String getCoreConstraintsSchema() {
+    @Nonnull
+    public String getCoreConstraintsSchema() {
         return this.coreConstraintsSchema;
     }
 
@@ -404,7 +408,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
         Iterator iterator = this.getVirtualTrackMap().entrySet().iterator();
         while (iterator != null
                 && iterator.hasNext()) {
-            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>) iterator.next()).getValue();
+            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>)iterator.next()).getValue();
             if (virtualTrack.getResourceList().size() != 0 && virtualTrack.getResourceList().get(0) instanceof IMFTrackFileResourceType) {
                 trackFileResources.addAll(IMFEssenceComponentVirtualTrack.class.cast(virtualTrack).getTrackFileResourceList());
             }
@@ -424,7 +428,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
         Iterator iterator = this.getVirtualTrackMap().entrySet().iterator();
         while (iterator != null
                 && iterator.hasNext()) {
-            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>) iterator.next()).getValue();
+            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>)iterator.next()).getValue();
             if (virtualTrack.getResourceList().size() != 0 && virtualTrack.getResourceList().get(0) instanceof IMFTrackFileResourceType) {
                 essenceVirtualTracks.add(IMFEssenceComponentVirtualTrack.class.cast(virtualTrack));
             }
@@ -461,7 +465,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
         Iterator iterator = this.getVirtualTrackMap().entrySet().iterator();
         while (iterator != null
                 && iterator.hasNext()) {
-            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>) iterator.next()).getValue();
+            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>)iterator.next()).getValue();
             if (virtualTrack.getSequenceTypeEnum().equals(Composition.SequenceTypeEnum.MainAudioSequence)) {
                 audioVirtualTracks.add(IMFEssenceComponentVirtualTrack.class.cast(virtualTrack));
             }
@@ -479,7 +483,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
         Iterator iterator = this.virtualTrackMap.entrySet().iterator();
         while (iterator != null
                 && iterator.hasNext()) {
-            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>) iterator.next()).getValue();
+            Composition.VirtualTrack virtualTrack = ((Map.Entry<UUID, ? extends Composition.VirtualTrack>)iterator.next()).getValue();
             if (virtualTrack.getSequenceTypeEnum().equals(Composition.SequenceTypeEnum.MarkerSequence)) {
                 return IMFMarkerVirtualTrack.class.cast(virtualTrack);
             }
@@ -572,7 +576,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                 IMFTrackFileResourceType trackFileResource = IMFTrackFileResourceType.class.cast(baseResource);
 
                 virtualTrackResourceIDs.add(new ResourceIdTuple(UUIDHelper.fromUUIDAsURNStringToUUID(trackFileResource.getTrackFileId())
-                        , UUIDHelper.fromUUIDAsURNStringToUUID(trackFileResource.getSourceEncoding())));
+                , UUIDHelper.fromUUIDAsURNStringToUUID(trackFileResource.getSourceEncoding())));
             }
         }
 
@@ -628,8 +632,8 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                     UUID uuid = essenceDescriptorBaseType.getId();
                     DOMNodeObjectModel domNodeObjectModel = null;
                     for (Object object : essenceDescriptorBaseType.getAny()) {
-                        domNodeObjectModel = new DOMNodeObjectModel((Node) object);
-                        if(domNodeObjectModel != null && ignoreSet.size() != 0) {
+                        domNodeObjectModel = new DOMNodeObjectModel((Node)object);
+                        if (domNodeObjectModel != null && ignoreSet.size() != 0) {
                             domNodeObjectModel = DOMNodeObjectModel.createDOMNodeObjectModelIgnoreSet(domNodeObjectModel, ignoreSet);
                         }
                     }
@@ -643,7 +647,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                 }
             }
         }
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             throw new IMFException("Creating essenceDescriptorMap failed", imfErrorLogger);
         }
@@ -680,7 +684,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
             }
             audioVirtualTrackMap.put(set, audioVirtualTrack);
         }
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             throw new IMFException("Creating Audio Virtual track map failed", imfErrorLogger);
         }
@@ -698,8 +702,8 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
      * @throws IOException        - any I/O related error is exposed through an IOException.
      */
     public List<ErrorLogger.ErrorObject> conformVirtualTracksInComposition(List<Composition.HeaderPartitionTuple>
-                                                                   headerPartitionTuples,
-                                                     boolean conformAllVirtualTracksInCpl) throws IOException {
+            headerPartitionTuples,
+            boolean conformAllVirtualTracksInCpl) throws IOException {
         /*
          * The algorithm for conformance checking a Composition (CPL) would be
          * 1) Verify that every EssenceDescriptor element in the EssenceDescriptor list (EDL) is referenced through its id element if conformAllVirtualTracks is enabled
@@ -721,7 +725,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
          */
         if (conformAllVirtualTracksInCpl) {
             while (cplEssenceDescriptorIDs.hasNext()) {
-                UUID cplEssenceDescriptorUUID = (UUID) cplEssenceDescriptorIDs.next();
+                UUID cplEssenceDescriptorUUID = (UUID)cplEssenceDescriptorIDs.next();
                 if (!resourceEssenceDescriptorIDsSet.contains(cplEssenceDescriptorUUID)) {
                     //Section 6.1.10.1 st2067-3:2013
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, String.format("EssenceDescriptorID %s in the CPL " +
@@ -753,7 +757,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
             this.imfErrorLogger.addAllErrors(e.getErrors());
         }
 
-        if( essenceDescriptorMap == null || resourceEssenceDescriptorMap == null || imfErrorLogger.hasFatalErrors())
+        if (essenceDescriptorMap == null || resourceEssenceDescriptorMap == null || imfErrorLogger.hasFatalErrors())
         {
             return imfErrorLogger.getErrors();
         }
@@ -811,27 +815,27 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                 IMFConstraints.HeaderPartitionIMF headerPartitionIMF = IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
                 Preface preface = headerPartitionIMF.getHeaderPartitionOP1A().getHeaderPartition().getPreface();
                 GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-                SourcePackage filePackage = (SourcePackage) genericPackage;
+                SourcePackage filePackage = (SourcePackage)genericPackage;
                 UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
                 resourceUUIDHeaderPartitionMap.put(packageUUID, headerPartitionTuple);
             }
-            catch (IMFException | MXFException e){
+            catch(IMFException | MXFException e) {
                 Preface preface = headerPartitionTuple.getHeaderPartition().getPreface();
                 GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-                SourcePackage filePackage = (SourcePackage) genericPackage;
+                SourcePackage filePackage = (SourcePackage)genericPackage;
                 UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
                 imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("IMFTrackFile with ID %s has fatal errors", packageUUID.toString())));
-                if(e instanceof IMFException){
+                if (e instanceof IMFException) {
                     IMFException imfException = (IMFException)e;
                     imfErrorLogger.addAllErrors(imfException.getErrors());
                 }
-                else if(e instanceof MXFException){
+                else if (e instanceof MXFException) {
                     MXFException mxfException = (MXFException)e;
                     imfErrorLogger.addAllErrors(mxfException.getErrors());
                 }
             }
         }
-        if(imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors())){
+        if (imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors())) {
             throw new IMFException(String.format("Fatal errors were detected in the IMFTrackFiles"), imfErrorLogger);
         }
         List<Composition.VirtualTrack> virtualTracks = new ArrayList<>(this.getVirtualTrackMap().values());
@@ -854,7 +858,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                             try {
                                 domNodeObjectModels.add(new DOMNodeObjectModel(node));
                             }
-                            catch( IMFException e) {
+                            catch(IMFException e) {
                                 imfErrorLogger.addAllErrors(e.getErrors());
                             }
 
@@ -862,14 +866,14 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                         resourcesEssenceDescriptorMap.put(resourceIdTuple.getSourceEncoding(), domNodeObjectModels);
                     }
                 }
-                catch( IMFException e)
+                catch(IMFException e)
                 {
                     imfErrorLogger.addAllErrors(e.getErrors());
                 }
             }
         }
 
-        if( imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors()))
+        if (imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors()))
         {
             throw new IMFException("Failed to get Essence Descriptor for a resource", this.imfErrorLogger);
         }
@@ -878,7 +882,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
             String message = "Composition does not refer to a single IMFEssence represented by the HeaderPartitions " +
                     "that were passed in.";
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors
-                    .ErrorLevels.FATAL,
+                            .ErrorLevels.FATAL,
                     message);
             throw new IMFException(message, this.imfErrorLogger);
         }
@@ -888,30 +892,30 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
 
     private List<Node> getEssenceDescriptorDOMNodes(Composition.HeaderPartitionTuple headerPartitionTuple) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-            List<InterchangeObject.InterchangeObjectBO> essenceDescriptors = headerPartitionTuple.getHeaderPartition().getEssenceDescriptors();
-            List<Node> essenceDescriptorNodes = new ArrayList<>();
-            for (InterchangeObject.InterchangeObjectBO essenceDescriptor : essenceDescriptors) {
-                try {
-                    KLVPacket.Header essenceDescriptorHeader = essenceDescriptor.getHeader();
-                    List<KLVPacket.Header> subDescriptorHeaders = this.getSubDescriptorKLVHeader(headerPartitionTuple.getHeaderPartition(), essenceDescriptor);
-                    /*Create a dom*/
-                    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-                    Document document = docBuilder.newDocument();
+        List<InterchangeObject.InterchangeObjectBO> essenceDescriptors = headerPartitionTuple.getHeaderPartition().getEssenceDescriptors();
+        List<Node> essenceDescriptorNodes = new ArrayList<>();
+        for (InterchangeObject.InterchangeObjectBO essenceDescriptor : essenceDescriptors) {
+            try {
+                KLVPacket.Header essenceDescriptorHeader = essenceDescriptor.getHeader();
+                List<KLVPacket.Header> subDescriptorHeaders = this.getSubDescriptorKLVHeader(headerPartitionTuple.getHeaderPartition(), essenceDescriptor);
+                /*Create a dom*/
+                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                Document document = docBuilder.newDocument();
 
-                    DocumentFragment documentFragment = this.getEssenceDescriptorAsDocumentFragment(document, headerPartitionTuple, essenceDescriptorHeader, subDescriptorHeaders);
-                    Node node = documentFragment.getFirstChild();
-                    essenceDescriptorNodes.add(node);
-                } catch (ParserConfigurationException e) {
-                    imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.INTERNAL_ERROR,
-                            IMFErrorLogger.IMFErrors
-                            .ErrorLevels.FATAL, e.getMessage());
-                }
+                DocumentFragment documentFragment = this.getEssenceDescriptorAsDocumentFragment(document, headerPartitionTuple, essenceDescriptorHeader, subDescriptorHeaders);
+                Node node = documentFragment.getFirstChild();
+                essenceDescriptorNodes.add(node);
+            } catch(ParserConfigurationException e) {
+                imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.INTERNAL_ERROR,
+                        IMFErrorLogger.IMFErrors
+                                .ErrorLevels.FATAL, e.getMessage());
             }
-            if(imfErrorLogger.hasFatalErrors()) {
-                throw new IMFException("Failed to get Essence Descriptor for a resource", imfErrorLogger);
-            }
-            return essenceDescriptorNodes;
+        }
+        if (imfErrorLogger.hasFatalErrors()) {
+            throw new IMFException("Failed to get Essence Descriptor for a resource", imfErrorLogger);
+        }
+        return essenceDescriptorNodes;
 
     }
 
@@ -988,7 +992,7 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
          */
         Iterator<Map.Entry<UUID, List<DOMNodeObjectModel>>> iterator = essenceDescriptorsMap.entrySet().iterator();
         while (iterator.hasNext()) {
-            Map.Entry<UUID, List<DOMNodeObjectModel>> entry = (Map.Entry<UUID, List<DOMNodeObjectModel>>) iterator.next();
+            Map.Entry<UUID, List<DOMNodeObjectModel>> entry = (Map.Entry<UUID, List<DOMNodeObjectModel>>)iterator.next();
             List<DOMNodeObjectModel> domNodeObjectModels = entry.getValue();
             DOMNodeObjectModel referenceDOMNodeObjectModel = eDLMap.get(entry.getKey());
             if (referenceDOMNodeObjectModel == null) {
@@ -1010,8 +1014,8 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
                     imfErrorLogger.addAllErrors(DOMNodeObjectModel.getNamespaceURIMismatchErrors(referenceDOMNodeObjectModel, matchingDOMNodeObjectModel));
 
                     String domNodeName = referenceDOMNodeObjectModel.getLocalName();
-                    List<DOMNodeObjectModel> domNodeObjectModelList = domNodeObjectModelsIgnoreSet.stream().filter( e -> e.getLocalName().equals(domNodeName)).collect(Collectors.toList());
-                    if(domNodeObjectModelList.size() != 0)
+                    List<DOMNodeObjectModel> domNodeObjectModelList = domNodeObjectModelsIgnoreSet.stream().filter(e -> e.getLocalName().equals(domNodeName)).collect(Collectors.toList());
+                    if (domNodeObjectModelList.size() != 0)
                     {
                         DOMNodeObjectModel diffCPLEssenceDescriptor = referenceDOMNodeObjectModel.removeNodes(domNodeObjectModelList.get(0));
                         DOMNodeObjectModel diffTrackFileEssenceDescriptor = domNodeObjectModelList.get(0).removeNodes(referenceDOMNodeObjectModel);
@@ -1054,12 +1058,12 @@ public abstract class AbstractApplicationComposition implements ApplicationCompo
         final Map<UUID, List<Node>> essenceDescriptorDomNodeMap = new HashMap<>();
         if (compositionPlaylistType.getEssenceDescriptorList() != null) {
             Map<UUID, UUID> essenceDescriptorIdToTrackFileIdMap = new HashMap<>();
-            for(ResourceIdTuple resourceIdTuple : getResourceIdTuples(this.getVirtualTracks())) {
+            for (ResourceIdTuple resourceIdTuple : getResourceIdTuples(this.getVirtualTracks())) {
                 essenceDescriptorIdToTrackFileIdMap.put(resourceIdTuple.getSourceEncoding(), resourceIdTuple.getTrackFileId());
             }
-            for(IMFEssenceDescriptorBaseType imfEssenceDescriptorBaseType : compositionPlaylistType.getEssenceDescriptorList()) {
-                if(essenceDescriptorIdToTrackFileIdMap.containsKey(imfEssenceDescriptorBaseType.getId())) {
-                    essenceDescriptorDomNodeMap.put(essenceDescriptorIdToTrackFileIdMap.get(imfEssenceDescriptorBaseType.getId()), imfEssenceDescriptorBaseType.getAny().stream().map(e -> (Node) e).collect(Collectors.toList()));
+            for (IMFEssenceDescriptorBaseType imfEssenceDescriptorBaseType : compositionPlaylistType.getEssenceDescriptorList()) {
+                if (essenceDescriptorIdToTrackFileIdMap.containsKey(imfEssenceDescriptorBaseType.getId())) {
+                    essenceDescriptorDomNodeMap.put(essenceDescriptorIdToTrackFileIdMap.get(imfEssenceDescriptorBaseType.getId()), imfEssenceDescriptorBaseType.getAny().stream().map(e -> (Node)e).collect(Collectors.toList()));
                 }
             }
         }

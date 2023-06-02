@@ -59,7 +59,7 @@ public final class LocalTagEntryBatch
 
         this.localTagToUID = new HashMap<>();
 
-        for (long i=0; i<this.header.getNumberOfElements(); i++)
+        for (long i = 0; i < this.header.getNumberOfElements(); i++)
         {
             int localTag = MXFPropertyPopulator.getUnsignedShortAsInt(byteProvider.getBytes(2), KLVPacket.BYTE_ORDER);
             //smpte st 377-1:2011, section 9.2

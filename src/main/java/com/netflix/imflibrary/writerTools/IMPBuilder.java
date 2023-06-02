@@ -54,7 +54,7 @@ public class IMPBuilder {
     /**
      * To prevent instantiation
      */
-    private IMPBuilder(){
+    private IMPBuilder() {
 
     }
 
@@ -77,13 +77,13 @@ public class IMPBuilder {
      * @throws URISyntaxException exposes any issues instantiating a {@link java.net.URI URI} object
      */
     public static List<ErrorLogger.ErrorObject> buildIMP_2013(@Nonnull String annotationText,
-                                                              @Nonnull String issuer,
-                                                              @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                              @Nonnull Composition.EditRate compositionEditRate,
-                                                              @Nonnull String applicationId,
-                                                              @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
-                                                              @Nonnull File workingDirectory) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
-        if(trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull Composition.EditRate compositionEditRate,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
+            @Nonnull File workingDirectory) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
+        if (trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
             throw new IMFAuthoringException(String.format("trackFileHeaderPartitionMap has IMFTrackFileMetadata with null header partition"));
         }
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -92,7 +92,7 @@ public class IMPBuilder {
 
         Map<UUID, IMFTrackFileInfo> uuidimfTrackFileInfoMap = new HashMap<>();
 
-        for(Map.Entry<UUID, IMFTrackFileMetadata> entry: trackFileHeaderPartitionMap.entrySet()) {
+        for (Map.Entry<UUID, IMFTrackFileMetadata> entry : trackFileHeaderPartitionMap.entrySet()) {
             IMFTrackFileInfo imfTrackFileInfo = new IMFTrackFileInfo(entry.getValue().getHash(), entry.getValue().getHashAlgorithm(), entry.getValue().getOriginalFileName(), entry.getValue().getLength(), entry.getValue().isExcludeFromPackage());
             uuidimfTrackFileInfoMap.put(entry.getKey(), imfTrackFileInfo);
         }
@@ -101,12 +101,12 @@ public class IMPBuilder {
     }
 
     public static List<ErrorLogger.ErrorObject> buildIMPWithoutCreatingNewCPL_2013(@Nonnull String annotationText,
-                                                                                   @Nonnull String issuer,
-                                                                                   @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                                                   @Nonnull Composition.EditRate compositionEditRate,
-                                                                                   @Nonnull String applicationId,
-                                                                                   @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
-                                                                                   @Nonnull File workingDirectory, @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull Composition.EditRate compositionEditRate,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
+            @Nonnull File workingDirectory, @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
         if (trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
             throw new IMFAuthoringException(String.format("trackFileHeaderPartitionMap has IMFTrackFileMetadata with null header partition"));
         }
@@ -123,12 +123,12 @@ public class IMPBuilder {
     }
 
     public static List<ErrorLogger.ErrorObject> buildIMPWithoutCreatingNewCPL_2013(@Nonnull String annotationText,
-                                                                                   @Nonnull String issuer,
-                                                                                   @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                                                   @Nonnull String applicationId,
-                                                                                   @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
-                                                                                   @Nonnull File workingDirectory,
-                                                                                   @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
+            @Nonnull File workingDirectory,
+            @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
 
         int numErrors = imfErrorLogger.getNumberOfErrors();
@@ -138,20 +138,20 @@ public class IMPBuilder {
             coreConstraintsSchema = CoreConstraints.NAMESPACE_IMF_2013;
 
         Composition.VirtualTrack mainImageVirtualTrack = null;
-        for(Composition.VirtualTrack virtualTrack : virtualTracks){
-            if(virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence){
+        for (Composition.VirtualTrack virtualTrack : virtualTracks) {
+            if (virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence) {
                 mainImageVirtualTrack = virtualTrack;
                 break;
             }
         }
 
-        if(mainImageVirtualTrack == null){
+        if (mainImageVirtualTrack == null) {
             throw new IMFAuthoringException(String.format("Exactly 1 MainImageSequence virtual track is required to create an IMP, none present"));
         }
 
         /* No need to build a new CPL because we already have it in cplFile */
 
-        if(!cplFile.exists()){
+        if (!cplFile.exists()) {
             throw new IMFAuthoringException(String.format("CompositionPlaylist file does not exist, cannot generate the rest of the documents"));
         }
         byte[] cplHash = IMFUtils.generateSHA1HashAndBase64Encode(cplFile);
@@ -182,8 +182,8 @@ public class IMPBuilder {
                         PackingListBuilder.PKLAssetTypeEnum.TEXT_XML,
                         PackingListBuilder.buildPKLUserTextType_2007(cplFile.getName(), "en"));
         packingListBuilderAssets.add(cplAsset);
-        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileMetadataEntriesSet = trackFileInfoMap.entrySet().stream().filter( e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
-        for(Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileMetadataEntriesSet){
+        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileMetadataEntriesSet = trackFileInfoMap.entrySet().stream().filter(e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
+        for (Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileMetadataEntriesSet) {
             PackingListBuilder.PackingListBuilderAsset_2007 asset =
                     new PackingListBuilder.PackingListBuilderAsset_2007(entry.getKey(),
                             PackingListBuilder.buildPKLUserTextType_2007(annotationText, "en"),
@@ -198,13 +198,13 @@ public class IMPBuilder {
 
         imfErrorLogger.addAllErrors(packingListBuilder.getErrors());
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the PackingList. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
-        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors()-1 : 0;
+        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors() - 1 : 0;
 
         File pklFile = new File(workingDirectory + File.separator + packingListBuilder.getPKLFileName());
-        if(!pklFile.exists()){
+        if (!pklFile.exists()) {
             throw new IMFAuthoringException(String.format("PackingList file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -214,7 +214,7 @@ public class IMPBuilder {
          */
         UUID assetMapUUID = IMFUUIDGenerator.getInstance().generateUUID();
         List<AssetMapBuilder.Asset> assetMapAssets = new ArrayList<>();
-        for(PackingListBuilder.PackingListBuilderAsset_2007 pklAsset : packingListBuilderAssets){
+        for (PackingListBuilder.PackingListBuilderAsset_2007 pklAsset : packingListBuilderAssets) {
             AssetMapBuilder.Chunk chunk = new AssetMapBuilder.Chunk(pklAsset.getOriginalFileName().getValue(), pklAsset.getSize().longValue());
             List<AssetMapBuilder.Chunk> chunkList = new ArrayList<>();
             chunkList.add(chunk);
@@ -244,13 +244,13 @@ public class IMPBuilder {
                 imfErrorLogger);
         assetMapBuilder.build();
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the AssetMap. Please see following error messages %s",
                     Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
 
         File assetMapFile = new File(workingDirectory + File.separator + assetMapBuilder.getAssetMapFileName());
-        if(!assetMapFile.exists()){
+        if (!assetMapFile.exists()) {
             throw new IMFAuthoringException(String.format("AssetMap file does not exist in the working directory %s", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -276,13 +276,13 @@ public class IMPBuilder {
      * @throws URISyntaxException exposes any issues instantiating a {@link java.net.URI URI} object
      */
     public static List<ErrorLogger.ErrorObject> buildIMP_2013(@Nonnull String annotationText,
-                                                              @Nonnull String issuer,
-                                                              @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                              @Nonnull Composition.EditRate compositionEditRate,
-                                                              @Nonnull String applicationId,
-                                                              @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
-                                                              @Nonnull File workingDirectory,
-                                                              @Nonnull Map<UUID, List<Node>> essenceDescriptorDomNodeMap)
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull Composition.EditRate compositionEditRate,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
+            @Nonnull File workingDirectory,
+            @Nonnull Map<UUID, List<Node>> essenceDescriptorDomNodeMap)
             throws IOException, ParserConfigurationException, URISyntaxException
     {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -295,14 +295,14 @@ public class IMPBuilder {
             coreConstraintsSchema = CoreConstraints.NAMESPACE_IMF_2013;
 
         Composition.VirtualTrack mainImageVirtualTrack = null;
-        for(Composition.VirtualTrack virtualTrack : virtualTracks){
-            if(virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence){
+        for (Composition.VirtualTrack virtualTrack : virtualTracks) {
+            if (virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence) {
                 mainImageVirtualTrack = virtualTrack;
                 break;
             }
         }
 
-        if(mainImageVirtualTrack == null){
+        if (mainImageVirtualTrack == null) {
             throw new IMFAuthoringException(String.format("Exactly 1 MainImageSequence virtual track is required to create an IMP, none present"));
         }
 
@@ -311,20 +311,21 @@ public class IMPBuilder {
          */
         long totalRunningTime = 0L;
         long totalNumberOfImageEditUnits = 0L;
-        for(IMFTrackFileResourceType trackResource : (List<IMFTrackFileResourceType>)mainImageVirtualTrack.getResourceList()){
+        for (IMFTrackFileResourceType trackResource : (List<IMFTrackFileResourceType>)mainImageVirtualTrack.getResourceList()) {
             totalNumberOfImageEditUnits += trackResource.getSourceDuration().longValue() * trackResource.getRepeatCount().longValue();
         }
-        totalRunningTime = totalNumberOfImageEditUnits/(compositionEditRate.getNumerator()/compositionEditRate.getDenominator());
+        totalRunningTime = totalNumberOfImageEditUnits / (compositionEditRate.getNumerator() / compositionEditRate.getDenominator());
 
         List<IMFEssenceDescriptorBaseType> imfEssenceDescriptorBaseTypeList = new ArrayList<>();
         Map<UUID, UUID> trackFileIdToEssenceDescriptorIdMap = new HashMap<>();
-        for(AbstractApplicationComposition.ResourceIdTuple resourceIdTuple : getResourceIdTuples(virtualTracks)) {
+        for (AbstractApplicationComposition.ResourceIdTuple resourceIdTuple : getResourceIdTuples(virtualTracks)) {
             trackFileIdToEssenceDescriptorIdMap.put(resourceIdTuple.getTrackFileId(), resourceIdTuple.getSourceEncoding());
         }
-        for(Map.Entry<UUID, List<Node>> entry: essenceDescriptorDomNodeMap.entrySet()) {
-            if(trackFileIdToEssenceDescriptorIdMap.containsKey(entry.getKey())) {
+        for (Map.Entry<UUID, List<Node>> entry : essenceDescriptorDomNodeMap.entrySet()) {
+            if (trackFileIdToEssenceDescriptorIdMap.containsKey(entry.getKey())) {
                 imfEssenceDescriptorBaseTypeList.add(new IMFEssenceDescriptorBaseType(UUIDHelper.fromUUID(trackFileIdToEssenceDescriptorIdMap.get(entry.getKey())), new ArrayList<>( entry.getValue())));
-            } else {
+            }
+            else {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                         String.format("Resource = %s is not referenced in the virtual track.", UUIDHelper.fromUUID(entry.getKey())));
@@ -348,13 +349,13 @@ public class IMPBuilder {
         imfErrorLogger.addAllErrors(compositionPlaylistBuilder_2013.build());
 
 
-        if(imfErrorLogger.hasFatalErrors()) {
+        if (imfErrorLogger.hasFatalErrors()) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the CompositionPlaylist. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
-        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors()-1 : 0;
+        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors() - 1 : 0;
 
         File cplFile = new File(workingDirectory + File.separator + compositionPlaylistBuilder_2013.getCPLFileName());
-        if(!cplFile.exists()){
+        if (!cplFile.exists()) {
             throw new IMFAuthoringException(String.format("CompositionPlaylist file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath()));
         }
         byte[] cplHash = IMFUtils.generateSHA1HashAndBase64Encode(cplFile);
@@ -384,8 +385,8 @@ public class IMPBuilder {
                         PackingListBuilder.PKLAssetTypeEnum.TEXT_XML,
                         PackingListBuilder.buildPKLUserTextType_2007(compositionPlaylistBuilder_2013.getCPLFileName(), "en"));
         packingListBuilderAssets.add(cplAsset);
-        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileMetadataEntriesSet = trackFileInfoMap.entrySet().stream().filter( e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
-        for(Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileMetadataEntriesSet){
+        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileMetadataEntriesSet = trackFileInfoMap.entrySet().stream().filter(e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
+        for (Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileMetadataEntriesSet) {
             PackingListBuilder.PackingListBuilderAsset_2007 asset =
                     new PackingListBuilder.PackingListBuilderAsset_2007(entry.getKey(),
                             PackingListBuilder.buildPKLUserTextType_2007(annotationText, "en"),
@@ -400,13 +401,13 @@ public class IMPBuilder {
 
         imfErrorLogger.addAllErrors(packingListBuilder.getErrors());
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the PackingList. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
-        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors()-1 : 0;
+        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors() - 1 : 0;
 
         File pklFile = new File(workingDirectory + File.separator + packingListBuilder.getPKLFileName());
-        if(!pklFile.exists()){
+        if (!pklFile.exists()) {
             throw new IMFAuthoringException(String.format("PackingList file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -416,7 +417,7 @@ public class IMPBuilder {
          */
         UUID assetMapUUID = IMFUUIDGenerator.getInstance().generateUUID();
         List<AssetMapBuilder.Asset> assetMapAssets = new ArrayList<>();
-        for(PackingListBuilder.PackingListBuilderAsset_2007 pklAsset : packingListBuilderAssets){
+        for (PackingListBuilder.PackingListBuilderAsset_2007 pklAsset : packingListBuilderAssets) {
             AssetMapBuilder.Chunk chunk = new AssetMapBuilder.Chunk(pklAsset.getOriginalFileName().getValue(), pklAsset.getSize().longValue());
             List<AssetMapBuilder.Chunk> chunkList = new ArrayList<>();
             chunkList.add(chunk);
@@ -446,13 +447,13 @@ public class IMPBuilder {
                 imfErrorLogger);
         assetMapBuilder.build();
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the AssetMap. Please see following error messages %s",
                     Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
 
         File assetMapFile = new File(workingDirectory + File.separator + assetMapBuilder.getAssetMapFileName());
-        if(!assetMapFile.exists()){
+        if (!assetMapFile.exists()) {
             throw new IMFAuthoringException(String.format("AssetMap file does not exist in the working directory %s", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -479,13 +480,13 @@ public class IMPBuilder {
      * @throws URISyntaxException exposes any issues instantiating a {@link java.net.URI URI} object
      */
     public static List<ErrorLogger.ErrorObject> buildIMP_2016(@Nonnull String annotationText,
-                                                              @Nonnull String issuer,
-                                                              @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                              @Nonnull Composition.EditRate compositionEditRate,
-                                                              @Nonnull String applicationId,
-                                                              @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
-                                                              @Nonnull File workingDirectory) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
-        if(trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull Composition.EditRate compositionEditRate,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
+            @Nonnull File workingDirectory) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
+        if (trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
             throw new IMFAuthoringException(String.format("trackFileHeaderPartitionMap has IMFTrackFileMetadata with null header partition"));
         }
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -493,7 +494,7 @@ public class IMPBuilder {
         Map<UUID, List<Node>> imfEssenceDescriptorMap = buildEDLForVirtualTracks(trackFileHeaderPartitionMap, virtualTracks, imfErrorLogger);
 
         Map<UUID, IMFTrackFileInfo> uuidimfTrackFileInfoMap = new HashMap<>();
-        for(Map.Entry<UUID, IMFTrackFileMetadata> entry: trackFileHeaderPartitionMap.entrySet()) {
+        for (Map.Entry<UUID, IMFTrackFileMetadata> entry : trackFileHeaderPartitionMap.entrySet()) {
             IMFTrackFileInfo imfTrackFileInfo = new IMFTrackFileInfo(entry.getValue().getHash(), entry.getValue().getHashAlgorithm(), entry.getValue().getOriginalFileName(), entry.getValue().getLength(), entry.getValue().isExcludeFromPackage());
             uuidimfTrackFileInfoMap.put(entry.getKey(), imfTrackFileInfo);
         }
@@ -503,19 +504,19 @@ public class IMPBuilder {
     }
 
     public static List<ErrorLogger.ErrorObject> buildIMPWithoutCreatingNewCPL_2016(@Nonnull String annotationText,
-                                                                                   @Nonnull String issuer,
-                                                                                   @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                                                   @Nonnull Composition.EditRate compositionEditRate,
-                                                                                   @Nonnull String applicationId,
-                                                                                   @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
-                                                                                   @Nonnull File workingDirectory, @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
-        if(trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull Composition.EditRate compositionEditRate,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileMetadata> trackFileHeaderPartitionMap,
+            @Nonnull File workingDirectory, @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
+        if (trackFileHeaderPartitionMap.entrySet().stream().filter(e -> e.getValue().getHeaderPartition() == null).count() > 0) {
             throw new IMFAuthoringException(String.format("trackFileHeaderPartitionMap has IMFTrackFileMetadata with null header partition"));
         }
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
 
         Map<UUID, IMFTrackFileInfo> trackFileInfoMap = new HashMap<>();
-        for(Map.Entry<UUID, IMFTrackFileMetadata> entry: trackFileHeaderPartitionMap.entrySet()) {
+        for (Map.Entry<UUID, IMFTrackFileMetadata> entry : trackFileHeaderPartitionMap.entrySet()) {
             IMFTrackFileInfo imfTrackFileInfo = new IMFTrackFileInfo(entry.getValue().getHash(), entry.getValue().getHashAlgorithm(), entry.getValue().getOriginalFileName(), entry.getValue().getLength(), entry.getValue().isExcludeFromPackage());
             trackFileInfoMap.put(entry.getKey(), imfTrackFileInfo);
         }
@@ -525,12 +526,12 @@ public class IMPBuilder {
     }
 
     public static List<ErrorLogger.ErrorObject> buildIMPWithoutCreatingNewCPL_2016(@Nonnull String annotationText,
-                                                                                   @Nonnull String issuer,
-                                                                                   @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                                                   @Nonnull String applicationId,
-                                                                                   @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
-                                                                                   @Nonnull File workingDirectory,
-                                                                                   @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
+            @Nonnull File workingDirectory,
+            @Nonnull File cplFile) throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException {
 
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
 
@@ -541,18 +542,18 @@ public class IMPBuilder {
             coreConstraintsSchema = CoreConstraints.NAMESPACE_IMF_2016;
 
         Composition.VirtualTrack mainImageVirtualTrack = null;
-        for(Composition.VirtualTrack virtualTrack : virtualTracks){
-            if(virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence){
+        for (Composition.VirtualTrack virtualTrack : virtualTracks) {
+            if (virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence) {
                 mainImageVirtualTrack = virtualTrack;
                 break;
             }
         }
 
-        if(mainImageVirtualTrack == null){
+        if (mainImageVirtualTrack == null) {
             throw new IMFAuthoringException(String.format("Exactly 1 MainImageSequence virtual track is required to create an IMP, none present"));
         }
 
-        if(!cplFile.exists()){
+        if (!cplFile.exists()) {
             throw new IMFAuthoringException(String.format("CompositionPlaylist file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath()));
         }
         byte[] cplHash = IMFUtils.generateSHA1HashAndBase64Encode(cplFile);
@@ -584,8 +585,8 @@ public class IMPBuilder {
                         PackingListBuilder.PKLAssetTypeEnum.TEXT_XML,
                         PackingListBuilder.buildPKLUserTextType_2016(cplFile.getName(), "en"));
         packingListBuilderAssets.add(cplAsset);
-        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileInfoEntriesSet = trackFileInfoMap.entrySet().stream().filter( e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
-        for(Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileInfoEntriesSet){
+        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileInfoEntriesSet = trackFileInfoMap.entrySet().stream().filter(e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
+        for (Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileInfoEntriesSet) {
             PackingListBuilder.PackingListBuilderAsset_2016 asset =
                     new PackingListBuilder.PackingListBuilderAsset_2016(entry.getKey(),
                             PackingListBuilder.buildPKLUserTextType_2016(annotationText, "en"),
@@ -598,12 +599,12 @@ public class IMPBuilder {
         }
         packingListBuilder.buildPackingList_2016(pklAnnotationText, pklIssuer, creator, packingListBuilderAssets);
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the PackingList. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
-        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors()-1 : 0;
+        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors() - 1 : 0;
         File pklFile = new File(workingDirectory + File.separator + packingListBuilder.getPKLFileName());
-        if(!pklFile.exists()){
+        if (!pklFile.exists()) {
             throw new IMFAuthoringException(String.format("PackingList file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -613,7 +614,7 @@ public class IMPBuilder {
          */
         UUID assetMapUUID = IMFUUIDGenerator.getInstance().generateUUID();
         List<AssetMapBuilder.Asset> assetMapAssets = new ArrayList<>();
-        for(PackingListBuilder.PackingListBuilderAsset_2016 pklAsset : packingListBuilderAssets){
+        for (PackingListBuilder.PackingListBuilderAsset_2016 pklAsset : packingListBuilderAssets) {
             AssetMapBuilder.Chunk chunk = new AssetMapBuilder.Chunk(pklAsset.getOriginalFileName().getValue(), pklAsset.getSize().longValue());
             List<AssetMapBuilder.Chunk> chunkList = new ArrayList<>();
             chunkList.add(chunk);
@@ -643,12 +644,12 @@ public class IMPBuilder {
                 imfErrorLogger);
         assetMapBuilder.build();
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the AssetMap. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
 
         File assetMapFile = new File(workingDirectory + File.separator + assetMapBuilder.getAssetMapFileName());
-        if(!assetMapFile.exists()){
+        if (!assetMapFile.exists()) {
             throw new IMFAuthoringException(String.format("AssetMap file does not exist in the working directory %s", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -676,13 +677,13 @@ public class IMPBuilder {
      * @throws URISyntaxException exposes any issues instantiating a {@link java.net.URI URI} object
      */
     public static List<ErrorLogger.ErrorObject> buildIMP_2016(@Nonnull String annotationText,
-                                                              @Nonnull String issuer,
-                                                              @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
-                                                              @Nonnull Composition.EditRate compositionEditRate,
-                                                              @Nonnull String applicationId,
-                                                              @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
-                                                              @Nonnull File workingDirectory,
-                                                              @Nonnull Map<UUID, List<Node>> essenceDescriptorDomNodeMap)
+            @Nonnull String issuer,
+            @Nonnull List<? extends Composition.VirtualTrack> virtualTracks,
+            @Nonnull Composition.EditRate compositionEditRate,
+            @Nonnull String applicationId,
+            @Nonnull Map<UUID, IMFTrackFileInfo> trackFileInfoMap,
+            @Nonnull File workingDirectory,
+            @Nonnull Map<UUID, List<Node>> essenceDescriptorDomNodeMap)
             throws IOException, ParserConfigurationException, SAXException, JAXBException, URISyntaxException
     {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -694,14 +695,14 @@ public class IMPBuilder {
             coreConstraintsSchema = CoreConstraints.NAMESPACE_IMF_2016;
 
         Composition.VirtualTrack mainImageVirtualTrack = null;
-        for(Composition.VirtualTrack virtualTrack : virtualTracks){
-            if(virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence){
+        for (Composition.VirtualTrack virtualTrack : virtualTracks) {
+            if (virtualTrack.getSequenceTypeEnum() == Composition.SequenceTypeEnum.MainImageSequence) {
                 mainImageVirtualTrack = virtualTrack;
                 break;
             }
         }
 
-        if(mainImageVirtualTrack == null){
+        if (mainImageVirtualTrack == null) {
             throw new IMFAuthoringException(String.format("Exactly 1 MainImageSequence virtual track is required to create an IMP, none present"));
         }
 
@@ -710,20 +711,21 @@ public class IMPBuilder {
          */
         long totalRunningTime = 0L;
         long totalNumberOfImageEditUnits = 0L;
-        for(IMFTrackFileResourceType trackResource : (List<IMFTrackFileResourceType>)mainImageVirtualTrack.getResourceList()){
+        for (IMFTrackFileResourceType trackResource : (List<IMFTrackFileResourceType>)mainImageVirtualTrack.getResourceList()) {
             totalNumberOfImageEditUnits += trackResource.getSourceDuration().longValue() * trackResource.getRepeatCount().longValue();
         }
-        totalRunningTime = totalNumberOfImageEditUnits/(compositionEditRate.getNumerator()/compositionEditRate.getDenominator());
+        totalRunningTime = totalNumberOfImageEditUnits / (compositionEditRate.getNumerator() / compositionEditRate.getDenominator());
 
         List<IMFEssenceDescriptorBaseType> imfEssenceDescriptorBaseTypeList = new ArrayList<>();
         Map<UUID, UUID> trackFileIdToEssenceDescriptorIdMap = new HashMap<>();
-        for(AbstractApplicationComposition.ResourceIdTuple resourceIdTuple : getResourceIdTuples(virtualTracks)) {
+        for (AbstractApplicationComposition.ResourceIdTuple resourceIdTuple : getResourceIdTuples(virtualTracks)) {
             trackFileIdToEssenceDescriptorIdMap.put(resourceIdTuple.getTrackFileId(), resourceIdTuple.getSourceEncoding());
         }
-        for(Map.Entry<UUID, List<Node>> entry: essenceDescriptorDomNodeMap.entrySet()) {
-            if(trackFileIdToEssenceDescriptorIdMap.containsKey(entry.getKey())) {
+        for (Map.Entry<UUID, List<Node>> entry : essenceDescriptorDomNodeMap.entrySet()) {
+            if (trackFileIdToEssenceDescriptorIdMap.containsKey(entry.getKey())) {
                 imfEssenceDescriptorBaseTypeList.add(new IMFEssenceDescriptorBaseType(UUIDHelper.fromUUID(trackFileIdToEssenceDescriptorIdMap.get(entry.getKey())), new ArrayList<>( entry.getValue())));
-            } else {
+            }
+            else {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                         String.format("Resource = %s is not referenced in the virtual track.", UUIDHelper.fromUUID(entry.getKey())));
@@ -746,14 +748,14 @@ public class IMPBuilder {
 
         imfErrorLogger.addAllErrors(compositionPlaylistBuilder_2016.build());
 
-        if(compositionPlaylistBuilder_2016.getErrors().stream().filter( e -> e.getErrorLevel().equals(IMFErrorLogger
+        if (compositionPlaylistBuilder_2016.getErrors().stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger
                 .IMFErrors.ErrorLevels.FATAL)).count() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the CompositionPlaylist. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
-        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors()-1 : 0;
+        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors() - 1 : 0;
 
         File cplFile = new File(workingDirectory + File.separator + compositionPlaylistBuilder_2016.getCPLFileName());
-        if(!cplFile.exists()){
+        if (!cplFile.exists()) {
             throw new IMFAuthoringException(String.format("CompositionPlaylist file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath()));
         }
         byte[] cplHash = IMFUtils.generateSHA1HashAndBase64Encode(cplFile);
@@ -783,8 +785,8 @@ public class IMPBuilder {
                         PackingListBuilder.PKLAssetTypeEnum.TEXT_XML,
                         PackingListBuilder.buildPKLUserTextType_2016(compositionPlaylistBuilder_2016.getCPLFileName(), "en"));
         packingListBuilderAssets.add(cplAsset);
-        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileInfoEntriesSet = trackFileInfoMap.entrySet().stream().filter( e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
-        for(Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileInfoEntriesSet){
+        Set<Map.Entry<UUID, IMFTrackFileInfo>> trackFileInfoEntriesSet = trackFileInfoMap.entrySet().stream().filter(e -> !(e.getValue().isExcludeFromPackage())).collect(Collectors.toSet());
+        for (Map.Entry<UUID, IMFTrackFileInfo> entry : trackFileInfoEntriesSet) {
             PackingListBuilder.PackingListBuilderAsset_2016 asset =
                     new PackingListBuilder.PackingListBuilderAsset_2016(entry.getKey(),
                             PackingListBuilder.buildPKLUserTextType_2016(annotationText, "en"),
@@ -797,12 +799,12 @@ public class IMPBuilder {
         }
         packingListBuilder.buildPackingList_2016(pklAnnotationText, pklIssuer, creator, packingListBuilderAssets);
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the PackingList. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
-        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors()-1 : 0;
+        numErrors = (imfErrorLogger.getNumberOfErrors() > 0) ? imfErrorLogger.getNumberOfErrors() - 1 : 0;
         File pklFile = new File(workingDirectory + File.separator + packingListBuilder.getPKLFileName());
-        if(!pklFile.exists()){
+        if (!pklFile.exists()) {
             throw new IMFAuthoringException(String.format("PackingList file does not exist in the working directory %s, cannot generate the rest of the documents", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -812,7 +814,7 @@ public class IMPBuilder {
          */
         UUID assetMapUUID = IMFUUIDGenerator.getInstance().generateUUID();
         List<AssetMapBuilder.Asset> assetMapAssets = new ArrayList<>();
-        for(PackingListBuilder.PackingListBuilderAsset_2016 pklAsset : packingListBuilderAssets){
+        for (PackingListBuilder.PackingListBuilderAsset_2016 pklAsset : packingListBuilderAssets) {
             AssetMapBuilder.Chunk chunk = new AssetMapBuilder.Chunk(pklAsset.getOriginalFileName().getValue(), pklAsset.getSize().longValue());
             List<AssetMapBuilder.Chunk> chunkList = new ArrayList<>();
             chunkList.add(chunk);
@@ -842,12 +844,12 @@ public class IMPBuilder {
                 imfErrorLogger);
         assetMapBuilder.build();
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the AssetMap. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, imfErrorLogger.getNumberOfErrors()))));
         }
 
         File assetMapFile = new File(workingDirectory + File.separator + assetMapBuilder.getAssetMapFileName());
-        if(!assetMapFile.exists()){
+        if (!assetMapFile.exists()) {
             throw new IMFAuthoringException(String.format("AssetMap file does not exist in the working directory %s", workingDirectory.getAbsolutePath
                     ()));
         }
@@ -855,10 +857,10 @@ public class IMPBuilder {
         return imfErrorLogger.getErrors();
     }
 
-    public static Map<UUID, List<Node>> buildEDLForVirtualTracks (Map<UUID, IMPBuilder.IMFTrackFileMetadata> imfTrackFileMetadataMap, List<? extends Composition.VirtualTrack> virtualTrackList, IMFErrorLogger imfErrorLogger) throws IOException, ParserConfigurationException{
+    public static Map<UUID, List<Node>> buildEDLForVirtualTracks(Map<UUID, IMPBuilder.IMFTrackFileMetadata> imfTrackFileMetadataMap, List<? extends Composition.VirtualTrack> virtualTrackList, IMFErrorLogger imfErrorLogger) throws IOException, ParserConfigurationException {
         Map<UUID, List<Node>> imfEssenceDescriptorMap = new HashMap<>();
 
-        for(Composition.VirtualTrack virtualTrack : virtualTrackList) {
+        for (Composition.VirtualTrack virtualTrack : virtualTrackList) {
             if (!(virtualTrack instanceof IMFEssenceComponentVirtualTrack)) {
                 continue; // Skip non-essence tracks
             }
@@ -876,7 +878,7 @@ public class IMPBuilder {
                 ByteProvider byteProvider = new ByteArrayDataProvider(imfTrackFileMetadata.getHeaderPartition());
                 ResourceByteRangeProvider resourceByteRangeProvider = new ByteArrayByteRangeProvider(imfTrackFileMetadata.getHeaderPartition());
                 //Create the HeaderPartition
-                HeaderPartition headerPartition = new HeaderPartition(byteProvider, 0L, (long) imfTrackFileMetadata.getHeaderPartition().length, imfErrorLogger);
+                HeaderPartition headerPartition = new HeaderPartition(byteProvider, 0L, (long)imfTrackFileMetadata.getHeaderPartition().length, imfErrorLogger);
 
                 MXFOperationalPattern1A.HeaderPartitionOP1A headerPartitionOP1A = MXFOperationalPattern1A.checkOperationalPattern1ACompliance(headerPartition, imfErrorLogger);
                 IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
@@ -907,17 +909,17 @@ public class IMPBuilder {
     }
 
     private static DocumentFragment getEssenceDescriptorAsDocumentFragment(RegXMLLibHelper regXMLLibHelper,
-                                                                           Document document,
-                                                                           KLVPacket.Header essenceDescriptor,
-                                                                           List<KLVPacket.Header>subDescriptors,
-                                                                           ResourceByteRangeProvider resourceByteRangeProvider,
-                                                                           IMFErrorLogger imfErrorLogger) throws MXFException, IOException {
+            Document document,
+            KLVPacket.Header essenceDescriptor,
+            List<KLVPacket.Header>subDescriptors,
+            ResourceByteRangeProvider resourceByteRangeProvider,
+            IMFErrorLogger imfErrorLogger) throws MXFException, IOException {
         document.setXmlStandalone(true);
 
         Triplet essenceDescriptorTriplet = regXMLLibHelper.getTripletFromKLVHeader(essenceDescriptor, getByteProvider(resourceByteRangeProvider, essenceDescriptor));
         /*Get the Triplets corresponding to the SubDescriptors*/
         List<Triplet> subDescriptorTriplets = new ArrayList<>();
-        for(KLVPacket.Header subDescriptorHeader : subDescriptors){
+        for (KLVPacket.Header subDescriptorHeader : subDescriptors) {
             subDescriptorTriplets.add(regXMLLibHelper.getTripletFromKLVHeader(subDescriptorHeader, getByteProvider(resourceByteRangeProvider, subDescriptorHeader)));
         }
         return regXMLLibHelper.getEssenceDescriptorDocumentFragment(essenceDescriptorTriplet, subDescriptorTriplets, document, imfErrorLogger);
@@ -950,7 +952,7 @@ public class IMPBuilder {
          * @param excludeFromPackage a boolean indicating if this track file needs to be excluded from package.
          *                           If excluded this file will not be referenced in asset map and packing list but may be referenced in CPL.
          */
-        public IMFTrackFileMetadata(byte[] headerPartition, byte[] hash, String hashAlgorithm, String originalFileName, long length, boolean excludeFromPackage){
+        public IMFTrackFileMetadata(byte[] headerPartition, byte[] hash, String hashAlgorithm, String originalFileName, long length, boolean excludeFromPackage) {
             this.headerPartition = Arrays.copyOf(headerPartition, headerPartition.length);
             this.hash = Arrays.copyOf(hash, hash.length);
             this.hashAlgorithm = hashAlgorithm;
@@ -959,15 +961,15 @@ public class IMPBuilder {
             this.excludeFromPackage = excludeFromPackage;
         }
 
-        public IMFTrackFileMetadata(byte[] headerPartition, byte[] hash, String hashAlgorithm, String originalFileName, long length){
-            this( headerPartition, hash, hashAlgorithm, originalFileName, length, false);
+        public IMFTrackFileMetadata(byte[] headerPartition, byte[] hash, String hashAlgorithm, String originalFileName, long length) {
+            this(headerPartition, hash, hashAlgorithm, originalFileName, length, false);
         }
 
         /**
          * Getter for the HeaderPartition metadata for the IMFTrack file corresponding to the IMFTrackFile metadata
          * @return a byte[] containing the HeaderParition metadata
          */
-        public byte[] getHeaderPartition(){
+        public byte[] getHeaderPartition() {
             return Arrays.copyOf(headerPartition, headerPartition.length);
         }
 
@@ -975,7 +977,7 @@ public class IMPBuilder {
          * Getter for the Hash of the IMFTrackFile
          * @return a byte[] containing the SHA-1 Base64 encoded hash of the IMFTrackFile
          */
-        public byte[] getHash(){
+        public byte[] getHash() {
             return Arrays.copyOf(this.hash, this.hash.length);
         }
 
@@ -983,7 +985,7 @@ public class IMPBuilder {
          * Getter for the HashAlgorithm used to create the Hash of the IMFTrackFile
          * @return a string representing the Hash of the IMFTrackFile
          */
-        public String getHashAlgorithm(){
+        public String getHashAlgorithm() {
             return this.hashAlgorithm;
         }
 
@@ -991,7 +993,7 @@ public class IMPBuilder {
          * Getter for the original file name of the IMFTrackFile
          * @return a string representing the name of the IMFTrackFile
          */
-        public String getOriginalFileName(){
+        public String getOriginalFileName() {
             return this.originalFileName;
         }
 
@@ -1031,7 +1033,7 @@ public class IMPBuilder {
          * @param excludeFromPackage a boolean indicating if this track file needs to be excluded from package.
          *                           If excluded this file will not be referenced in asset map and packing list but may be referenced in CPL.
          */
-        public IMFTrackFileInfo(byte[] hash, String hashAlgorithm, String originalFileName, long length, boolean excludeFromPackage){
+        public IMFTrackFileInfo(byte[] hash, String hashAlgorithm, String originalFileName, long length, boolean excludeFromPackage) {
             this.hash = Arrays.copyOf(hash, hash.length);
             this.hashAlgorithm = hashAlgorithm;
             this.originalFileName = originalFileName;
@@ -1043,7 +1045,7 @@ public class IMPBuilder {
          * Getter for the Hash of the IMFTrackFile
          * @return a byte[] containing the SHA-1 Base64 encoded hash of the IMFTrackFile
          */
-        public byte[] getHash(){
+        public byte[] getHash() {
             return Arrays.copyOf(this.hash, this.hash.length);
         }
 
@@ -1051,7 +1053,7 @@ public class IMPBuilder {
          * Getter for the HashAlgorithm used to create the Hash of the IMFTrackFile
          * @return a string representing the Hash of the IMFTrackFile
          */
-        public String getHashAlgorithm(){
+        public String getHashAlgorithm() {
             return this.hashAlgorithm;
         }
 
@@ -1059,7 +1061,7 @@ public class IMPBuilder {
          * Getter for the original file name of the IMFTrackFile
          * @return a string representing the name of the IMFTrackFile
          */
-        public String getOriginalFileName(){
+        public String getOriginalFileName() {
             return this.originalFileName;
         }
 

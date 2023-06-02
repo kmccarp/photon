@@ -72,7 +72,7 @@ public class CompositionTest
     }
 
     @Test
-    public void virtualTracksEquivalenceTest(){
+    public void virtualTracksEquivalenceTest() {
         String trackFileId1 = IMFUUIDGenerator.getInstance().getUrnUUID();
         String trackFileId2 = IMFUUIDGenerator.getInstance().getUrnUUID();
         String sourceEncoding = IMFUUIDGenerator.getInstance().generateUUID().toString();

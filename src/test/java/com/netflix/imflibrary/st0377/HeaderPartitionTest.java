@@ -72,7 +72,6 @@ public class HeaderPartitionTest
         Assert.assertEquals(contentStorage.getPackageInstanceUIDs().size(), 2);
 
 
-
         List<InterchangeObject> materialPackages = headerPartition.getMaterialPackages();
         Assert.assertEquals(materialPackages.size(), 1);
         MaterialPackage materialPackage = (MaterialPackage)materialPackages.get(0);
@@ -107,9 +106,6 @@ public class HeaderPartitionTest
         Assert.assertEquals((long)sourceClip.getDuration(), 35232L);
 
 
-
-
-
         List<InterchangeObject> sourcePackages = headerPartition.getSourcePackages();
         Assert.assertEquals(sourcePackages.size(), 1);
         SourcePackage sourcePackage = (SourcePackage)sourcePackages.get(0);
@@ -130,7 +126,6 @@ public class HeaderPartitionTest
         Assert.assertEquals(trackInstanceUIDs.get(1), new MXFUID(new byte[]{
                 0x2b, 0x71, 0x39, (byte)0xcc, 0x16, 0x3c, 0x43, (byte)0xa5, (byte)0x9d, (byte)0xc4, (byte)0xb3, 0x64, (byte)0xb6, (byte)0xa1, (byte)0xeb, (byte)0x93
         }));
-
 
 
         Assert.assertTrue(headerPartition.hasWaveAudioEssenceDescriptor());
@@ -253,7 +248,7 @@ public class HeaderPartitionTest
 
         Assert.assertTrue(headerPartition.hasAudioChannelLabelSubDescriptors());
         Assert.assertEquals(headerPartition.getAudioChannelLabelSubDescriptors().size(), 6);
-        if(headerPartition.getAudioChannelLabelSubDescriptors().size() == 0){
+        if (headerPartition.getAudioChannelLabelSubDescriptors().size() == 0) {
             throw new MXFException(String.format("Asset seems to be invalid since it does not contain any AudioChannelLabelSubDescriptors"));
         }
         Assert.assertEquals(headerPartition.getAudioContentKind(), AudioContentKind.Unknown);
@@ -264,8 +259,8 @@ public class HeaderPartitionTest
                 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x0d, 0x03, 0x02, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00
         }));
         Assert.assertEquals(audioChannelLabelSubDescriptor.getMCALinkId(), new MXFUID(new byte[]{
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-    }));
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+        }));
     }
 
     @Test

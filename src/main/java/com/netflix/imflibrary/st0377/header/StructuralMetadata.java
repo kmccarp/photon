@@ -45,18 +45,19 @@ public final class StructuralMetadata
     }
 
     private static final byte[] KEY_BASE = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x00, 0x01, 0x00, 0x0d, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00};
-    private static final byte[] KEY_MASK = {   1,    1,    1,    1,    1,    0,    1,    0,    1,    1,    1,    1,    1,    0,    0,    1};
+    private static final byte[] KEY_MASK = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1};
 
     private static final byte[] DESCRIPTIVE_METADATA_KEY_BASE = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x00, 0x01, 0x00, 0x0d, 0x01, 0x04, 0x01, 0x00, 0x00, 0x00, 0x00};
-    private static final byte[] DESCRIPTIVE_METADATA_KEY_MASK = {   1,    1,    1,    1,    1,    0,    1,    0,    1,    1,    1,    1,    0,    0,    0,    1};
+    private static final byte[] DESCRIPTIVE_METADATA_KEY_MASK = {1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1};
 
 
     private static final byte[] PHDR_METADATA_TRACK_SUBDESCRIPTOR = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x05, 0x0e, 0x09, 0x06, 0x07, 0x01, 0x01, 0x01, 0x03};
 
 
     private static final Map<MXFUID, String> ItemULToItemName;
+
     static
-    {
+        {
         Map<MXFUID, String> map = new HashMap<>();
         //Preface
         {
@@ -121,18 +122,18 @@ public final class StructuralMetadata
             map.put(mxfUL, "edit_rate");
         }
         {
-            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02, 0x07 , 0x02, 0x01, 0x03, 0x01, 0x03, 0x00, 0x00};
+            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02, 0x07, 0x02, 0x01, 0x03, 0x01, 0x03, 0x00, 0x00};
             MXFUID mxfUL = new MXFUID(byteArray);
             map.put(mxfUL, "origin");
         }
         //Event
         {
-            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02, 0x07 , 0x02, 0x01, 0x03, 0x03, 0x03, 0x00, 0x00};
+            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02, 0x07, 0x02, 0x01, 0x03, 0x03, 0x03, 0x00, 0x00};
             MXFUID mxfUL = new MXFUID(byteArray);
             map.put(mxfUL, "event_start_position");
         }
         {
-            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02, 0x05 , 0x30, 0x04, 0x04, 0x01, 0x00, 0x00, 0x00};
+            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02, 0x05, 0x30, 0x04, 0x04, 0x01, 0x00, 0x00, 0x00};
             MXFUID mxfUL = new MXFUID(byteArray);
             map.put(mxfUL, "event_comment");
         }
@@ -326,18 +327,18 @@ public final class StructuralMetadata
             map.put(mxfUL, "average_bytes_per_second");
         }
         {
-            byte[] byteArray = {0x06, 0x0e ,0x2b ,0x34 ,0x01 ,0x01 ,0x01 ,0x07  ,0x04 ,0x02 ,0x01 ,0x01 ,0x05 ,0x00 ,0x00 ,0x00};
+            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x07, 0x04, 0x02, 0x01, 0x01, 0x05, 0x00, 0x00, 0x00};
             MXFUID mxfUL = new MXFUID(byteArray);
             map.put(mxfUL, "channel_assignment");
         }
         //GenericSoundEssenceDescriptor
         {
-            byte[] byteArray = {0x06, 0x0e ,0x2b ,0x34 ,0x01 ,0x01 ,0x01 ,0x0e  ,0x04 ,0x02 ,0x01 ,0x01 ,0x06 ,0x00 ,0x00 ,0x00};
+            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x0e, 0x04, 0x02, 0x01, 0x01, 0x06, 0x00, 0x00, 0x00};
             MXFUID mxfUL = new MXFUID(byteArray);
             map.put(mxfUL, "reference_image_edit_rate");
         }
         {
-            byte[] byteArray = {0x06, 0x0e ,0x2b ,0x34 ,0x01 ,0x01 ,0x01 ,0x0e  ,0x04 ,0x02 ,0x01 ,0x01 ,0x07 ,0x00 ,0x00 ,0x00};
+            byte[] byteArray = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x0e, 0x04, 0x02, 0x01, 0x01, 0x07, 0x00, 0x00, 0x00};
             MXFUID mxfUL = new MXFUID(byteArray);
             map.put(mxfUL, "reference_audio_alignment_level");
         }
@@ -655,9 +656,9 @@ public final class StructuralMetadata
             return true;
         }
 
-        for (int i=0; i< KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
-            if( (StructuralMetadata.KEY_MASK[i] != 0) && (StructuralMetadata.KEY_BASE[i] != key[i]) )
+            if ((StructuralMetadata.KEY_MASK[i] != 0) && (StructuralMetadata.KEY_BASE[i] != key[i]))
             {
                 return false;
             }
@@ -675,9 +676,9 @@ public final class StructuralMetadata
      */
     public static boolean isDescriptiveMetadata(byte[] key)
     {
-        for (int i=0; i< KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
-            if( (StructuralMetadata.DESCRIPTIVE_METADATA_KEY_MASK[i] != 0) && (StructuralMetadata.DESCRIPTIVE_METADATA_KEY_BASE[i] != key[i]) )
+            if ((StructuralMetadata.DESCRIPTIVE_METADATA_KEY_MASK[i] != 0) && (StructuralMetadata.DESCRIPTIVE_METADATA_KEY_BASE[i] != key[i]))
             {
                 return false;
             }
@@ -698,11 +699,11 @@ public final class StructuralMetadata
         return Arrays.equals(key, StructuralMetadata.PHDR_METADATA_TRACK_SUBDESCRIPTOR);
     }
 
-    public static boolean isAudioWaveClipWrapped(int contentKind){
-        if(contentKind == 0x02){
+    public static boolean isAudioWaveClipWrapped(int contentKind) {
+        if (contentKind == 0x02) {
             return true;
         }
-        else{
+        else {
             return false;
         }
     }
@@ -809,9 +810,11 @@ public final class StructuralMetadata
         else if (isDescriptiveMetadata(key)) { // Metadata Sets for the Text-based Metadata
             if (key[13] == 0x02 && key[14] == 0x01) {
                 return GenericStreamTextBasedSet.GenericStreamTextBasedSetBO.class;
-            } else if (key[13] == 0x01 && key[14] == 0x01) {
+            }
+            else if (key[13] == 0x01 && key[14] == 0x01) {
                 return TextBasedDMFramework.TextBasedDMFrameworkBO.class;
-            } else {
+            }
+            else {
                 return Object.class;
             }
         }
@@ -867,12 +870,12 @@ public final class StructuralMetadata
             {
                 String itemName = StructuralMetadata.ItemULToItemName.get(mxfUL);
                 int expectedLength = MXFPropertyPopulator.getFieldSizeInBytes(object, itemName);
-                if((expectedLength > 0) && (length != expectedLength))
+                if ((expectedLength > 0) && (length != expectedLength))
                 {
                     throw new MXFException(String.format("Actual length from bitstream = %d is different from expected length = %d",
                             length, expectedLength));
                 }
-                MXFPropertyPopulator.populateField((int) length, byteProvider, object, itemName);
+                MXFPropertyPopulator.populateField((int)length, byteProvider, object, itemName);
             }
             else
             {

@@ -70,15 +70,18 @@ public abstract class GenericTrack extends InterchangeObject
         /**
          * The Track _ id.
          */
-        @MXFProperty(size=4) protected final Long track_id = null;
+        @MXFProperty(size = 4)
+        protected final Long track_id = null;
         /**
          * The Track _ number.
          */
-        @MXFProperty(size=4) protected final Long track_number = null;
+        @MXFProperty(size = 4)
+        protected final Long track_number = null;
         /**
          * The Sequence.
          */
-        @MXFProperty(size=16, depends=true) protected final StrongRef sequence = null;
+        @MXFProperty(size = 16, depends = true)
+        protected final StrongRef sequence = null;
 
         private final IMFErrorLogger imfErrorLogger;
 

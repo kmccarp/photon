@@ -145,7 +145,7 @@ public final class Sequence extends StructuralComponent
      * Getter for the list of instance UIDs of structural components referred by this sequence
      * @return the list of instance UIDs of structural components referred by this sequence
      */
-    public List<MXFUID> getStructuralComponentInstanceUIDs(){
+    public List<MXFUID> getStructuralComponentInstanceUIDs() {
         return this.sequenceBO.getStructuralComponentInstanceUIDs();
     }
 
@@ -167,7 +167,8 @@ public final class Sequence extends StructuralComponent
     public static final class SequenceBO extends StructuralComponentBO
     {
 
-        @MXFProperty(size=0, depends=true) private final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> structural_components = null;
+        @MXFProperty(size = 0, depends = true)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> structural_components = null;
         private final List<MXFUID> structuralComponentInstanceUIDs = new ArrayList<>();
 
         /**

@@ -36,30 +36,38 @@ import java.util.Set;
  * This class provides a factory method to construct ApplicationComposition based on CPL ApplicationIdentification.
  */
 public class ApplicationCompositionFactory {
-    private static final Set<String> namespacesApplication2Composition = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("http://www.smpte-ra.org/schemas/2067-20/2013");
-        add("http://www.smpte-ra.org/schemas/2067-20/2016");
-    }});
+    private static final Set<String> namespacesApplication2Composition = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("http://www.smpte-ra.org/schemas/2067-20/2013");
+            add("http://www.smpte-ra.org/schemas/2067-20/2016");
+        }
+    });
 
-    private static final Set<String> namespacesApplication2EComposition = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("http://www.smpte-ra.org/schemas/2067-21/2014");
-        add("http://www.smpte-ra.org/schemas/2067-21/2016");
-        add("http://www.smpte-ra.org/ns/2067-21/2020");
-    }});
+    private static final Set<String> namespacesApplication2EComposition = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("http://www.smpte-ra.org/schemas/2067-21/2014");
+            add("http://www.smpte-ra.org/schemas/2067-21/2016");
+            add("http://www.smpte-ra.org/ns/2067-21/2020");
+        }
+    });
 
-    private static final Set<String> namespacesApplication2E2021Composition = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("http://www.smpte-ra.org/ns/2067-21/2021");
-    }});
+    private static final Set<String> namespacesApplication2E2021Composition = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("http://www.smpte-ra.org/ns/2067-21/2021");
+        }
+    });
 
-    private static final Set<String> namespacesApplication5Composition = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("http://www.smpte-ra.org/ns/2067-50/2017");
-    }});
+    private static final Set<String> namespacesApplication5Composition = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("http://www.smpte-ra.org/ns/2067-50/2017");
+        }
+    });
 
     public enum ApplicationCompositionType {
-        APPLICATION_2_COMPOSITION_TYPE(Application2Composition.class,          namespacesApplication2Composition),
+        APPLICATION_2_COMPOSITION_TYPE(Application2Composition.class, namespacesApplication2Composition),
         APPLICATION_2E_COMPOSITION_TYPE(Application2ExtendedComposition.class, namespacesApplication2EComposition),
-        APPLICATION_5_COMPOSITION_TYPE(Application5Composition.class,          namespacesApplication5Composition),
-        APPLICATION_2E2021_COMPOSITION_TYPE(Application2E2021.class,           namespacesApplication2E2021Composition),
+        APPLICATION_5_COMPOSITION_TYPE(Application5Composition.class, namespacesApplication5Composition),
+        APPLICATION_2E2021_COMPOSITION_TYPE(Application2E2021.class, namespacesApplication2E2021Composition),
         APPLICATION_UNSUPPORTED_COMPOSITION_TYPE(ApplicationUnsupportedComposition.class, Collections.unmodifiableSet(new HashSet<>()));
         private Set<String> nameSpaceSet;
         private Class<?> clazz;
@@ -79,8 +87,8 @@ public class ApplicationCompositionFactory {
 
         public static ApplicationCompositionType fromApplicationID(String applicationIdentification) {
 
-            for(ApplicationCompositionType applicationCompositionType : ApplicationCompositionType.values()) {
-                if(applicationCompositionType.getNameSpaceSet().contains(applicationIdentification)) {
+            for (ApplicationCompositionType applicationCompositionType : ApplicationCompositionType.values()) {
+                if (applicationCompositionType.getNameSpaceSet().contains(applicationIdentification)) {
                     return applicationCompositionType;
                 }
             }
@@ -108,14 +116,15 @@ public class ApplicationCompositionFactory {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                         String.format("Missing ApplicationIdentification in CPL"));
                 Constructor<?> constructor = clazz.getConstructor(IMFCompositionPlaylistType.class, Set.class);
-                composition = (ApplicationComposition) constructor.newInstance(imfCompositionPlaylistType, homogeneitySelectionSet);
+                composition = (ApplicationComposition)constructor.newInstance(imfCompositionPlaylistType, homogeneitySelectionSet);
                 imfErrorLogger.addAllErrors(composition.getErrors());
-            } else {
+            }
+            else {
                 for (String applicationIdentification : imfCompositionPlaylistType.getApplicationIdentificationSet()) {
                     ApplicationCompositionType applicationCompositionType = ApplicationCompositionType.fromApplicationID(applicationIdentification);
                     clazz = applicationCompositionType.getClazz();
                     Constructor<?> constructor = clazz.getConstructor(IMFCompositionPlaylistType.class, Set.class);
-                    composition = (ApplicationComposition) constructor.newInstance(imfCompositionPlaylistType, homogeneitySelectionSet);
+                    composition = (ApplicationComposition)constructor.newInstance(imfCompositionPlaylistType, homogeneitySelectionSet);
                     imfErrorLogger.addAllErrors(composition.getErrors());
                 }
             }
@@ -124,17 +133,17 @@ public class ApplicationCompositionFactory {
             imfErrorLogger.addAllErrors(e.getErrors());
             return null;
         }
-        catch(NoSuchMethodException|IllegalAccessException|InstantiationException| InvocationTargetException e){
-            if(e instanceof InvocationTargetException ) {
+        catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            if (e instanceof InvocationTargetException) {
                 Throwable ex = InvocationTargetException.class.cast(e).getTargetException();
-               if(ex instanceof IMFException) {
-                   imfErrorLogger.addAllErrors(IMFException.class.cast(ex).getErrors());
-                   return null;
-               }
+                if (ex instanceof IMFException) {
+                    imfErrorLogger.addAllErrors(IMFException.class.cast(ex).getErrors());
+                    return null;
+                }
             }
 
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.INTERNAL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
-                    String.format(String.format("No matching constructor for class %s", clazz != null ? clazz.getSimpleName(): "ApplicationComposition")));
+                    String.format(String.format("No matching constructor for class %s", clazz != null ? clazz.getSimpleName() : "ApplicationComposition")));
             return null;
         }
 

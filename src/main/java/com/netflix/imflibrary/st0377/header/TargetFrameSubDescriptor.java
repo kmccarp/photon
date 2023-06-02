@@ -41,7 +41,7 @@ public final class TargetFrameSubDescriptor extends SubDescriptor {
      * Constructor for a TargetFrameSubDescriptor object
      * @param subDescriptorBO the parsed TargetFrameSubDescriptor object
      */
-    public TargetFrameSubDescriptor(TargetFrameSubDescriptorBO subDescriptorBO){
+    public TargetFrameSubDescriptor(TargetFrameSubDescriptorBO subDescriptorBO) {
         this.subDescriptorBO = subDescriptorBO;
     }
 
@@ -59,17 +59,27 @@ public final class TargetFrameSubDescriptor extends SubDescriptor {
      * Object corresponding to a parsed TargetFrameSubDescriptor as defined in st429-4-2006
      */
     @Immutable
-    public static final class TargetFrameSubDescriptorBO extends SubDescriptorBO{
-        @MXFProperty(size=16) private final UL ancillary_resource_uid = null;
-        @MXFProperty(size=0, charset="UTF-16") private final String media_type = null;
-        @MXFProperty(size=8) private final Long target_frame_index = null;
-        @MXFProperty(size=16) private final UL target_frame_transfer_characteristic = null;
-        @MXFProperty(size=16) private final UL color_primaries = null;
-        @MXFProperty(size=4) private final Integer max_ref = null;
-        @MXFProperty(size=4) private final Integer min_ref = null;
-        @MXFProperty(size=4) private final Integer essence_stream_id = null;
-        @MXFProperty(size=16) private final UL aces_picture_subdescriptor_uid = null;
-        @MXFProperty(size=16) private final UL viewing_environment = null;
+    public static final class TargetFrameSubDescriptorBO extends SubDescriptorBO {
+        @MXFProperty(size = 16)
+        private final UL ancillary_resource_uid = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        private final String media_type = null;
+        @MXFProperty(size = 8)
+        private final Long target_frame_index = null;
+        @MXFProperty(size = 16)
+        private final UL target_frame_transfer_characteristic = null;
+        @MXFProperty(size = 16)
+        private final UL color_primaries = null;
+        @MXFProperty(size = 4)
+        private final Integer max_ref = null;
+        @MXFProperty(size = 4)
+        private final Integer min_ref = null;
+        @MXFProperty(size = 4)
+        private final Integer essence_stream_id = null;
+        @MXFProperty(size = 16)
+        private final UL aces_picture_subdescriptor_uid = null;
+        @MXFProperty(size = 16)
+        private final UL viewing_environment = null;
 
         /**
          * Instantiates a new TargetFrameSubDescriptor ByteObject.

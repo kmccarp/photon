@@ -11,6 +11,7 @@ public class DMFramework extends InterchangeObject {
     public DMFramework(DMFrameworkBO dmFrameworkBO) {
         this.dmFrameworkBO = dmFrameworkBO;
     }
+
     /**
      * Object corresponding to a parsed DMFramework structural metadata set defined in RP 2057:2011
      */

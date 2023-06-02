@@ -24,7 +24,7 @@ public class HeaderPartitionExtractor {
      * @param essenceFooter4Bytes - the last 4 bytes of the MXF file used to infer the size of the RandomIndexPack
      * @return a long integer value representing the size of the RandomIndexPack
      */
-    public static Long getRandomIndexPackSize(PayloadRecord essenceFooter4Bytes){
+    public static Long getRandomIndexPackSize(PayloadRecord essenceFooter4Bytes) {
         return IMPValidator.getRandomIndexPackSize(essenceFooter4Bytes);
     }
 
@@ -38,7 +38,7 @@ public class HeaderPartitionExtractor {
      * @return list of long integer values representing the byte offsets of the partitions in the MXF file
      * @throws IOException - any I/O related error is exposed through an IOException
      */
-    public static List<Long> getHeaderPartitionByteOffsets(PayloadRecord randomIndexPackPayload, Long randomIndexPackSize) throws IOException{
+    public static List<Long> getHeaderPartitionByteOffsets(PayloadRecord randomIndexPackPayload, Long randomIndexPackSize) throws IOException {
         List<Long> partitionByteOffsets = IMPValidator.getEssencePartitionOffsets(randomIndexPackPayload, randomIndexPackSize);
         return partitionByteOffsets.subList(0, 2);
     }

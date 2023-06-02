@@ -56,7 +56,7 @@ public final class WaveAudioEssenceDescriptor extends GenericSoundEssenceDescrip
     public int getBlockAlign() throws MXFException
     {
         long value = getWaveAudioEssenceDescriptorBO().block_align;
-        if ((value <=0) || (value > Integer.MAX_VALUE))
+        if ((value <= 0) || (value > Integer.MAX_VALUE))
         {
             throw new MXFException(String.format("Observed block align = %d, which is not supported at this time", value));
         }
@@ -87,7 +87,7 @@ public final class WaveAudioEssenceDescriptor extends GenericSoundEssenceDescrip
      */
     public boolean equals(Object other)
     {
-        if(!(other instanceof WaveAudioEssenceDescriptor))
+        if (!(other instanceof WaveAudioEssenceDescriptor))
         {
             return false;
         }
@@ -124,9 +124,12 @@ public final class WaveAudioEssenceDescriptor extends GenericSoundEssenceDescrip
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class WaveAudioEssenceDescriptorBO extends GenericSoundEssenceDescriptor.GenericSoundEssenceDescriptorBO
     {
-        @MXFProperty(size=2) private final Integer block_align = null;
-        @MXFProperty(size=4) private final Long average_bytes_per_second = null;
-        @MXFProperty(size=16) private final UL channel_assignment = null;
+        @MXFProperty(size = 2)
+        private final Integer block_align = null;
+        @MXFProperty(size = 4)
+        private final Long average_bytes_per_second = null;
+        @MXFProperty(size = 16)
+        private final UL channel_assignment = null;
 
         /**
          * Instantiates a new parsed WaveAudioEssenceDescriptor object by virtue of parsing the MXF file bitstream
@@ -165,7 +168,7 @@ public final class WaveAudioEssenceDescriptor extends GenericSoundEssenceDescrip
          */
         public boolean equals(Object other)
         {
-            if(!(other instanceof WaveAudioEssenceDescriptorBO))
+            if (!(other instanceof WaveAudioEssenceDescriptorBO))
             {
                 return false;
             }

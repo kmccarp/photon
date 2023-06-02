@@ -74,14 +74,14 @@ public final class RegXMLLibHelper {
      * @param primerPackByteProvider the data provider for the primer pack
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
-    public RegXMLLibHelper(KLVPacket.Header primerPack, ByteProvider primerPackByteProvider) throws IOException{
+    public RegXMLLibHelper(KLVPacket.Header primerPack, ByteProvider primerPackByteProvider) throws IOException {
 
         try
         {
             this.regXMLLibDictionary = new RegXMLLibDictionary();
             this.localTagRegister = PrimerPack.createLocalTagRegister(this.getTripletFromKLVHeader(primerPack, primerPackByteProvider));
         }
-        catch (Exception e){
+        catch(Exception e) {
             throw new IOException(String.format("Unable to load resources corresponding to registers"));
         }
     }
@@ -108,19 +108,19 @@ public final class RegXMLLibHelper {
             if (handler.hasErrors()) {
                 handler.getErrors().stream()
                         .map(e -> new ErrorLogger.ErrorObject(
-                                IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_METADATA_ERROR,
-                                e.getValidationEventSeverity(),
-                                "Error code : " + e.getCode().name() + " - " + e.getErrorMessage())
+                                        IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_METADATA_ERROR,
+                                        e.getValidationEventSeverity(),
+                                        "Error code : " + e.getCode().name() + " - " + e.getErrorMessage())
                         )
                         .forEach(imfErrorLogger::addError);
 
-                if(imfErrorLogger.hasFatalErrors()) {
+                if (imfErrorLogger.hasFatalErrors()) {
                     throw new MXFException(handler.toString(), imfErrorLogger);
                 }
             }
             return documentFragment;
         }
-        catch (FragmentBuilder.RuleException | KLVException e){
+        catch(FragmentBuilder.RuleException | KLVException e) {
             throw new MXFException(String.format("Could not generate MXFFragment for the KLV Set"));
         }
     }
@@ -142,7 +142,7 @@ public final class RegXMLLibHelper {
             Set set = Set.fromGroup(group);
             setResolver.put(set.getInstanceID(), set);
             /*Add all the subdescriptors into the setResolver*/
-            for(Triplet subDescriptorTriplet:subDescriptorTriplets){
+            for (Triplet subDescriptorTriplet :subDescriptorTriplets) {
                 Group subDescriptorGroup = LocalSet.fromTriplet(subDescriptorTriplet, this.localTagRegister);
                 Set subDescriptorSet = Set.fromGroup(subDescriptorGroup);
                 setResolver.put(subDescriptorSet.getInstanceID(), subDescriptorSet);
@@ -153,19 +153,19 @@ public final class RegXMLLibHelper {
             if (handler.hasErrors()) {
                 handler.getErrors().stream()
                         .map(e -> new ErrorLogger.ErrorObject(
-                                IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_METADATA_ERROR,
-                                e.getValidationEventSeverity(),
-                                "Error code : " + e.getCode().name() + " - " + e.getErrorMessage())
+                                        IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_METADATA_ERROR,
+                                        e.getValidationEventSeverity(),
+                                        "Error code : " + e.getCode().name() + " - " + e.getErrorMessage())
                         )
                         .forEach(imfErrorLogger::addError);
 
-                if(imfErrorLogger.hasFatalErrors()) {
+                if (imfErrorLogger.hasFatalErrors()) {
                     throw new MXFException(handler.toString(), imfErrorLogger);
                 }
             }
             return documentFragment;
         }
-        catch (FragmentBuilder.RuleException | KLVException e){
+        catch(FragmentBuilder.RuleException | KLVException e) {
             throw new MXFException(String.format("Could not generate MXFFragment for the KLV Set"));
         }
     }
@@ -180,13 +180,13 @@ public final class RegXMLLibHelper {
     public MemoryTriplet getTripletFromKLVHeader(KLVPacket.Header header, ByteProvider byteProvider) throws IOException {
         UL key = new UL(byteProvider.getBytes(KLVPacket.KEY_FIELD_SIZE));
         KLVPacket.LengthField lengthField = KLVPacket.getLength(byteProvider);
-        if(lengthField.value != header.getVSize()){
+        if (lengthField.value != header.getVSize()) {
             throw new MXFException(String.format("KLVPacket length %d read from the bitstream does not match the size of the value %d", lengthField.value, header.getVSize()));
         }
         if (header.getVSize() > Integer.MAX_VALUE) {
             throw new MXFException(String.format("Essence Descriptors that are larger than %d bytes are not supported", Integer.MAX_VALUE));
         }
-        byte[] value = byteProvider.getBytes((int) header.getVSize());
+        byte[] value = byteProvider.getBytes((int)header.getVSize());
         return new MemoryTriplet(new AUID(key), value);
     }
 

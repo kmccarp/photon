@@ -43,6 +43,7 @@ public final class BasicMapProfileV2FileSet
     private static final Logger logger = LoggerFactory.getLogger(BasicMapProfileV2FileSet.class);
     private final BasicMapProfileV2MappedFileSet basicMapProfileV2MappedFileSet;
     private final IMFErrorLogger imfErrorLogger;
+
     /**
      * Constructor for a {@link BasicMapProfileV2FileSet BasicMapProfilev2FileSet} from a {@link BasicMapProfileV2MappedFileSet MappedFileSet} object. Construction
      * succeeds if the constraints specified in Section A.1 in Annex A of st0429-9:2014 are satisfied

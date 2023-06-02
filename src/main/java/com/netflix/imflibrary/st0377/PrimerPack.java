@@ -32,8 +32,8 @@ import java.util.Arrays;
 @Immutable
 public final class PrimerPack
 {
-    private static final byte[] KEY      = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x00, 0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
-    private static final byte[] KEY_MASK = {   1,    1,     1,    1,    1,    1,   1,    0,    1,    1,    1,     1,    1,   1,    1,    1};
+    private static final byte[] KEY = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x00, 0x0d, 0x01, 0x02, 0x01, 0x01, 0x05, 0x01, 0x00};
+    private static final byte[] KEY_MASK = {1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1};
 
     private final KLVPacket.Header header;
     private final LocalTagEntryBatch localTagEntryBatch;
@@ -47,7 +47,7 @@ public final class PrimerPack
     PrimerPack(ByteProvider byteProvider, long byteOffset) throws IOException
     {
         this.header = new KLVPacket.Header(byteProvider, byteOffset);
-        if(!PrimerPack.isValidKey(Arrays.copyOf(this.header.getKey(), this.header.getKey().length)))
+        if (!PrimerPack.isValidKey(Arrays.copyOf(this.header.getKey(), this.header.getKey().length)))
         {
             throw new MXFException("Found invalid PrimerPack key");
         }
@@ -72,7 +72,7 @@ public final class PrimerPack
      *
      * @return the MXFKLV Header
      */
-    public KLVPacket.Header getHeader(){
+    public KLVPacket.Header getHeader() {
         return this.header;
     }
 
@@ -84,9 +84,9 @@ public final class PrimerPack
      */
     public static boolean isValidKey(byte[] key)
     {
-        for (int i=0; i< KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
-            if((PrimerPack.KEY_MASK[i] != 0) && (PrimerPack.KEY[i] != key[i]))
+            if ((PrimerPack.KEY_MASK[i] != 0) && (PrimerPack.KEY[i] != key[i]))
             {
                 return false;
             }

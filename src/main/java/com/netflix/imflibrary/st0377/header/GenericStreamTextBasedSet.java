@@ -31,7 +31,8 @@ public class GenericStreamTextBasedSet extends TextBasedObject {
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class GenericStreamTextBasedSetBO extends TextBasedObjectBO {
 
-        @MXFProperty(size=4) protected final Long generic_stream_id = null;
+        @MXFProperty(size = 4)
+        protected final Long generic_stream_id = null;
         private final IMFErrorLogger imfErrorLogger;
 
         /**

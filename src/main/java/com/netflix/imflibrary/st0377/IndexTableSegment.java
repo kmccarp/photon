@@ -40,11 +40,12 @@ import java.util.Map;
 @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
 public final class IndexTableSegment
 {
-    private static final byte[] KEY      = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01, 0x0d, 0x01, 0x02, 0x01, 0x01, 0x10, 0x01, 0x00};
-    private static final byte[] KEY_MASK = {   1,    1,    1,    1,    1,    0,    1,    1,    1,    1,    1,    1,    1,    1,    1,    1};
+    private static final byte[] KEY = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x53, 0x01, 0x01, 0x0d, 0x01, 0x02, 0x01, 0x01, 0x10, 0x01, 0x00};
+    private static final byte[] KEY_MASK = {1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
     private static final Map<Integer, String> LOCAL_TAG_TO_ITEM_NAME;
+
     static
-    {
+        {
         Map<Integer, String> localTagToItemName = new HashMap<>();
         localTagToItemName.put(0x3c0a, "instance_UID");
         localTagToItemName.put(0x3f0b, "indexEditRate");
@@ -61,18 +62,29 @@ public final class IndexTableSegment
     }
 
     private final KLVPacket.Header header;
-    @MXFProperty(size=16) private final byte[] instance_UID = null;
-    @MXFProperty(size=0) private final CompoundDataTypes.Rational indexEditRate = null;
-    @MXFProperty(size=8) private final Long index_start_position = null;
-    @MXFProperty(size=8) private final Long index_duration = null;
-    @MXFProperty(size=4) private final Long edit_unit_byte_count = null;
-    @MXFProperty(size=4) private final Long index_SID = null;
-    @MXFProperty(size=4) private final Long body_SID = null;
-    @MXFProperty(size=1) private final Short slice_count = null;
-    @MXFProperty(size=1) private final Short pos_table_count = null;
+    @MXFProperty(size = 16)
+    private final byte[] instance_UID = null;
+    @MXFProperty(size = 0)
+    private final CompoundDataTypes.Rational indexEditRate = null;
+    @MXFProperty(size = 8)
+    private final Long index_start_position = null;
+    @MXFProperty(size = 8)
+    private final Long index_duration = null;
+    @MXFProperty(size = 4)
+    private final Long edit_unit_byte_count = null;
+    @MXFProperty(size = 4)
+    private final Long index_SID = null;
+    @MXFProperty(size = 4)
+    private final Long body_SID = null;
+    @MXFProperty(size = 1)
+    private final Short slice_count = null;
+    @MXFProperty(size = 1)
+    private final Short pos_table_count = null;
     private final IndexEntryArray indexEntryArray;
-    @MXFProperty(size=8) private final Long ext_start_offset = null;
-    @MXFProperty(size=8) private final Long vbe_byte_count = null;
+    @MXFProperty(size = 8)
+    private final Long ext_start_offset = null;
+    @MXFProperty(size = 8)
+    private final Long vbe_byte_count = null;
 
 
     /**
@@ -123,7 +135,7 @@ public final class IndexTableSegment
             if (itemName != null)
             {
                 int expectedLength = MXFPropertyPopulator.getFieldSizeInBytes(this, itemName);
-                if((expectedLength > 0) && (itemSize != expectedLength))
+                if ((expectedLength > 0) && (itemSize != expectedLength))
                 {
                     throw new MXFException(String.format("Actual length from bitstream = %d is different from expected length = %d",
                             itemSize, expectedLength));
@@ -211,9 +223,9 @@ public final class IndexTableSegment
      */
     public static boolean isValidKey(byte[] key)
     {
-        for (int i=0; i< KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
-            if((IndexTableSegment.KEY_MASK[i] != 0) && (IndexTableSegment.KEY[i] != key[i]))
+            if ((IndexTableSegment.KEY_MASK[i] != 0) && (IndexTableSegment.KEY[i] != key[i]))
             {
                 return false;
             }
@@ -239,7 +251,7 @@ public final class IndexTableSegment
         IndexEntryArray(ByteProvider byteProvider) throws IOException
         {
             this.header = new CompoundDataTypes.MXFCollections.Header(byteProvider);
-            for (long i=0; i<header.getNumberOfElements(); i++)
+            for (long i = 0; i < header.getNumberOfElements(); i++)
             {
                 indexEntries.add(new IndexEntry(byteProvider));
                 byteProvider.skipBytes(this.header.getSizeOfElement() - 11);
@@ -269,10 +281,14 @@ public final class IndexTableSegment
         @Immutable
         public static final class IndexEntry
         {
-            @MXFProperty(size=1) private final Byte temporal_offset = null;
-            @MXFProperty(size=1) private final Byte key_frame_offset = null;
-            @MXFProperty(size=1) private final Byte flags = null;
-            @MXFProperty(size=8) private final Long stream_offset = null;
+            @MXFProperty(size = 1)
+            private final Byte temporal_offset = null;
+            @MXFProperty(size = 1)
+            private final Byte key_frame_offset = null;
+            @MXFProperty(size = 1)
+            private final Byte flags = null;
+            @MXFProperty(size = 8)
+            private final Long stream_offset = null;
 
             /**
              * Instantiates a new Index entry.

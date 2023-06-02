@@ -80,7 +80,7 @@ public interface ResourceByteRangeProvider
 
             if (rangeEnd > (resourceSize - 1))
             {
-                throw new IllegalArgumentException(String.format("rangeEnd = %d is not <= (resourceSize -1) = %d", rangeEnd, (resourceSize-1)));
+                throw new IllegalArgumentException(String.format("rangeEnd = %d is not <= (resourceSize -1) = %d", rangeEnd, (resourceSize - 1)));
             }
         }
     }

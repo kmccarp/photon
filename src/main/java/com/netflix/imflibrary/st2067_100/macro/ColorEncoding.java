@@ -36,7 +36,7 @@ public enum ColorEncoding {
     }
 
     public static ColorEncoding fromValue(String value) {
-        for (ColorEncoding colorEncodingEnum: ColorEncoding.values()) {
+        for (ColorEncoding colorEncodingEnum : ColorEncoding.values()) {
             if (colorEncodingEnum.value.equals(value)) {
                 return colorEncodingEnum;
             }

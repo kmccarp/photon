@@ -72,7 +72,7 @@ public final class TimelineTrack extends GenericTrack
      * Getter for the Origin property of this TimelineTrack
      * @return a long integer representing the origin property of this timeline track
      */
-    public long getOrigin(){
+    public long getOrigin() {
         return this.timelineTrackBO.origin;
     }
 
@@ -93,8 +93,10 @@ public final class TimelineTrack extends GenericTrack
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class TimelineTrackBO extends GenericTrackBO
     {
-        @MXFProperty(size=0) private final CompoundDataTypes.Rational edit_rate = null;
-        @MXFProperty(size=8) private final Long origin = null; //Position type
+        @MXFProperty(size = 0)
+        private final CompoundDataTypes.Rational edit_rate = null;
+        @MXFProperty(size = 8)
+        private final Long origin = null; //Position type
 
         /**
          * Instantiates a new parsed TimelineTrack object by virtue of parsing the MXF file bitstream

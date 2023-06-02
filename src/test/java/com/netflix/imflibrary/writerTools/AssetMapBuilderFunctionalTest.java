@@ -64,12 +64,16 @@ public class AssetMapBuilderFunctionalTest {
          */
         List<AssetMap.Asset> assets = assetMap.getAssetList();
         List<AssetMapBuilder.Asset> assetMapBuilderAssets = new ArrayList<>();
-        for(AssetMap.Asset asset : assets){
+        for (AssetMap.Asset asset : assets) {
             String annotationText = (asset.isPackingList() ? "PKL" : "Netflix Asset");
             String language = "en";
 
             AssetMapBuilder.Chunk chunk = new AssetMapBuilder.Chunk(asset.getPath().toString(), 10L); //All assets will have a length of 10 bytes perhaps okay for a functional test.
-            List<AssetMapBuilder.Chunk> chunks = new ArrayList<AssetMapBuilder.Chunk>() {{ add(chunk);}};
+            List<AssetMapBuilder.Chunk> chunks = new ArrayList<AssetMapBuilder.Chunk>() {
+                {
+                    add(chunk);
+                }
+            };
             AssetMapBuilder.Asset assetMapBuilderAsset = new AssetMapBuilder.Asset(asset.getUUID(), AssetMapBuilder.buildAssetMapUserTextType_2007(annotationText, language), asset.isPackingList(), chunks);
             assetMapBuilderAssets.add(assetMapBuilderAsset);
         }
@@ -90,23 +94,23 @@ public class AssetMapBuilderFunctionalTest {
 
         List<ErrorLogger.ErrorObject> fatalErrors = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger
                 .IMFErrors.ErrorLevels.FATAL)).collect(Collectors.toList());
-        if(fatalErrors.size() > 0) {
+        if (fatalErrors.size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the AssetMap. " +
                     "Please see following error messages %s", Utilities.serializeObjectCollectionToString(fatalErrors)));
         }
 
         File assetMapFile = null;
-        for(File file : tempDir.listFiles()){
-            if(file.getName().contains("ASSETMAP.xml")){
+        for (File file : tempDir.listFiles()) {
+            if (file.getName().contains("ASSETMAP.xml")) {
                 assetMapFile = file;
             }
         }
-        if(assetMapFile == null){
+        if (assetMapFile == null) {
             throw new IMFAuthoringException(String.format("AssetMap file does not exist in the working directory %s, IMP is incomplete", tempDir.getAbsolutePath()));
         }
         Assert.assertTrue(assetMapFile.length() > 0);
 
-        List<ErrorLogger.ErrorObject> assetMapValidationErrors = IMPValidator.validateAssetMap(new PayloadRecord(new FileByteRangeProvider(assetMapFile).getByteRangeAsBytes(0, assetMapFile.length()-1), PayloadRecord.PayloadAssetType.AssetMap, 0L, 0L));
+        List<ErrorLogger.ErrorObject> assetMapValidationErrors = IMPValidator.validateAssetMap(new PayloadRecord(new FileByteRangeProvider(assetMapFile).getByteRangeAsBytes(0, assetMapFile.length() - 1), PayloadRecord.PayloadAssetType.AssetMap, 0L, 0L));
         Assert.assertTrue(assetMapValidationErrors.size() == 0);
 
         //Destroy the temporary working directory

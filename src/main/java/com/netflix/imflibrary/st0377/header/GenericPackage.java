@@ -67,19 +67,23 @@ public abstract class GenericPackage extends InterchangeObject
         /**
          * The Package _ uid.
          */
-        @MXFProperty(size=32) protected final byte[] package_uid = null; //PackageID type
+        @MXFProperty(size = 32)
+        protected final byte[] package_uid = null; //PackageID type
         /**
          * The Package _ creation _ date.
          */
-        @MXFProperty(size=0) protected final CompoundDataTypes.Timestamp package_creation_date = null;
+        @MXFProperty(size = 0)
+        protected final CompoundDataTypes.Timestamp package_creation_date = null;
         /**
          * The Package _ modified _ date.
          */
-        @MXFProperty(size=0) protected final CompoundDataTypes.Timestamp package_modified_date = null;
+        @MXFProperty(size = 0)
+        protected final CompoundDataTypes.Timestamp package_modified_date = null;
         /**
          * The Tracks.
          */
-        @MXFProperty(size=0, depends=true) protected final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> tracks = null;
+        @MXFProperty(size = 0, depends = true)
+        protected final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> tracks = null;
 
         /**
          * The Generic track instance uI ds.

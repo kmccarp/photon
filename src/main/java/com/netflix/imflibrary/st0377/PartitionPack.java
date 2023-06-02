@@ -41,25 +41,37 @@ import java.util.List;
 public final class  PartitionPack
 {
     private static final String ERROR_DESCRIPTION_PREFIX = "MXF Header Partition: " + PartitionPack.class.getSimpleName() + " : ";
-    private static final byte[] KEY      = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x00, 0x0d, 0x01, 0x02, 0x01, 0x01, 0x00, 0x00, 0x00};
-    private static final byte[] KEY_MASK = {   1,    1,     1,    1,    1,    1,   1,    0,    1,    1,    1,     1,    1,   0,    0,    1};
+    private static final byte[] KEY = {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x00, 0x0d, 0x01, 0x02, 0x01, 0x01, 0x00, 0x00, 0x00};
+    private static final byte[] KEY_MASK = {1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1};
     private static final Long UNKNOWN_BYTE_OFFSET = -1L;
     private static final byte GENERIC_STREAM_PARTITION_PACK_KEY_PARTITION_STATUS = 0x11;
 
     private final KLVPacket.Header header;
 
-    @MXFProperty(size=2) private final Integer major_version = null;
-    @MXFProperty(size=2) private final Integer minor_version = null;
-    @MXFProperty(size=4) private final Long KAG_size = null;
-    @MXFProperty(size=8) private final Long this_partition = null;
-    @MXFProperty(size=8) private final Long previous_partition = null;
-    @MXFProperty(size=8) private final Long footer_partition = null;
-    @MXFProperty(size=8) private final Long header_byte_count = null;
-    @MXFProperty(size=8) private final Long index_byte_count = null;
-    @MXFProperty(size=4) private final Long index_SID = null;
-    @MXFProperty(size=8) private final Long body_offset = null;
-    @MXFProperty(size=4) private final Long body_SID = null;
-    @MXFProperty(size=16) private final byte[] operational_pattern = null;
+    @MXFProperty(size = 2)
+    private final Integer major_version = null;
+    @MXFProperty(size = 2)
+    private final Integer minor_version = null;
+    @MXFProperty(size = 4)
+    private final Long KAG_size = null;
+    @MXFProperty(size = 8)
+    private final Long this_partition = null;
+    @MXFProperty(size = 8)
+    private final Long previous_partition = null;
+    @MXFProperty(size = 8)
+    private final Long footer_partition = null;
+    @MXFProperty(size = 8)
+    private final Long header_byte_count = null;
+    @MXFProperty(size = 8)
+    private final Long index_byte_count = null;
+    @MXFProperty(size = 4)
+    private final Long index_SID = null;
+    @MXFProperty(size = 8)
+    private final Long body_offset = null;
+    @MXFProperty(size = 4)
+    private final Long body_SID = null;
+    @MXFProperty(size = 16)
+    private final byte[] operational_pattern = null;
 
     private final CompoundDataTypes.MXFCollections.MXFCollection<UL> essenceContainerBatch;
 
@@ -90,7 +102,7 @@ public final class  PartitionPack
         private final String partitionTypeString;
 
         //To prevent other objects from constructing new PartitionTypes
-        private PartitionPackType(Integer partitionTypeKey, String partitionTypeString){
+        private PartitionPackType(Integer partitionTypeKey, String partitionTypeString) {
             this.partitionTypeKey = partitionTypeKey;
             this.partitionTypeString = partitionTypeString;
         }
@@ -100,7 +112,7 @@ public final class  PartitionPack
          * @return string representing this partition type
          *
          */
-        public String getPartitionTypeString(){
+        public String getPartitionTypeString() {
             return this.partitionTypeString;
         }
 
@@ -108,7 +120,7 @@ public final class  PartitionPack
          * Accessor for the PartitionTypeKey
          * @return key corresponding to this Partition Pack
          */
-        public Integer getPartitionPackTypeKey(){
+        public Integer getPartitionPackTypeKey() {
             return this.partitionTypeKey;
         }
 
@@ -118,17 +130,17 @@ public final class  PartitionPack
          * @return a PartitionPackType corresponding to the PartitionTypeKey that was passed in.
          * @throws MXFException if an invalid PartitionTypeKey was passed in.
          */
-        public static PartitionPackType getPartitionPackTypeKey(Integer partitionTypeKey) throws MXFException{
-            if(partitionTypeKey.equals(HeaderPartitionPack.getPartitionPackTypeKey())){
+        public static PartitionPackType getPartitionPackTypeKey(Integer partitionTypeKey) throws MXFException {
+            if (partitionTypeKey.equals(HeaderPartitionPack.getPartitionPackTypeKey())) {
                 return HeaderPartitionPack;
             }
-            else if(partitionTypeKey.equals(BodyPartitionPack.getPartitionPackTypeKey())){
+            else if (partitionTypeKey.equals(BodyPartitionPack.getPartitionPackTypeKey())) {
                 return BodyPartitionPack;
             }
-            else if(partitionTypeKey .equals(FooterPartitionPack.getPartitionPackTypeKey())){
+            else if (partitionTypeKey .equals(FooterPartitionPack.getPartitionPackTypeKey())) {
                 return FooterPartitionPack;
             }
-            else{
+            else {
                 throw new MXFException(String.format("Unrecognized partition pack type"));
             }
         }
@@ -260,7 +272,7 @@ public final class  PartitionPack
                     cHeader.getSizeOfElement(), KLVPacket.KEY_FIELD_SIZE));
         }
 
-        for (long i=0; i<cHeader.getNumberOfElements(); i++)
+        for (long i = 0; i < cHeader.getNumberOfElements(); i++)
         {
             cList.add(new UL(byteProvider.getBytes(KLVPacket.KEY_FIELD_SIZE)));
         }
@@ -270,7 +282,7 @@ public final class  PartitionPack
         if (checkForSucceedingKLVFillItem)
         {
             //Offset of the next KLV packet would be the offset of the current KLV packet + KLV size
-            this.nextHeader = new KLVPacket.Header(byteProvider, byteOffset+this.header.getKLSize()+this.header.getVSize());
+            this.nextHeader = new KLVPacket.Header(byteProvider, byteOffset + this.header.getKLSize() + this.header.getVSize());
         }
         else
         {
@@ -281,9 +293,9 @@ public final class  PartitionPack
 
     private void validateHeaderKey()
     {
-        for (int i=0; i< KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
-            if( (PartitionPack.KEY_MASK[i] != 0) && (PartitionPack.KEY[i] != this.header.getKey()[i]) )
+            if ((PartitionPack.KEY_MASK[i] != 0) && (PartitionPack.KEY[i] != this.header.getKey()[i]))
             {
                 throw new MXFException(String.format("Partition Pack key value = 0x%x at position (zero-indexed) = %d, is different from expected value = 0x%x",
                         this.header.getKey()[i], i, PartitionPack.KEY[i]));
@@ -361,7 +373,7 @@ public final class  PartitionPack
      */
     public boolean isValidFooterPartition()
     {
-        return ( (this.footer_partition.equals(this.this_partition)) && (this.body_offset == 0) && (this.body_SID == 0));
+        return ((this.footer_partition.equals(this.this_partition)) && (this.body_offset == 0) && (this.body_SID == 0));
     }
 
     /**
@@ -489,7 +501,7 @@ public final class  PartitionPack
      *
      * @return the previous_partition byte offset
      */
-    public long getPreviousPartitionByteOffset(){
+    public long getPreviousPartitionByteOffset() {
         return this.previous_partition;
     }
 

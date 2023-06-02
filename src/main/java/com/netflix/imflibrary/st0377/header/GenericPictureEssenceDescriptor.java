@@ -29,7 +29,7 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
     public static final String rgbaDescriptorUL = "urn:smpte:ul:060e2b34.027f0101.0d010101.01012900";
     public static final String cdciDescriptorUL = "urn:smpte:ul:060e2b34.027f0101.0d010101.01012800";
     public static final String frameLayoutUL = "urn:smpte:ul:060e2b34.01010101.04010301.04000000";
-    public static final String frameLayoutTypeUL= "urn:smpte:ul:060e2b34.01040101.02010108.00000000";
+    public static final String frameLayoutTypeUL = "urn:smpte:ul:060e2b34.01040101.02010108.00000000";
     public static final String storedWidthUL = "urn:smpte:ul:060e2b34.01010101.04010502.02000000";
     public static final String storedHeightUL = "urn:smpte:ul:060e2b34.01010101.04010502.01000000";
     public static final String sampleRateUL = "urn:smpte:ul:060e2b34.01010101.04060101.00000000";
@@ -103,6 +103,7 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
     //end items defined in 2067-50
     //begin items defined in 379-2
     public static final String containerConstraintsSubDescriptorUL = "urn:smpte:ul:060e2b34.027f0101.0d010101.01016700";
+
     //begin items defined in 379-2
     
        
@@ -110,15 +111,24 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
 
     public static abstract class GenericPictureEssenceDescriptorBO extends FileDescriptorBO {
 
-        @MXFProperty(size=1) protected final Short frame_layout = null;
-        @MXFProperty(size=4) protected final Long stored_width = null;
-        @MXFProperty(size=4) protected final Long stored_height = null;
-        @MXFProperty(size=0) protected final CompoundDataTypes.Rational aspect_ratio = null;
-        @MXFProperty(size=0) protected final CompoundDataTypes.MXFCollections.MXFCollection<Integer> video_line_map = null;
-        @MXFProperty(size=16) protected final UL picture_essence_coding = null;
-        @MXFProperty(size=16) protected final UL color_primaries = null;
-        @MXFProperty(size=16) protected final UL coding_equations = null;
-        @MXFProperty(size=16) protected final UL transfer_characteristic = null;
+        @MXFProperty(size = 1)
+        protected final Short frame_layout = null;
+        @MXFProperty(size = 4)
+        protected final Long stored_width = null;
+        @MXFProperty(size = 4)
+        protected final Long stored_height = null;
+        @MXFProperty(size = 0)
+        protected final CompoundDataTypes.Rational aspect_ratio = null;
+        @MXFProperty(size = 0)
+        protected final CompoundDataTypes.MXFCollections.MXFCollection<Integer> video_line_map = null;
+        @MXFProperty(size = 16)
+        protected final UL picture_essence_coding = null;
+        @MXFProperty(size = 16)
+        protected final UL color_primaries = null;
+        @MXFProperty(size = 16)
+        protected final UL coding_equations = null;
+        @MXFProperty(size = 16)
+        protected final UL transfer_characteristic = null;
 
 
         /**
@@ -134,7 +144,7 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
          * Accessor for the ColorPrimaries UL
          * @return a UL representing the ColorPrimaries
          */
-        public UL getColorPrimariesUL(){
+        public UL getColorPrimariesUL() {
             return this.color_primaries;
         }
 
@@ -142,7 +152,7 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
          * Accessor for the CodingEquations UL
          * @return a UL representing the CodingEquations
          */
-        public UL getCodingEquationsUL(){
+        public UL getCodingEquationsUL() {
             return this.coding_equations;
         }
 
@@ -150,7 +160,7 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
          * Accessor for the TransferCharacteristic UL
          * @return a UL representing the TransferCharacteristic
          */
-        public UL getTransferCharacteristicUL(){
+        public UL getTransferCharacteristicUL() {
             return this.transfer_characteristic;
         }
 
@@ -173,9 +183,9 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
         }
 
         public static RGBAComponentType valueOf(Integer code) {
-            for(RGBAComponentType cur : RGBAComponentType.values())
+            for (RGBAComponentType cur : RGBAComponentType.values())
             {
-                if(cur.getCode().equals(code))
+                if (cur.getCode().equals(code))
                 {
                     return cur;
                 }
@@ -183,7 +193,9 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
             return Unknown;
         }
 
-        public Integer getCode() { return this.code;}
+        public Integer getCode() {
+            return this.code;
+        }
     }
 
     public static enum FrameLayoutType {
@@ -199,11 +211,13 @@ public abstract class GenericPictureEssenceDescriptor extends FileDescriptor {
             this.value = value;
         }
 
-        public Integer getValue() { return this.value;}
+        public Integer getValue() {
+            return this.value;
+        }
 
         public static FrameLayoutType valueOf(Integer value) {
-            for(FrameLayoutType frameLayout: FrameLayoutType.values()) {
-                if(frameLayout.getValue().equals(value)) {
+            for (FrameLayoutType frameLayout : FrameLayoutType.values()) {
+                if (frameLayout.getValue().equals(value)) {
                     return frameLayout;
                 }
             }

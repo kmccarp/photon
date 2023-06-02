@@ -119,14 +119,22 @@ public final class Preface extends InterchangeObject
     public static final class PrefaceBO extends InterchangeObjectBO
     {
 
-        @MXFProperty(size=8) private final byte[] last_modified_date = null;
-        @MXFProperty(size=2) private final byte[] version = null;
-        @MXFProperty(size=16, depends=true) private final byte[] primary_package = null; //In-file Weak Ref
-        @MXFProperty(size=16, depends=true) private final StrongRef content_storage = null;
-        @MXFProperty(size=16) private final UL operational_pattern = null;
-        @MXFProperty(size=0) private final CompoundDataTypes.MXFCollections.MXFCollection<UL> essencecontainers = null;
-        @MXFProperty(size=0) private final CompoundDataTypes.MXFCollections.MXFCollection<UL> dm_schemes = null;
-        @MXFProperty(size=0) private final CompoundDataTypes.MXFCollections.MXFCollection<UL> conforms_to_specifications = null;
+        @MXFProperty(size = 8)
+        private final byte[] last_modified_date = null;
+        @MXFProperty(size = 2)
+        private final byte[] version = null;
+        @MXFProperty(size = 16, depends = true)
+        private final byte[] primary_package = null; //In-file Weak Ref
+        @MXFProperty(size = 16, depends = true)
+        private final StrongRef content_storage = null;
+        @MXFProperty(size = 16)
+        private final UL operational_pattern = null;
+        @MXFProperty(size = 0)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<UL> essencecontainers = null;
+        @MXFProperty(size = 0)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<UL> dm_schemes = null;
+        @MXFProperty(size = 0)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<UL> conforms_to_specifications = null;
 
         /**
          * Instantiates a new parsed Preface object by virtue of parsing the MXF file bitstream

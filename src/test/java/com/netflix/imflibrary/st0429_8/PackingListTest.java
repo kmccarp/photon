@@ -8,7 +8,7 @@ import testUtils.TestHelper;
 import java.io.File;
 import java.util.UUID;
 
-@Test(groups="unit")
+@Test(groups = "unit")
 public class PackingListTest
 {
     @Test
@@ -23,8 +23,8 @@ public class PackingListTest
         PackingList.Asset asset = packingList.getAssets().get(2);
         Assert.assertEquals(asset.getUUID(), UUID.fromString("682feecb-7516-4d93-b533-f40d4ce60539"));
         Assert.assertEquals(asset.getSize(), 2544L);
-        Assert.assertEquals(asset.getType(),"text/xml");
-        Assert.assertEquals(asset.getOriginalFilename(),"CPL_682feecb-7516-4d93-b533-f40d4ce60539.xml");
+        Assert.assertEquals(asset.getType(), "text/xml");
+        Assert.assertEquals(asset.getOriginalFilename(), "CPL_682feecb-7516-4d93-b533-f40d4ce60539.xml");
         Assert.assertTrue(asset.toString().length() > 0);
     }
 
@@ -40,8 +40,8 @@ public class PackingListTest
         PackingList.Asset asset = packingList.getAssets().get(0);
         Assert.assertEquals(asset.getUUID(), UUID.fromString("88b5b453-a342-46eb-bc0a-4c9645f4d627"));
         Assert.assertEquals(asset.getSize(), 19139240035L);
-        Assert.assertEquals(asset.getType(),"application/mxf");
-        Assert.assertEquals(asset.getOriginalFilename(),"1.mxf");
+        Assert.assertEquals(asset.getType(), "application/mxf");
+        Assert.assertEquals(asset.getOriginalFilename(), "1.mxf");
         Assert.assertTrue(asset.toString().length() > 0);
     }
 }

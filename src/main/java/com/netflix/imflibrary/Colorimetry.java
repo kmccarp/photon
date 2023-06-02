@@ -14,16 +14,16 @@ import java.util.stream.Collectors;
  * Created by svenkatrav on 10/31/16.
  */
 public enum Colorimetry {
-    Color1(ColorPrimaries.ITU470PAL,  TransferCharacteristic.ITU709,            CodingEquation.ITU601),
-    Color2(ColorPrimaries.SMPTE170M,  TransferCharacteristic.ITU709,            CodingEquation.ITU601),
-    Color3(ColorPrimaries.ITU709,     TransferCharacteristic.ITU709,            CodingEquation.ITU709),
-    Color4(ColorPrimaries.ITU709,     TransferCharacteristic.IEC6196624xvYCC,   CodingEquation.ITU709),
-    Color5(ColorPrimaries.ITU2020,    TransferCharacteristic.ITU2020,           CodingEquation.ITU2020NCL),
-    Color6(ColorPrimaries.P3D65,      TransferCharacteristic.SMPTEST2084,       CodingEquation.None),
-    Color7(ColorPrimaries.ITU2020,    TransferCharacteristic.SMPTEST2084,       CodingEquation.ITU2020NCL),
-    Color8(ColorPrimaries.ITU2020,    TransferCharacteristic.HLG,               CodingEquation.ITU2020NCL),
-    Color_App5_AP0(ColorPrimaries.ACES,    TransferCharacteristic.Linear,       CodingEquation.None),
-    Unknown(ColorPrimaries.Unknown,   TransferCharacteristic.Unknown,           CodingEquation.Unknown);
+    Color1(ColorPrimaries.ITU470PAL, TransferCharacteristic.ITU709, CodingEquation.ITU601),
+    Color2(ColorPrimaries.SMPTE170M, TransferCharacteristic.ITU709, CodingEquation.ITU601),
+    Color3(ColorPrimaries.ITU709, TransferCharacteristic.ITU709, CodingEquation.ITU709),
+    Color4(ColorPrimaries.ITU709, TransferCharacteristic.IEC6196624xvYCC, CodingEquation.ITU709),
+    Color5(ColorPrimaries.ITU2020, TransferCharacteristic.ITU2020, CodingEquation.ITU2020NCL),
+    Color6(ColorPrimaries.P3D65, TransferCharacteristic.SMPTEST2084, CodingEquation.None),
+    Color7(ColorPrimaries.ITU2020, TransferCharacteristic.SMPTEST2084, CodingEquation.ITU2020NCL),
+    Color8(ColorPrimaries.ITU2020, TransferCharacteristic.HLG, CodingEquation.ITU2020NCL),
+    Color_App5_AP0(ColorPrimaries.ACES, TransferCharacteristic.Linear, CodingEquation.None),
+    Unknown(ColorPrimaries.Unknown, TransferCharacteristic.Unknown, CodingEquation.Unknown);
 
 
     private final ColorPrimaries colorPrimary;
@@ -32,8 +32,8 @@ public enum Colorimetry {
 
     Colorimetry(@Nonnull ColorPrimaries colorPrimary, @Nonnull TransferCharacteristic transferCharacteristic, @Nonnull CodingEquation codingEquation) {
         this.colorPrimary = colorPrimary;
-        this.transferCharacteristic =  transferCharacteristic;
-        this.codingEquation =  codingEquation;
+        this.transferCharacteristic = transferCharacteristic;
+        this.codingEquation = codingEquation;
     }
 
     public @Nonnull ColorPrimaries getColorPrimary() {
@@ -49,8 +49,8 @@ public enum Colorimetry {
     }
 
     public static @Nonnull Colorimetry valueOf(@Nonnull ColorPrimaries colorPrimary, @Nonnull TransferCharacteristic transferCharacteristic) {
-        for(Colorimetry colorimetry: Colorimetry.values()) {
-            if( colorimetry.getColorPrimary().equals(colorPrimary) && colorimetry.getTransferCharacteristic().equals(transferCharacteristic)) {
+        for (Colorimetry colorimetry : Colorimetry.values()) {
+            if (colorimetry.getColorPrimary().equals(colorPrimary) && colorimetry.getTransferCharacteristic().equals(transferCharacteristic)) {
                 return colorimetry;
             }
         }
@@ -64,6 +64,7 @@ public enum Colorimetry {
         None(null),
         Unknown(null);
         private final UL codingEquationUL;
+
         CodingEquation(@Nullable  UL codingEquationUL) {
             this.codingEquationUL = codingEquationUL;
         }
@@ -73,8 +74,8 @@ public enum Colorimetry {
         }
 
         public static @Nonnull CodingEquation valueOf(@Nullable UL codingEquationUL) {
-            for(CodingEquation codingEquation: CodingEquation.values()) {
-                if( codingEquation.getCodingEquationUL() != null && codingEquation.getCodingEquationUL().equals(codingEquationUL)) {
+            for (CodingEquation codingEquation : CodingEquation.values()) {
+                if (codingEquation.getCodingEquationUL() != null && codingEquation.getCodingEquationUL().equals(codingEquationUL)) {
                     return codingEquation;
                 }
             }
@@ -92,6 +93,7 @@ public enum Colorimetry {
         Unknown(null);
 
         private final UL transferCharacteristicUL;
+
         TransferCharacteristic(@Nullable UL transferCharacteristicUL) {
             this.transferCharacteristicUL = transferCharacteristicUL;
         }
@@ -101,8 +103,8 @@ public enum Colorimetry {
         }
 
         public static @Nonnull TransferCharacteristic valueOf(@Nullable UL transferCharacteristicUL) {
-            for(TransferCharacteristic transferCharacteristic: TransferCharacteristic.values()) {
-                if( transferCharacteristic.getTransferCharacteristicUL() != null && transferCharacteristic.getTransferCharacteristicUL().equals(transferCharacteristicUL)) {
+            for (TransferCharacteristic transferCharacteristic : TransferCharacteristic.values()) {
+                if (transferCharacteristic.getTransferCharacteristicUL() != null && transferCharacteristic.getTransferCharacteristicUL().equals(transferCharacteristicUL)) {
                     return transferCharacteristic;
                 }
             }
@@ -120,6 +122,7 @@ public enum Colorimetry {
         Unknown(null);
 
         private final UL colorPrimariesUL;
+
         ColorPrimaries(@Nullable UL colorPrimariesUL) {
             this.colorPrimariesUL = colorPrimariesUL;
         }
@@ -129,8 +132,8 @@ public enum Colorimetry {
         }
 
         public static @Nonnull ColorPrimaries valueOf(@Nullable UL colorPrimariesUL) {
-            for(ColorPrimaries colorPrimaries: ColorPrimaries.values()) {
-                if( colorPrimaries.getColorPrimariesUL() != null && colorPrimaries.getColorPrimariesUL().equals(colorPrimariesUL)) {
+            for (ColorPrimaries colorPrimaries : ColorPrimaries.values()) {
+                if (colorPrimaries.getColorPrimariesUL() != null && colorPrimaries.getColorPrimariesUL().equals(colorPrimariesUL)) {
                     return colorPrimaries;
                 }
             }
@@ -179,27 +182,34 @@ public enum Colorimetry {
         public int hashCode()
         {
             Integer hash = 1;
-            hash = hash *31 + this.getBitDepth();
-            hash = hash *31 + this.getMaxLevel().intValue();
-            hash = hash *31 + this.getMinLevel().intValue();
+            hash = hash * 31 + this.getBitDepth();
+            hash = hash * 31 + this.getMaxLevel().intValue();
+            hash = hash * 31 + this.getMinLevel().intValue();
             return hash;
         }
     }
 
     public static enum Quantization {
-        QE1(new HashSet<ComponentLevel>() {{
-            add(new ComponentLevel(8, 16L, 235L));
-            add(new ComponentLevel(10, 64L, 940L));
-            add(new ComponentLevel(12, 256L, 3760L));
-            add(new ComponentLevel(16, 4096L, 60160L)); }} ),
-        QE2(new HashSet<ComponentLevel>() {{
-            add(new ComponentLevel(8, 0L, 255L));
-            add(new ComponentLevel(10, 0L, 1023L));
-            add(new ComponentLevel(12, 0L, 4095L));
-            add(new ComponentLevel(16, 0L, 65535L)); }} ),
+        QE1(new HashSet<ComponentLevel>() {
+            {
+                add(new ComponentLevel(8, 16L, 235L));
+                add(new ComponentLevel(10, 64L, 940L));
+                add(new ComponentLevel(12, 256L, 3760L));
+                add(new ComponentLevel(16, 4096L, 60160L));
+            }
+        } ),
+        QE2(new HashSet<ComponentLevel>() {
+            {
+                add(new ComponentLevel(8, 0L, 255L));
+                add(new ComponentLevel(10, 0L, 1023L));
+                add(new ComponentLevel(12, 0L, 4095L));
+                add(new ComponentLevel(16, 0L, 65535L));
+            }
+        } ),
         Unknown(new HashSet<>());
 
         private final Set<ComponentLevel> componentLevels;
+
         Quantization(@Nonnull Set<ComponentLevel> componentLevels) {
 
             this.componentLevels = componentLevels;
@@ -211,8 +221,8 @@ public enum Colorimetry {
 
         public static @Nonnull Quantization valueOf(@Nonnull Integer pixelBitDepth, @Nonnull Long minLevel, @Nonnull Long maxLevel) {
             ComponentLevel componentLevel = new ComponentLevel(pixelBitDepth, minLevel, maxLevel);
-            for(Quantization quantization: Quantization.values()) {
-                if(quantization.getComponentLevels().contains(componentLevel)) {
+            for (Quantization quantization : Quantization.values()) {
+                if (quantization.getComponentLevels().contains(componentLevel)) {
                     return quantization;
                 }
             }
@@ -220,10 +230,10 @@ public enum Colorimetry {
         }
 
         public static @Nonnull Integer componentRangeToBitDepth(@Nonnull Long minLevel, @Nonnull Long maxLevel) {
-            for(Quantization quantization: Quantization.values()) {
+            for (Quantization quantization : Quantization.values()) {
                 List<Integer> bitDepths = quantization.getComponentLevels().stream()
-                        .filter( e -> e.getMaxLevel().equals(maxLevel) && e.getMinLevel().equals(minLevel)).map(e -> e.bitDepth).collect(Collectors.toList());
-                if(bitDepths.size() == 1) {
+                        .filter(e -> e.getMaxLevel().equals(maxLevel) && e.getMinLevel().equals(minLevel)).map(e -> e.bitDepth).collect(Collectors.toList());
+                if (bitDepths.size() == 1) {
                     return bitDepths.get(0);
                 }
             }
@@ -237,6 +247,7 @@ public enum Colorimetry {
         Unknown(0, 0);
         Integer horizontalSubSampling;
         Integer verticalSubSampling;
+
         Sampling(@Nonnull Integer horizontalSubSampling, @Nonnull Integer verticalSubSampling) {
             this.horizontalSubSampling = horizontalSubSampling;
             this.verticalSubSampling = verticalSubSampling;
@@ -251,8 +262,8 @@ public enum Colorimetry {
         }
 
         public static @Nonnull Sampling valueOf(@Nonnull Integer horizontalSubSampling, @Nonnull Integer verticalSubSampling) {
-            for(Sampling sampling: Sampling.values()) {
-                if(sampling.getHorizontalSubSampling().equals(horizontalSubSampling) && sampling.getVerticalSubSampling().equals( verticalSubSampling)) {
+            for (Sampling sampling : Sampling.values()) {
+                if (sampling.getHorizontalSubSampling().equals(horizontalSubSampling) && sampling.getVerticalSubSampling().equals(verticalSubSampling)) {
                     return sampling;
                 }
             }
@@ -261,10 +272,23 @@ public enum Colorimetry {
     }
 
     public static enum ColorModel {
-        RGB(new HashSet<RGBAComponentType>() {{ add(RGBAComponentType.Red); add(RGBAComponentType.Green); add(RGBAComponentType.Blue);}}),
-        YUV(new HashSet<RGBAComponentType>() {{ add(RGBAComponentType.Luma); add(RGBAComponentType.ChromaU); add(RGBAComponentType.ChromaV);}}),
+        RGB(new HashSet<RGBAComponentType>() {
+            {
+                add(RGBAComponentType.Red);
+                add(RGBAComponentType.Green);
+                add(RGBAComponentType.Blue);
+            }
+        }),
+        YUV(new HashSet<RGBAComponentType>() {
+            {
+                add(RGBAComponentType.Luma);
+                add(RGBAComponentType.ChromaU);
+                add(RGBAComponentType.ChromaV);
+            }
+        }),
         Unknown(new HashSet<>());
         private final Set<RGBAComponentType> componentTypeSet;
+
         ColorModel(@Nonnull Set<RGBAComponentType> componentTypeSet) {
             this.componentTypeSet = componentTypeSet;
         }

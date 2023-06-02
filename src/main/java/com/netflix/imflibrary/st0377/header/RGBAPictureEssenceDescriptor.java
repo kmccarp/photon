@@ -50,7 +50,7 @@ public final class RGBAPictureEssenceDescriptor extends GenericPictureEssenceDes
      * Getter for the Essence Container UL of this FileDescriptor
      * @return a UL representing the Essence Container
      */
-    public UL getEssenceContainerUL(){
+    public UL getEssenceContainerUL() {
         return this.rgbaPictureEssenceDescriptorBO.getEssenceContainerUL();
     }
 
@@ -71,8 +71,10 @@ public final class RGBAPictureEssenceDescriptor extends GenericPictureEssenceDes
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class RGBAPictureEssenceDescriptorBO extends GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO
     {
-        @MXFProperty(size=4) protected final Long component_max_ref = null;
-        @MXFProperty(size=4) protected final Long component_min_ref = null;
+        @MXFProperty(size = 4)
+        protected final Long component_max_ref = null;
+        @MXFProperty(size = 4)
+        protected final Long component_min_ref = null;
 
         /**
          * Instantiates a new parsed RGBAPictureEssenceDescriptor object by virtue of parsing the MXF file bitstream
@@ -102,7 +104,7 @@ public final class RGBAPictureEssenceDescriptor extends GenericPictureEssenceDes
          * Accessor for the ComponentMaxRef UL
          * @return a long integer representing the maximum value for RGB components
          */
-        public Long getComponentMaxRef(){
+        public Long getComponentMaxRef() {
             return this.component_max_ref;
         }
 
@@ -110,7 +112,7 @@ public final class RGBAPictureEssenceDescriptor extends GenericPictureEssenceDes
          * Accessor for the ComponentMinRef UL
          * @return a long integer representing the minimum value for RGB components
          */
-        public Long getComponentMinRef(){
+        public Long getComponentMinRef() {
             return this.component_min_ref;
         }
 

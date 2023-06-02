@@ -68,16 +68,16 @@ public class IMPValidator {
     public static PayloadRecord.PayloadAssetType getPayloadType(PayloadRecord payloadRecord) throws IOException {
 
         ResourceByteRangeProvider resourceByteRangeProvider = new ByteArrayByteRangeProvider(payloadRecord.getPayload());
-        if(AssetMap.isFileOfSupportedSchema(resourceByteRangeProvider)){
+        if (AssetMap.isFileOfSupportedSchema(resourceByteRangeProvider)) {
             return PayloadRecord.PayloadAssetType.AssetMap;
         }
-        else if(PackingList.isFileOfSupportedSchema(resourceByteRangeProvider)){
+        else if (PackingList.isFileOfSupportedSchema(resourceByteRangeProvider)) {
             return PayloadRecord.PayloadAssetType.PackingList;
         }
-        else if(ApplicationComposition.isCompositionPlaylist(resourceByteRangeProvider)){
+        else if (ApplicationComposition.isCompositionPlaylist(resourceByteRangeProvider)) {
             return PayloadRecord.PayloadAssetType.CompositionPlaylist;
         }
-        else if(OutputProfileList.isOutputProfileList(resourceByteRangeProvider)){
+        else if (OutputProfileList.isOutputProfileList(resourceByteRangeProvider)) {
             return PayloadRecord.PayloadAssetType.OutputProfileList;
         }
         return PayloadRecord.PayloadAssetType.Unknown;
@@ -92,15 +92,15 @@ public class IMPValidator {
     public static List<ErrorLogger.ErrorObject> validatePKL(PayloadRecord pkl) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
 
-        if(pkl.getPayloadAssetType() != PayloadRecord.PayloadAssetType.PackingList){
+        if (pkl.getPayloadAssetType() != PayloadRecord.PayloadAssetType.PackingList) {
             throw new IMFException(String.format("Payload asset type is %s, expected asset type %s", pkl
                     .getPayloadAssetType(), PayloadRecord.PayloadAssetType.PackingList.toString()), imfErrorLogger);
         }
-        try{
+        try {
             PackingList packingList = new PackingList(new ByteArrayByteRangeProvider(pkl.getPayload()));
             imfErrorLogger.addAllErrors(packingList.getErrors());
         }
-        catch (IMFException e)
+        catch(IMFException e)
         {
             imfErrorLogger.addAllErrors(e.getErrors());
         }
@@ -114,11 +114,11 @@ public class IMPValidator {
      * @throws IOException - any I/O related error is exposed through an IOException
      */
     public static List<ErrorLogger.ErrorObject> validateAssetMap(PayloadRecord assetMapPayload) throws IOException {
-        if(assetMapPayload.getPayloadAssetType() != PayloadRecord.PayloadAssetType.AssetMap){
+        if (assetMapPayload.getPayloadAssetType() != PayloadRecord.PayloadAssetType.AssetMap) {
             throw new IMFException(String.format("Payload asset type is %s, expected asset type %s", assetMapPayload
                     .getPayloadAssetType(), PayloadRecord.PayloadAssetType.AssetMap.toString()));
         }
-        try{
+        try {
             AssetMap assetMap = new AssetMap(new ByteArrayByteRangeProvider(assetMapPayload.getPayload()));
             return assetMap.getErrors();
         }
@@ -140,11 +140,11 @@ public class IMPValidator {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         List<PayloadRecord> packingListPayloadRecords = Collections.unmodifiableList(pklPayloads);
 
-        if(assetMapPayload.getPayloadAssetType() != PayloadRecord.PayloadAssetType.AssetMap){
+        if (assetMapPayload.getPayloadAssetType() != PayloadRecord.PayloadAssetType.AssetMap) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors
                             .ErrorLevels.FATAL,
                     String.format("Payload asset type is %s, expected asset type %s", assetMapPayload
-                    .getPayloadAssetType(), PayloadRecord.PayloadAssetType.AssetMap.toString()));
+                            .getPayloadAssetType(), PayloadRecord.PayloadAssetType.AssetMap.toString()));
         }
 
         ResourceByteRangeProvider assetMapByteRangeProvider = new ByteArrayByteRangeProvider(assetMapPayload.getPayload());
@@ -153,20 +153,20 @@ public class IMPValidator {
             assetMapObjectModel = new AssetMap(assetMapByteRangeProvider);
             imfErrorLogger.addAllErrors(assetMapObjectModel.getErrors());
 
-            if(assetMapObjectModel.getPackingListAssets().size() == 0){
+            if (assetMapObjectModel.getPackingListAssets().size() == 0) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors
                         .ErrorLevels.FATAL, String.format("Asset map should reference atleast one PackingList, %d " +
                         "references found", assetMapObjectModel.getPackingListAssets().size()));
             }
         }
-        catch( IMFException e)
+        catch(IMFException e)
         {
             imfErrorLogger.addAllErrors(e.getErrors());
         }
 
         List<ResourceByteRangeProvider> packingLists = new ArrayList<>();
-        for(PayloadRecord payloadRecord : packingListPayloadRecords){
-            if(payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.PackingList){
+        for (PayloadRecord payloadRecord : packingListPayloadRecords) {
+            if (payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.PackingList) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_MASTER_PACKAGE_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels
                         .FATAL, String.format("Payload asset type is %s, expected asset type %s", assetMapPayload.getPayloadAssetType(), PayloadRecord.PayloadAssetType.PackingList.toString()));
             }
@@ -175,11 +175,11 @@ public class IMPValidator {
             }
         }
 
-        if(packingLists.size() == 0){
+        if (packingLists.size() == 0) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_MASTER_PACKAGE_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("Atleast one PackingList is expected, %d were detected", packingLists.size()));
         }
 
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             return imfErrorLogger.getErrors();
         }
@@ -187,79 +187,79 @@ public class IMPValidator {
         List<PackingList> packingListObjectModels = new ArrayList<>();
         for (ResourceByteRangeProvider resourceByteRangeProvider : packingLists) {
             try {
-                    PackingList packingList = new PackingList(resourceByteRangeProvider);
-                    packingListObjectModels.add(packingList);
-                    imfErrorLogger.addAllErrors(packingList.getErrors());
+                PackingList packingList = new PackingList(resourceByteRangeProvider);
+                packingListObjectModels.add(packingList);
+                imfErrorLogger.addAllErrors(packingList.getErrors());
             }
-            catch (IMFException e)
+            catch(IMFException e)
             {
                 imfErrorLogger.addAllErrors(e.getErrors());
                 return imfErrorLogger.getErrors();
             }
         }
         List<UUID> assetUUIDsAssetMapList = new ArrayList<>();
-        for(AssetMap.Asset asset : assetMapObjectModel.getAssetList()){
+        for (AssetMap.Asset asset : assetMapObjectModel.getAssetList()) {
             assetUUIDsAssetMapList.add(asset.getUUID());
         }
 
-/*
-        //Sort the UUIDs in the AssetMap
-        assetUUIDsAssetMapList.sort(new Comparator<UUID>() {
-                                    @Override
-                                    public int compare(UUID o1, UUID o2) {
-                                        return o1.compareTo(o2);
-                                    }
-                                });
-*/
+        /*
+                //Sort the UUIDs in the AssetMap
+                assetUUIDsAssetMapList.sort(new Comparator<UUID>() {
+                                            @Override
+                                            public int compare(UUID o1, UUID o2) {
+                                                return o1.compareTo(o2);
+                                            }
+                                        });
+        */
 
         /* Collect all the assets in all of the PKLs that are a part of this IMP delivery */
         List<UUID> assetUUIDsPackingList = new ArrayList<>();
-        for(PackingList packingList : packingListObjectModels) {
+        for (PackingList packingList : packingListObjectModels) {
             assetUUIDsPackingList.add(packingList.getUUID());//PKL's UUID is also added to this list since that should be present in the AssetMap
             for (PackingList.Asset asset : packingList.getAssets()) {
                 assetUUIDsPackingList.add(asset.getUUID());
             }
         }
 
-/*
-        //Sort the UUIDs in the PackingList
-        assetUUIDsPackingList.sort(new Comparator<UUID>() {
-            @Override
-            public int compare(UUID o1, UUID o2) {
-                return o1.compareTo(o2);
-            }
-        });
-*/
+        /*
+                //Sort the UUIDs in the PackingList
+                assetUUIDsPackingList.sort(new Comparator<UUID>() {
+                    @Override
+                    public int compare(UUID o1, UUID o2) {
+                        return o1.compareTo(o2);
+                    }
+                });
+        */
 
         /* Check to see if all the Assets referenced in the PKL are also referenced by the Asset Map */
         Set<UUID> assetUUIDsAssetMapSet = new HashSet<>(assetUUIDsAssetMapList);
         Set<UUID> assetUUIDsPKLSet = new HashSet<>(assetUUIDsPackingList);
 
         StringBuilder unreferencedPKLAssetsUUIDs = new StringBuilder();
-        for(UUID uuid : assetUUIDsPKLSet){
-            if(!assetUUIDsAssetMapSet.contains(uuid)) {
+        for (UUID uuid : assetUUIDsPKLSet) {
+            if (!assetUUIDsAssetMapSet.contains(uuid)) {
                 unreferencedPKLAssetsUUIDs.append(uuid.toString());
                 unreferencedPKLAssetsUUIDs.append(", ");
             }
         }
 
-        if(!unreferencedPKLAssetsUUIDs.toString().isEmpty()){
+        if (!unreferencedPKLAssetsUUIDs.toString().isEmpty()) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("The following UUID/s %s in the Packing list are not referenced by the AssetMap.", unreferencedPKLAssetsUUIDs.toString()));
             return imfErrorLogger.getErrors();
         }
 
         /* Check if all the assets in the AssetMap that are supposed to be PKLs have the same UUIDs as the PKLs themselves */
         Set<UUID> packingListAssetsUUIDsSet = new HashSet<>();
-        for(AssetMap.Asset asset : assetMapObjectModel.getPackingListAssets()){
+        for (AssetMap.Asset asset : assetMapObjectModel.getPackingListAssets()) {
             packingListAssetsUUIDsSet.add(asset.getUUID());
         }
         StringBuilder unreferencedPKLUUIDs = new StringBuilder();
-        for(PackingList packingList : packingListObjectModels) {
+        for (PackingList packingList : packingListObjectModels) {
             if (!packingListAssetsUUIDsSet.contains(packingList.getUUID())) {
                 unreferencedPKLUUIDs.append(packingList.getUUID());
             }
         }
-        if(!unreferencedPKLUUIDs.toString().isEmpty()) {
+        if (!unreferencedPKLUUIDs.toString().isEmpty()) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("The following Packing lists %s are not referenced in the AssetMap", unreferencedPKLUUIDs.toString()));
             return imfErrorLogger.getErrors();
         }
@@ -272,9 +272,9 @@ public class IMPValidator {
      * @return list of error messages encountered while validating an AssetMap document
      * @throws IOException - any I/O related error is exposed through an IOException
      */
-    public static List<ErrorLogger.ErrorObject> validateCPL(PayloadRecord cpl) throws IOException{
+    public static List<ErrorLogger.ErrorObject> validateCPL(PayloadRecord cpl) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        if(cpl.getPayloadAssetType() != PayloadRecord.PayloadAssetType.CompositionPlaylist){
+        if (cpl.getPayloadAssetType() != PayloadRecord.PayloadAssetType.CompositionPlaylist) {
             throw new IMFException(String.format("Payload asset type is %s, expected asset type %s", cpl
                     .getPayloadAssetType(), PayloadRecord.PayloadAssetType.CompositionPlaylist.toString()));
         }
@@ -301,13 +301,13 @@ public class IMPValidator {
 
         imfErrorLogger.addAllErrors(errorList);
 
-        if(imfErrorLogger.hasFatalErrors())
+        if (imfErrorLogger.hasFatalErrors())
         {
             throw new IMFException("Virtual track failed validation", imfErrorLogger);
         }
 
         ApplicationComposition applicationComposition = ApplicationCompositionFactory.getApplicationComposition(new ByteArrayByteRangeProvider(cpl.getPayload()), imfErrorLogger);
-        if(applicationComposition == null) {
+        if (applicationComposition == null) {
             return new ArrayList<>();
         }
         return applicationComposition.getVirtualTracks();
@@ -324,15 +324,15 @@ public class IMPValidator {
      * @throws IOException - any I/O related error is exposed through an IOException
      */
     public static List<ErrorLogger.ErrorObject> isVirtualTrackInCPLConformed(PayloadRecord cplPayloadRecord,
-                                                                             VirtualTrack virtualTrack,
-                                                                             List<PayloadRecord> essencesHeaderPartitionPayloads) throws IOException
+            VirtualTrack virtualTrack,
+            List<PayloadRecord> essencesHeaderPartitionPayloads) throws IOException
     {
         List<VirtualTrack> virtualTracks = new ArrayList<>();
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         virtualTracks.add(virtualTrack);
         imfErrorLogger.addAllErrors(checkVirtualTrackAndEssencesHeaderPartitionPayloadRecords(virtualTracks,
                 essencesHeaderPartitionPayloads));
-        if(imfErrorLogger.hasFatalErrors()){
+        if (imfErrorLogger.hasFatalErrors()) {
             return imfErrorLogger.getErrors();
         }
         imfErrorLogger.addAllErrors(conformVirtualTracksInCPL(cplPayloadRecord, essencesHeaderPartitionPayloads,
@@ -356,14 +356,14 @@ public class IMPValidator {
 
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         ApplicationComposition applicationComposition = ApplicationCompositionFactory.getApplicationComposition(new ByteArrayByteRangeProvider(cplPayloadRecord.getPayload()), imfErrorLogger);
-        if(applicationComposition == null) {
+        if (applicationComposition == null) {
             return imfErrorLogger.getErrors();
         }
 
         List<VirtualTrack> virtualTracks = new ArrayList<>(applicationComposition.getVirtualTracks());
         imfErrorLogger.addAllErrors(checkVirtualTrackAndEssencesHeaderPartitionPayloadRecords(virtualTracks,
                 essencesHeaderPartitionPayloads));
-        if(imfErrorLogger.hasFatalErrors()){
+        if (imfErrorLogger.hasFatalErrors()) {
             return imfErrorLogger.getErrors();
         }
         imfErrorLogger.addAllErrors(conformVirtualTracksInCPL(cplPayloadRecord, essencesHeaderPartitionPayloads,
@@ -373,7 +373,7 @@ public class IMPValidator {
     }
 
     public static List<ErrorLogger.ErrorObject> conformVirtualTracksInCPL(PayloadRecord cplPayloadRecord,
-        List<PayloadRecord> essencesHeaderPartitionPayloads,boolean conformAllVirtualTracks) throws IOException
+            List<PayloadRecord> essencesHeaderPartitionPayloads, boolean conformAllVirtualTracks) throws IOException
     {
 
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -385,7 +385,7 @@ public class IMPValidator {
                 return Collections.unmodifiableList(imfErrorLogger.getErrors());
 
             ApplicationComposition applicationComposition = ApplicationCompositionFactory.getApplicationComposition(new ByteArrayByteRangeProvider(cplPayloadRecord.getPayload()), imfErrorLogger);
-            if(applicationComposition == null) {
+            if (applicationComposition == null) {
                 return imfErrorLogger.getErrors();
             }
 
@@ -403,9 +403,9 @@ public class IMPValidator {
                     continue;
                 }
                 headerPartitionTuples.add(new Composition.HeaderPartitionTuple(new HeaderPartition(new ByteArrayDataProvider(payloadRecord.getPayload()),
-                        0L,
-                        (long) payloadRecord.getPayload().length,
-                        imfErrorLogger),
+                                0L,
+                                (long)payloadRecord.getPayload().length,
+                                imfErrorLogger),
                         new ByteArrayByteRangeProvider(payloadRecord.getPayload())));
             }
 
@@ -445,8 +445,8 @@ public class IMPValidator {
         try
         {
             ApplicationComposition applicationComposition = ApplicationCompositionFactory.getApplicationComposition(new ByteArrayByteRangeProvider(referenceCPLPayloadRecord.getPayload()),
-                imfErrorLogger);
-            if(applicationComposition == null) {
+                    imfErrorLogger);
+            if (applicationComposition == null) {
                 return imfErrorLogger.getErrors();
             }
 
@@ -462,8 +462,8 @@ public class IMPValidator {
             try
             {
                 ApplicationComposition applicationComposition = ApplicationCompositionFactory.getApplicationComposition(new ByteArrayByteRangeProvider(cpl.getPayload()),
-                    imfErrorLogger);
-                if(applicationComposition != null) {
+                        imfErrorLogger);
+                if (applicationComposition != null) {
                     applicationCompositions.add(applicationComposition);
                 }
 
@@ -474,7 +474,7 @@ public class IMPValidator {
             }
         }
 
-        if(imfErrorLogger.hasFatalErrors()) {
+        if (imfErrorLogger.hasFatalErrors()) {
             return imfErrorLogger.getErrors();
         }
 
@@ -505,7 +505,7 @@ public class IMPValidator {
         }
 
 
-        if(!bAudioVirtualTrackMapFail) {
+        if (!bAudioVirtualTrackMapFail) {
             Map<Set<DOMNodeObjectModel>, ? extends VirtualTrack> referenceAudioVirtualTracksMap = audioVirtualTracksMapList.get(0);
             for (int i = 1; i < audioVirtualTracksMapList.size(); i++) {
                 if (!compareAudioVirtualTrackMaps(Collections.unmodifiableMap(referenceAudioVirtualTracksMap), Collections.unmodifiableMap(audioVirtualTracksMapList.get(i)), imfErrorLogger)) {
@@ -538,9 +538,9 @@ public class IMPValidator {
      * @param essenceFooter4Bytes - the last 4 bytes of the MXF file used to infer the size of the RandomIndexPack
      * @return a long integer value representing the size of the RandomIndexPack
      */
-    public static Long getRandomIndexPackSize(PayloadRecord essenceFooter4Bytes){
+    public static Long getRandomIndexPackSize(PayloadRecord essenceFooter4Bytes) {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        if(essenceFooter4Bytes.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssenceFooter4Bytes){
+        if (essenceFooter4Bytes.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssenceFooter4Bytes) {
             throw new IMFException(String.format("Payload asset type is %s, expected asset type %s",
                     essenceFooter4Bytes.getPayloadAssetType(), PayloadRecord.PayloadAssetType.EssenceFooter4Bytes
                             .toString()), imfErrorLogger);
@@ -559,7 +559,7 @@ public class IMPValidator {
      * @throws IOException - any I/O related error is exposed through an IOException
      */
     public static List<Long> getEssencePartitionOffsets(PayloadRecord randomIndexPackPayload, Long randomIndexPackSize) throws IOException {
-        if(randomIndexPackPayload.getPayload().length != randomIndexPackSize){
+        if (randomIndexPackPayload.getPayload().length != randomIndexPackSize) {
             throw new IllegalArgumentException(String.format("RandomIndexPackSize passed in is = %d, RandomIndexPack payload size = %d, they should be equal", randomIndexPackSize, randomIndexPackPayload.getPayload().length));
         }
         RandomIndexPack randomIndexPack = new RandomIndexPack(new ByteArrayDataProvider(randomIndexPackPayload.getPayload()), 0L, randomIndexPackSize);
@@ -576,22 +576,22 @@ public class IMPValidator {
     public static List<ErrorLogger.ErrorObject> validateIMFTrackFileHeaderMetadata(List<PayloadRecord> essencesHeaderPartitionPayloads) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         List<PayloadRecord> essencesHeaderPartition = Collections.unmodifiableList(essencesHeaderPartitionPayloads);
-        for(PayloadRecord payloadRecord : essencesHeaderPartition){
-            if(payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition){
+        for (PayloadRecord payloadRecord : essencesHeaderPartition) {
+            if (payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMP_VALIDATOR_PAYLOAD_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
                         String.format
-                        ("Payload asset type is %s, expected asset type %s",
-                        payloadRecord
-                        .getPayloadAssetType(), PayloadRecord.PayloadAssetType.EssencePartition.toString()));
+                                ("Payload asset type is %s, expected asset type %s",
+                                        payloadRecord
+                                                .getPayloadAssetType(), PayloadRecord.PayloadAssetType.EssencePartition.toString()));
                 continue;
             }
             HeaderPartition headerPartition = null;
             try {
                 headerPartition = new HeaderPartition(new ByteArrayDataProvider(payloadRecord.getPayload()),
-                    0L,
-                    (long)payloadRecord.getPayload().length,
-                    imfErrorLogger);
+                        0L,
+                        (long)payloadRecord.getPayload().length,
+                        imfErrorLogger);
 
                 MXFOperationalPattern1A.HeaderPartitionOP1A headerPartitionOP1A = MXFOperationalPattern1A.checkOperationalPattern1ACompliance(headerPartition, imfErrorLogger);
                 IMFConstraints.HeaderPartitionIMF headerPartitionIMF = IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
@@ -599,19 +599,19 @@ public class IMPValidator {
                     IABTrackFileConstraints.checkCompliance(headerPartitionIMF, imfErrorLogger);
                 }
             }
-            catch (IMFException | MXFException e){
-                if(headerPartition != null) {
+            catch(IMFException | MXFException e) {
+                if (headerPartition != null) {
                     Preface preface = headerPartition.getPreface();
                     GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-                    SourcePackage filePackage = (SourcePackage) genericPackage;
+                    SourcePackage filePackage = (SourcePackage)genericPackage;
                     UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
                     imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("IMFTrackFile with ID %s has fatal errors", packageUUID.toString())));
                 }
-                if(e instanceof IMFException){
+                if (e instanceof IMFException) {
                     IMFException imfException = (IMFException)e;
                     imfErrorLogger.addAllErrors(imfException.getErrors());
                 }
-                else if(e instanceof MXFException){
+                else if (e instanceof MXFException) {
                     MXFException mxfException = (MXFException)e;
                     imfErrorLogger.addAllErrors(mxfException.getErrors());
                 }
@@ -630,7 +630,7 @@ public class IMPValidator {
     @Nullable
     public static String getAudioTrackSpokenLanguage(VirtualTrack audioVirtualTrack, List<PayloadRecord> essencesHeaderPartition) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        if(audioVirtualTrack.getSequenceTypeEnum() != Composition.SequenceTypeEnum.MainAudioSequence){
+        if (audioVirtualTrack.getSequenceTypeEnum() != Composition.SequenceTypeEnum.MainAudioSequence) {
             throw new IMFException(String.format("Virtual track that was passed in is of type %s, spoken language is " +
                     "currently supported for only %s tracks", audioVirtualTrack.getSequenceTypeEnum().toString(),
                     Composition.SequenceTypeEnum.MainAudioSequence.toString()));
@@ -639,52 +639,11 @@ public class IMPValidator {
         virtualTracks.add(audioVirtualTrack);
         imfErrorLogger.addAllErrors(checkVirtualTrackAndEssencesHeaderPartitionPayloadRecords(virtualTracks,
                 essencesHeaderPartition));
-        if(imfErrorLogger.hasFatalErrors()){
+        if (imfErrorLogger.hasFatalErrors()) {
             throw new IMFException(String.format("Fatal Errors were detected when trying to verify the Virtual Track and Essence Header Partition payloads %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors())));
         }
         Set<String> audioLanguageSet = new HashSet<>();
-        for (PayloadRecord payloadRecord : essencesHeaderPartition){
-            if (payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition) {
-                throw new IMFException(String.format("Payload asset type is %s, expected asset type %s",
-                        payloadRecord.getPayloadAssetType(), PayloadRecord.PayloadAssetType.EssencePartition.toString
-                                ()), imfErrorLogger);
-            }
-            HeaderPartition headerPartition = new HeaderPartition(new ByteArrayDataProvider(payloadRecord.getPayload()),
-                0L,
-                (long) payloadRecord.getPayload().length,
-                imfErrorLogger);
-            audioLanguageSet.add(headerPartition.getAudioEssenceSpokenLanguage());
-        }
-
-        if(audioLanguageSet.size() > 1){
-            throw new IMFException(String.format("It seems that RFC-5646 spoken language is not consistent across " +
-                    "resources of this Audio Virtual Track, found references to %s languages in the HeaderPartition",
-                    Utilities.serializeObjectCollectionToString(audioLanguageSet)), imfErrorLogger);
-        }
-        return audioLanguageSet.iterator().next();
-    }
-
-    private static boolean compareAudioVirtualTrackMaps(Map<Set<DOMNodeObjectModel>, ? extends VirtualTrack> map1, Map<Set<DOMNodeObjectModel>, ? extends VirtualTrack> map2, IMFErrorLogger imfErrorLogger){
-        boolean result = true;
-        Iterator refIterator = map1.entrySet().iterator();
-        while(refIterator.hasNext()){
-            Map.Entry<Set<DOMNodeObjectModel>, VirtualTrack> entry = (Map.Entry<Set<DOMNodeObjectModel>, VirtualTrack>) refIterator.next();
-            VirtualTrack refVirtualTrack = entry.getValue();
-            VirtualTrack otherVirtualTrack = map2.get(entry.getKey());
-            if(otherVirtualTrack != null){//If we identified an audio virtual track with the same essence description we can compare, else no point comparing hence the default result = true.
-                result &= refVirtualTrack.equivalent(otherVirtualTrack);
-            }
-        }
-        return result;
-    }
-
-    private static List<ErrorLogger.ErrorObject> checkVirtualTrackAndEssencesHeaderPartitionPayloadRecords(List<VirtualTrack>
-                                                                                               virtualTracks,
-                                                                               List<PayloadRecord> essencesHeaderPartition) throws IOException {
-        IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        Set<UUID> trackFileIDsSet = new HashSet<>();
-
-        for (PayloadRecord payloadRecord : essencesHeaderPartition){
+        for (PayloadRecord payloadRecord : essencesHeaderPartition) {
             if (payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition) {
                 throw new IMFException(String.format("Payload asset type is %s, expected asset type %s",
                         payloadRecord.getPayloadAssetType(), PayloadRecord.PayloadAssetType.EssencePartition.toString
@@ -692,11 +651,52 @@ public class IMPValidator {
             }
             HeaderPartition headerPartition = new HeaderPartition(new ByteArrayDataProvider(payloadRecord.getPayload()),
                     0L,
-                    (long) payloadRecord.getPayload().length,
+                    (long)payloadRecord.getPayload().length,
+                    imfErrorLogger);
+            audioLanguageSet.add(headerPartition.getAudioEssenceSpokenLanguage());
+        }
+
+        if (audioLanguageSet.size() > 1) {
+            throw new IMFException(String.format("It seems that RFC-5646 spoken language is not consistent across " +
+                    "resources of this Audio Virtual Track, found references to %s languages in the HeaderPartition",
+                    Utilities.serializeObjectCollectionToString(audioLanguageSet)), imfErrorLogger);
+        }
+        return audioLanguageSet.iterator().next();
+    }
+
+    private static boolean compareAudioVirtualTrackMaps(Map<Set<DOMNodeObjectModel>, ? extends VirtualTrack> map1, Map<Set<DOMNodeObjectModel>, ? extends VirtualTrack> map2, IMFErrorLogger imfErrorLogger) {
+        boolean result = true;
+        Iterator refIterator = map1.entrySet().iterator();
+        while (refIterator.hasNext()) {
+            Map.Entry<Set<DOMNodeObjectModel>, VirtualTrack> entry = (Map.Entry<Set<DOMNodeObjectModel>, VirtualTrack>)refIterator.next();
+            VirtualTrack refVirtualTrack = entry.getValue();
+            VirtualTrack otherVirtualTrack = map2.get(entry.getKey());
+            if (otherVirtualTrack != null) {//If we identified an audio virtual track with the same essence description we can compare, else no point comparing hence the default result = true.
+                result &= refVirtualTrack.equivalent(otherVirtualTrack);
+            }
+        }
+        return result;
+    }
+
+    private static List<ErrorLogger.ErrorObject> checkVirtualTrackAndEssencesHeaderPartitionPayloadRecords(List<VirtualTrack>
+            virtualTracks,
+            List<PayloadRecord> essencesHeaderPartition) throws IOException {
+        IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
+        Set<UUID> trackFileIDsSet = new HashSet<>();
+
+        for (PayloadRecord payloadRecord : essencesHeaderPartition) {
+            if (payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition) {
+                throw new IMFException(String.format("Payload asset type is %s, expected asset type %s",
+                        payloadRecord.getPayloadAssetType(), PayloadRecord.PayloadAssetType.EssencePartition.toString
+                                ()), imfErrorLogger);
+            }
+            HeaderPartition headerPartition = new HeaderPartition(new ByteArrayDataProvider(payloadRecord.getPayload()),
+                    0L,
+                    (long)payloadRecord.getPayload().length,
                     imfErrorLogger);
             Preface preface = headerPartition.getPreface();
             GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-            SourcePackage filePackage = (SourcePackage) genericPackage;
+            SourcePackage filePackage = (SourcePackage)genericPackage;
             UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
             trackFileIDsSet.add(packageUUID);
 
@@ -711,16 +711,16 @@ public class IMPValidator {
                     IABTrackFileConstraints.checkCompliance(headerPartitionIMF, imfErrorLogger);
                 }
             }
-            catch (IMFException | MXFException e){
-                if(headerPartition != null) {
+            catch(IMFException | MXFException e) {
+                if (headerPartition != null) {
 
                 }
                 imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("IMFTrackFile with ID %s has fatal errors", packageUUID.toString())));
-                if(e instanceof IMFException){
+                if (e instanceof IMFException) {
                     IMFException imfException = (IMFException)e;
                     imfErrorLogger.addAllErrors(imfException.getErrors());
                 }
-                else if(e instanceof MXFException){
+                else if (e instanceof MXFException) {
                     MXFException mxfException = (MXFException)e;
                     imfErrorLogger.addAllErrors(mxfException.getErrors());
                 }
@@ -728,8 +728,8 @@ public class IMPValidator {
         }
 
         Set<UUID> virtualTrackResourceIDsSet = new HashSet<>();
-        for(Composition.VirtualTrack virtualTrack : virtualTracks){
-            if(virtualTrack instanceof IMFEssenceComponentVirtualTrack)
+        for (Composition.VirtualTrack virtualTrack : virtualTracks) {
+            if (virtualTrack instanceof IMFEssenceComponentVirtualTrack)
             {
                 virtualTrackResourceIDsSet.addAll(IMFEssenceComponentVirtualTrack.class.cast(virtualTrack).getTrackResourceIds());
             }
@@ -738,12 +738,12 @@ public class IMPValidator {
          * Following check ensures that the Header Partitions corresponding to all the Resources of the VirtualTracks were passed in.
          */
         Set<UUID> unreferencedResourceIDsSet = new HashSet<>();
-        for(UUID uuid : virtualTrackResourceIDsSet){
-            if(!trackFileIDsSet.contains(uuid)){
+        for (UUID uuid : virtualTrackResourceIDsSet) {
+            if (!trackFileIDsSet.contains(uuid)) {
                 unreferencedResourceIDsSet.add(uuid);
             }
         }
-        if(unreferencedResourceIDsSet.size() > 0){
+        if (unreferencedResourceIDsSet.size() > 0) {
             imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMP_VALIDATOR_PAYLOAD_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("It seems that no EssenceHeaderPartition data was passed in for " +
                     "VirtualTrack Resource Ids %s, please verify that the correct Header Partition payloads for the " +
                     "Virtual Track were passed in", Utilities.serializeObjectCollectionToString
@@ -754,12 +754,12 @@ public class IMPValidator {
          * Following check ensures that the Header Partitions corresponding to only the Resource that are a part of the VirtualTracks were passed in.
          */
         Set<UUID> unreferencedTrackFileIDsSet = new HashSet<>();
-        for(UUID uuid : trackFileIDsSet){
-            if(!virtualTrackResourceIDsSet.contains(uuid)){
+        for (UUID uuid : trackFileIDsSet) {
+            if (!virtualTrackResourceIDsSet.contains(uuid)) {
                 unreferencedTrackFileIDsSet.add(uuid);
             }
         }
-        if(unreferencedTrackFileIDsSet.size() > 0){
+        if (unreferencedTrackFileIDsSet.size() > 0) {
             imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMP_VALIDATOR_PAYLOAD_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("It seems that EssenceHeaderPartition data was passed in for " +
                     "Resource Ids %s which are not part of this virtual track, please verify that only the Header " +
                     "Partition payloads for the Virtual Track were passed in", Utilities
@@ -786,9 +786,9 @@ public class IMPValidator {
             throw new IllegalArgumentException("Invalid parameters");
         }
         List<ErrorLogger.ErrorObject> errors = new ArrayList<>();
-        File assetMapFile=null, packingListFile=null, compositionPlaylistFile=null;
+        File assetMapFile = null, packingListFile = null, compositionPlaylistFile = null;
 
-        for(String arg : args) {
+        for (String arg : args) {
             File inputFile = new File(arg);
             ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(inputFile);
             byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize() - 1);
@@ -816,8 +816,8 @@ public class IMPValidator {
             }
         }
 
-        if(assetMapFile != null
-                && packingListFile != null){
+        if (assetMapFile != null
+                && packingListFile != null) {
             ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(assetMapFile);
             byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize() - 1);
             PayloadRecord assetMapPayloadRecord = new PayloadRecord(bytes, PayloadRecord.PayloadAssetType.AssetMap, 0L, resourceByteRangeProvider.getResourceSize());
@@ -831,21 +831,21 @@ public class IMPValidator {
             errors.addAll(IMPValidator.validatePKLAndAssetMap(assetMapPayloadRecord, packingListPayloadRecords));
         }
 
-        if(errors.size() > 0){
+        if (errors.size() > 0) {
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("AssetMap has %d errors and %d warnings",
                     errors.size() - warningCount, warningCount));
-            for(ErrorLogger.ErrorObject errorObject : errors){
-                if(errorObject.getErrorLevel()!= IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+            for (ErrorLogger.ErrorObject errorObject : errors) {
+                if (errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.error(errorObject.toString());
                 }
-                else if(errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+                else if (errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.warn(errorObject.toString());
                 }
             }
         }
-        else{
+        else {
             logger.info("No errors were detected in the AssetMap Document");
         }
 
@@ -859,8 +859,8 @@ public class IMPValidator {
      */
     public static List<ErrorLogger.ErrorObject> validateIndexTableSegments(List<PayloadRecord> essencesPartitionPayloads) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        for(PayloadRecord payloadRecord : essencesPartitionPayloads){
-            if(payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition){
+        for (PayloadRecord payloadRecord : essencesPartitionPayloads) {
+            if (payloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMP_VALIDATOR_PAYLOAD_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
                         String.format
@@ -878,19 +878,20 @@ public class IMPValidator {
                     long numBytesToRead = payloadRecord.getPayload().length;
                     long numBytesRead = 0;
                     while (numBytesRead < numBytesToRead) {
-                            KLVPacket.Header header = new KLVPacket.Header(imfEssenceComponentByteProvider, 0);
-                            numBytesRead += header.getKLSize();
+                        KLVPacket.Header header = new KLVPacket.Header(imfEssenceComponentByteProvider, 0);
+                        numBytesRead += header.getKLSize();
 
-                            if (IndexTableSegment.isValidKey(header.getKey())) {
-                                new IndexTableSegment(imfEssenceComponentByteProvider, header);
-                            } else {
-                                imfEssenceComponentByteProvider.skipBytes(header.getVSize());
-                            }
-                            numBytesRead += header.getVSize();
+                        if (IndexTableSegment.isValidKey(header.getKey())) {
+                            new IndexTableSegment(imfEssenceComponentByteProvider, header);
+                        }
+                        else {
+                            imfEssenceComponentByteProvider.skipBytes(header.getVSize());
+                        }
+                        numBytesRead += header.getVSize();
                     }
 
                 }
-            } catch (MXFException e) {
+            } catch(MXFException e) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, e.getMessage());
             }
 
@@ -904,9 +905,9 @@ public class IMPValidator {
      * @return list of error messages encountered while validating an OutputProfileList document
      * @throws IOException - any I/O related error is exposed through an IOException
      */
-    public static List<ErrorLogger.ErrorObject> validateOPL(PayloadRecord opl) throws IOException{
+    public static List<ErrorLogger.ErrorObject> validateOPL(PayloadRecord opl) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        if(opl.getPayloadAssetType() != PayloadRecord.PayloadAssetType.OutputProfileList){
+        if (opl.getPayloadAssetType() != PayloadRecord.PayloadAssetType.OutputProfileList) {
             throw new IMFException(String.format("Payload asset type is %s, expected asset type %s", opl
                     .getPayloadAssetType(), PayloadRecord.PayloadAssetType.OutputProfileList.toString()));
         }
@@ -931,8 +932,8 @@ public class IMPValidator {
     public static List<ErrorLogger.ErrorObject> validateIndexEditRate(List<PayloadRecord> headerPartitionPayloadRecords, List<PayloadRecord> indexSegmentPayloadRecords) throws IOException {
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
         List<PayloadRecord> essencesHeaderPartition = Collections.unmodifiableList(headerPartitionPayloadRecords);
-        for(PayloadRecord headerPayloadRecord : essencesHeaderPartition){
-            if(headerPayloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition){
+        for (PayloadRecord headerPayloadRecord : essencesHeaderPartition) {
+            if (headerPayloadRecord.getPayloadAssetType() != PayloadRecord.PayloadAssetType.EssencePartition) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMP_VALIDATOR_PAYLOAD_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.FATAL,
                         String.format("Payload asset type is %s, expected asset type %s",
@@ -943,7 +944,7 @@ public class IMPValidator {
             HeaderPartition headerPartition = null;
             try {
                 headerPartition = new HeaderPartition(new ByteArrayDataProvider(headerPayloadRecord.getPayload()),
-                        0L, (long) headerPayloadRecord.getPayload().length, imfErrorLogger);
+                        0L, (long)headerPayloadRecord.getPayload().length, imfErrorLogger);
 
                 MXFOperationalPattern1A.HeaderPartitionOP1A headerPartitionOP1A = MXFOperationalPattern1A.checkOperationalPattern1ACompliance(headerPartition, imfErrorLogger);
                 IMFConstraints.HeaderPartitionIMF headerPartitionIMF = IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
@@ -971,7 +972,8 @@ public class IMPValidator {
                                 if (headerPartitionIMF.hasMatchingEssence(HeaderPartition.EssenceTypeEnum.IABEssence)) {
                                     IABTrackFileConstraints.checkIndexEditRate(headerPartitionIMF, indexTableSegment, imfErrorLogger);
                                 }
-                            } else {
+                            }
+                            else {
                                 imfEssenceComponentByteProvider.skipBytes(header.getVSize());
                             }
                             numBytesRead += header.getVSize();
@@ -979,19 +981,19 @@ public class IMPValidator {
 
                     }
                 }
-            } catch (IMFException | MXFException e){
-                if(headerPartition != null) {
+            } catch(IMFException | MXFException e) {
+                if (headerPartition != null) {
                     Preface preface = headerPartition.getPreface();
                     GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-                    SourcePackage filePackage = (SourcePackage) genericPackage;
+                    SourcePackage filePackage = (SourcePackage)genericPackage;
                     UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
                     imfErrorLogger.addError(new ErrorLogger.ErrorObject(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, String.format("IMFTrackFile with ID %s has fatal errors", packageUUID.toString())));
                 }
-                if(e instanceof IMFException){
+                if (e instanceof IMFException) {
                     IMFException imfException = (IMFException)e;
                     imfErrorLogger.addAllErrors(imfException.getErrors());
                 }
-                else if(e instanceof MXFException){
+                else if (e instanceof MXFException) {
                     MXFException mxfException = (MXFException)e;
                     imfErrorLogger.addAllErrors(mxfException.getErrors());
                 }

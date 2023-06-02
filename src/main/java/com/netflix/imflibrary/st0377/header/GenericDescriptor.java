@@ -32,7 +32,8 @@ public abstract class GenericDescriptor extends InterchangeObject
         /**
          * Collection of subdescriptors.
          */
-        @MXFProperty(size = 0, depends = true) protected final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> subdescriptors = null;
+        @MXFProperty(size = 0, depends = true)
+        protected final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> subdescriptors = null;
 
         /**
          * Instantiates a new Generic descriptor ByteObject.
@@ -47,7 +48,7 @@ public abstract class GenericDescriptor extends InterchangeObject
          * Accessor for the SubDescriptors in the EssenceDescriptor
          * @return list of references to subdescriptors
          */
-        public CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> getSubdescriptors(){
+        public CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> getSubdescriptors() {
             return this.subdescriptors;
         }
     }

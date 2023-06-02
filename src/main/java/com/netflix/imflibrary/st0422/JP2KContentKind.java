@@ -12,7 +12,7 @@ public enum JP2KContentKind {
     private final byte contentKind;
     private final String description;
 
-    JP2KContentKind (byte contentKind, String description){
+    JP2KContentKind(byte contentKind, String description) {
         this.contentKind = contentKind;
         this.description = description;
     }
@@ -23,7 +23,7 @@ public enum JP2KContentKind {
 
     public static JP2KContentKind valueOf(byte value)
     {
-        for (JP2KContentKind kind: JP2KContentKind.values()) {
+        for (JP2KContentKind kind : JP2KContentKind.values()) {
             if (kind.getContentKind() == value) {
                 return kind;
             }

@@ -29,18 +29,28 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
     /**
      * Object corresponding to a parsed MultiChannelAudioLabelSubDescriptor structural metadata set defined in st377-4:2012
      */
-    public static abstract class MCALabelSubDescriptorBO extends SubDescriptorBO{
+    public static abstract class MCALabelSubDescriptorBO extends SubDescriptorBO {
 
-        @MXFProperty(size=16) protected final UL mca_label_dictionary_id = null;
-        @MXFProperty(size=16) protected final byte[] mca_link_id = null; //UUID type
-        @MXFProperty(size=0, charset = "UTF-16") protected final String mca_tag_symbol = null; //UTF-16 String
-        @MXFProperty(size=0, charset = "UTF-16") protected final String mca_tag_name = null; //UTF-16 String
-        @MXFProperty(size=4) protected final Long mca_channel_id = null;
-        @MXFProperty(size=0, charset="ISO-8859-1") protected final String rfc_5646_spoken_language = null; //ISO-8 String
-        @MXFProperty(size=0, charset="UTF-16") protected final String mca_title = null;
-        @MXFProperty(size=0, charset="UTF-16") protected final String mca_title_version = null;
-        @MXFProperty(size=0, charset="UTF-16") protected final String mca_audio_content_kind = null;
-        @MXFProperty(size=0, charset="UTF-16") protected final String mca_audio_element_kind = null;
+        @MXFProperty(size = 16)
+        protected final UL mca_label_dictionary_id = null;
+        @MXFProperty(size = 16)
+        protected final byte[] mca_link_id = null; //UUID type
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mca_tag_symbol = null; //UTF-16 String
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mca_tag_name = null; //UTF-16 String
+        @MXFProperty(size = 4)
+        protected final Long mca_channel_id = null;
+        @MXFProperty(size = 0, charset = "ISO-8859-1")
+        protected final String rfc_5646_spoken_language = null; //ISO-8 String
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mca_title = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mca_title_version = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mca_audio_content_kind = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String mca_audio_element_kind = null;
 
         /**
          * Constructor for a parsed MCA Label Sub descriptor object
@@ -55,7 +65,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the ChannelID of this MCA Label Subdescriptor
          * @return a long integer representing the channel Id for the MCALabelSubDescriptor
          */
-        public Long getMCAChannelID(){
+        public Long getMCAChannelID() {
             return this.mca_channel_id;
         }
 
@@ -63,7 +73,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Tag Name of this MCA Label Subdescriptor
          * @return a String representing the MCA Tag Name
          */
-        public String getMCATagName(){
+        public String getMCATagName() {
             return this.mca_tag_name;
         }
 
@@ -71,7 +81,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Tag Symbol of this MCA Label Subdescriptor
          * @return a String representing the MCA Tag Symbol
          */
-        public String getMCATagSymbol(){
+        public String getMCATagSymbol() {
             return this.mca_tag_symbol;
         }
 
@@ -79,7 +89,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Label Dictionnary ID of this MCA Label Subdescriptor
          * @return a UL representing the MCA Label Dictionnary ID
          */
-        public UL getMCALabelDictionnaryId(){
+        public UL getMCALabelDictionnaryId() {
             return this.mca_label_dictionary_id;
         }
 
@@ -87,7 +97,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Title of this MCA Label Subdescriptor
          * @return a String representing the MCA Title
          */
-        public String getMCATitle(){
+        public String getMCATitle() {
             return this.mca_title;
         }
 
@@ -95,7 +105,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Title Version of this MCA Label Subdescriptor
          * @return a String representing the MCA Title Version
          */
-        public String getMCATitleVersion(){
+        public String getMCATitleVersion() {
             return this.mca_title_version;
         }
 
@@ -103,7 +113,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Audio Content Kind of this MCA Label Subdescriptor
          * @return a String representing the MCA Audio Content Kind
          */
-        public String getMCAAudioContentKind(){
+        public String getMCAAudioContentKind() {
             return this.mca_audio_content_kind;
         }
 
@@ -111,7 +121,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the MCA Audio Element Kind of this MCA Label Subdescriptor
          * @return a String representing the MCA Audio Element Kind
          */
-        public String getMCAAudioElementKind(){
+        public String getMCAAudioElementKind() {
             return this.mca_audio_element_kind;
         }
 
@@ -119,7 +129,7 @@ public abstract class MCALabelSubDescriptor extends SubDescriptor {
          * Accessor for the RFC 5646 Spoken Language of this MCA Label Subdescriptor
          * @return a String representing the RFC 5646 Spoken Language
          */
-        public String getRFC5646SpokenLanguage(){
+        public String getRFC5646SpokenLanguage() {
             return this.rfc_5646_spoken_language;
         }
 

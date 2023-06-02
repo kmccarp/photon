@@ -49,8 +49,8 @@ class OutputProfileListModel_st2067_100_2014 {
     private final OutputProfileList normalizedOutputProfileList;
 
     OutputProfileListModel_st2067_100_2014(org.smpte_ra.schemas._2067_100._2014.OutputProfileListType outputProfileListType, IMFErrorLogger imfErrorLogger) {
-        this.imfErrorLogger         = imfErrorLogger;
-        this.outputProfileListType  = outputProfileListType;
+        this.imfErrorLogger = imfErrorLogger;
+        this.outputProfileListType = outputProfileListType;
         this.normalizedOutputProfileList = createNormalizedOutputProfileList();
     }
 
@@ -62,18 +62,18 @@ class OutputProfileListModel_st2067_100_2014 {
      * A stateless method that reads and parses OPL as per st 2067-100:2014 schema and returns normalized(schema agnostic) OutputProfileList object.
      * @return Normalized object model for OutputProfileList
      */
-    private OutputProfileList createNormalizedOutputProfileList () {
+    private OutputProfileList createNormalizedOutputProfileList() {
         Map<String, Macro> macroMap = new HashMap<>();
         Map<String, String> aliasMap = new HashMap<>();
-        for(org.smpte_ra.schemas._2067_100._2014.MacroType macroType: outputProfileListType.getMacroList().getMacro()) {
+        for (org.smpte_ra.schemas._2067_100._2014.MacroType macroType : outputProfileListType.getMacroList().getMacro()) {
 
             Macro macro = createMacro(macroType);
-            if(macro != null) {
+            if (macro != null) {
                 macroMap.put(macroType.getName(), macro);
             }
         }
 
-        for(Alias alias: outputProfileListType.getAliasList().getAlias()) {
+        for (Alias alias : outputProfileListType.getAliasList().getAlias()) {
             aliasMap.put(alias.getValue(), alias.getHandle());
         }
 
@@ -87,23 +87,23 @@ class OutputProfileListModel_st2067_100_2014 {
     }
 
     private Macro createMacro(org.smpte_ra.schemas._2067_100._2014.MacroType macroType) {
-        if(macroType instanceof ImageCropMacroType) {
-            return createCropMacro((ImageCropMacroType) macroType);
+        if (macroType instanceof ImageCropMacroType) {
+            return createCropMacro((ImageCropMacroType)macroType);
         }
-        else if(macroType instanceof ImageScaleMacroType) {
-            return createScaleMacro((ImageScaleMacroType) macroType);
+        else if (macroType instanceof ImageScaleMacroType) {
+            return createScaleMacro((ImageScaleMacroType)macroType);
         }
-        else if(macroType instanceof PixelDecoderType) {
-            return createPixelDecoderMacro((PixelDecoderType) macroType);
+        else if (macroType instanceof PixelDecoderType) {
+            return createPixelDecoderMacro((PixelDecoderType)macroType);
         }
-        else if(macroType instanceof PixelEncoderType) {
-            return createPixelEncoderMacro((PixelEncoderType) macroType);
+        else if (macroType instanceof PixelEncoderType) {
+            return createPixelEncoderMacro((PixelEncoderType)macroType);
         }
-        else if(macroType instanceof AudioRoutingMixingMacroType) {
-            return createAudioRoutingMixingMacro((AudioRoutingMixingMacroType) macroType);
+        else if (macroType instanceof AudioRoutingMixingMacroType) {
+            return createAudioRoutingMixingMacro((AudioRoutingMixingMacroType)macroType);
         }
-        else if(macroType instanceof PresetMacroType) {
-            return createPresetMacro((PresetMacroType) macroType);
+        else if (macroType instanceof PresetMacroType) {
+            return createPresetMacro((PresetMacroType)macroType);
         }
         else {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
@@ -114,7 +114,7 @@ class OutputProfileListModel_st2067_100_2014 {
 
 
     private CropMacro createCropMacro(ImageCropMacroType imageCropMacroType) {
-        if(imageCropMacroType.getInputImageSequence() == null) {
+        if (imageCropMacroType.getInputImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing InputImageSequence in %s macro", imageCropMacroType.getName()));
         }
@@ -126,10 +126,10 @@ class OutputProfileListModel_st2067_100_2014 {
                 inputImageSequence.getInset().getTop().intValue(),
                 inputImageSequence.getInset().getBottom().intValue());
 
-        CropInputImageSequence input = new CropInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null, 
+        CropInputImageSequence input = new CropInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null,
                 inputImageSequence.getHandle(), mxfRectangleEnum, inset);
 
-        if(imageCropMacroType.getOutputImageSequence() == null) {
+        if (imageCropMacroType.getOutputImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing OutputImageSequence in %s macro", imageCropMacroType.getName()));
         }
@@ -151,24 +151,24 @@ class OutputProfileListModel_st2067_100_2014 {
     }
 
     private ScaleMacro createScaleMacro(ImageScaleMacroType imageScaleMacroType) {
-        if(imageScaleMacroType.getInputImageSequence() == null) {
+        if (imageScaleMacroType.getInputImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing InputImageSequence in %s macro", imageScaleMacroType.getName()));
         }
         ImageScaleMacroType.InputImageSequence inputImageSequence = imageScaleMacroType.getInputImageSequence();
-        ScaleInputImageSequence input = new ScaleInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null, 
+        ScaleInputImageSequence input = new ScaleInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null,
                 inputImageSequence.getHandle());
 
-        if(imageScaleMacroType.getOutputImageSequence() == null) {
+        if (imageScaleMacroType.getOutputImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing OutputImageSequence in %s macro", imageScaleMacroType.getName()));
         }
         ImageScaleMacroType.OutputImageSequence outputImageSequence = imageScaleMacroType.getOutputImageSequence();
         ScaleAlgorithm scaleAlgorithmType = null;
-        if(outputImageSequence.getAlgorithm() instanceof org.smpte_ra.schemas._2067_101._2014.lanczos.LanczosType) {
-            scaleAlgorithmType = new Lanczos(((org.smpte_ra.schemas._2067_101._2014.lanczos.LanczosType) outputImageSequence.getAlgorithm()).getParameterA().intValue());
+        if (outputImageSequence.getAlgorithm() instanceof org.smpte_ra.schemas._2067_101._2014.lanczos.LanczosType) {
+            scaleAlgorithmType = new Lanczos(((org.smpte_ra.schemas._2067_101._2014.lanczos.LanczosType)outputImageSequence.getAlgorithm()).getParameterA().intValue());
         }
-        if(scaleAlgorithmType == null) {
+        if (scaleAlgorithmType == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Unsupported scaling algorithm in %s macro", imageScaleMacroType.getName()));
         }
@@ -183,15 +183,15 @@ class OutputProfileListModel_st2067_100_2014 {
 
 
     private PixelDecoderMacro createPixelDecoderMacro(PixelDecoderType pixelDecoderType) {
-        if(pixelDecoderType.getInputImageSequence() == null) {
+        if (pixelDecoderType.getInputImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing InputImageSequence in %s macro", pixelDecoderType.getName()));
         }
         PixelDecoderType.InputImageSequence inputImageSequence = pixelDecoderType.getInputImageSequence();
-        PixelDecoderInputImageSequence input = new PixelDecoderInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null, 
+        PixelDecoderInputImageSequence input = new PixelDecoderInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null,
                 inputImageSequence.getHandle());
 
-        if(pixelDecoderType.getOutputReferenceImageSequence() == null) {
+        if (pixelDecoderType.getOutputReferenceImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing OutputImageSequence in %s macro", pixelDecoderType.getName()));
         }
@@ -205,15 +205,15 @@ class OutputProfileListModel_st2067_100_2014 {
     }
 
     private PixelEncoderMacro createPixelEncoderMacro(PixelEncoderType pixelEncoderType) {
-        if(pixelEncoderType.getInputReferenceImageSequence() == null) {
+        if (pixelEncoderType.getInputReferenceImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing InputImageSequence in %s macro", pixelEncoderType.getName()));
         }
         PixelEncoderType.InputReferenceImageSequence inputImageSequence = pixelEncoderType.getInputReferenceImageSequence();
-        PixelEncoderInputImageSequence input = new PixelEncoderInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null, 
+        PixelEncoderInputImageSequence input = new PixelEncoderInputImageSequence(inputImageSequence.getAnnotation() != null ? inputImageSequence.getAnnotation().getValue() : null,
                 inputImageSequence.getHandle());
 
-        if(pixelEncoderType.getOutputImageSequence() == null) {
+        if (pixelEncoderType.getOutputImageSequence() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing OutputImageSequence in %s macro", pixelEncoderType.getName()));
         }
@@ -227,14 +227,14 @@ class OutputProfileListModel_st2067_100_2014 {
     }
 
     private AudioRoutingMixingMacro createAudioRoutingMixingMacro(AudioRoutingMixingMacroType audioRoutingMixingMacroType) {
-        if(audioRoutingMixingMacroType.getOutputEntityList() == null) {
+        if (audioRoutingMixingMacroType.getOutputEntityList() == null) {
             this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_OPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Missing OutputEntityList in %s macro", audioRoutingMixingMacroType.getName()));
         }
 
         AudioRoutingMixingMacroType.OutputEntityList outputEntityList = audioRoutingMixingMacroType.getOutputEntityList();
         List<OutputAudioChannel> outputAudioChannels = new ArrayList<>();
-        for(OutputAudioChannelType outputAudioChannelType: outputEntityList.getOutputAudioChannel()) {
+        for (OutputAudioChannelType outputAudioChannelType : outputEntityList.getOutputAudioChannel()) {
             List<InputEntity> inputEntityList = outputAudioChannelType.getInputEntityList().getInputEntity().stream().map(e -> new InputEntity( "", e.getHandle(), e.getGain())).collect(Collectors.toList());
             outputAudioChannels.add(new OutputAudioChannel( outputAudioChannelType.getAnnotation() != null ? outputAudioChannelType.getAnnotation().getValue() : null,
                     "macros/" + audioRoutingMixingMacroType.getName() + "/outputs/" + outputAudioChannelType.getHandle(), inputEntityList));

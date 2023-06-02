@@ -31,8 +31,8 @@ public final class IMFMarkerType {
     private final BigInteger offset;
 
     public IMFMarkerType(String annotation,
-                         IMFMarkerType.Label label,
-                         BigInteger offset)
+            IMFMarkerType.Label label,
+            BigInteger offset)
     {
         this.annotation = annotation;
         this.label = label;
@@ -43,7 +43,7 @@ public final class IMFMarkerType {
      * Getter for the Annotation of the Marker
      * @return a Annotation of the Marker
      */
-    public String getAnnotation(){
+    public String getAnnotation() {
         return this.annotation;
     }
 
@@ -51,7 +51,7 @@ public final class IMFMarkerType {
      * Getter for the Label of the Marker
      * @return a Label of the Marker
      */
-    public IMFMarkerType.Label getLabel(){
+    public IMFMarkerType.Label getLabel() {
         return this.label;
     }
 
@@ -59,7 +59,7 @@ public final class IMFMarkerType {
      * Getter for the Offset of the Marker
      * @return a BigInteger representing the Marker's Offset
      */
-    public BigInteger getOffset(){
+    public BigInteger getOffset() {
         return this.offset;
     }
 
@@ -70,7 +70,7 @@ public final class IMFMarkerType {
      */
     public boolean equivalent(IMFMarkerType other)
     {
-        if(other == null){
+        if (other == null) {
             return false;
         }
         boolean result = true;

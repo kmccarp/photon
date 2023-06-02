@@ -23,7 +23,7 @@ import com.netflix.imflibrary.writerTools.utils.IMFDocumentsObjectFieldsFactory;
 public final class IMFCPLObjectFieldsFactory {
 
     /*Prevent instantiation*/
-    private IMFCPLObjectFieldsFactory(){
+    private IMFCPLObjectFieldsFactory() {
 
     }
 
@@ -34,7 +34,7 @@ public final class IMFCPLObjectFieldsFactory {
      *
      * @return A 2013 schema compliant CompositionPlaylistType object
      */
-    public static org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType constructCompositionPlaylistType_2013(){
+    public static org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType constructCompositionPlaylistType_2013() {
         org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType cplType_2013 = new org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType();
         IMFDocumentsObjectFieldsFactory.constructObjectFields(cplType_2013);
         return cplType_2013;

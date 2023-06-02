@@ -50,7 +50,7 @@ public final class CDCIPictureEssenceDescriptor extends GenericPictureEssenceDes
      * Getter for the Essence Container UL of this FileDescriptor
      * @return a UL representing the Essence Container
      */
-    public UL getEssenceContainerUL(){
+    public UL getEssenceContainerUL() {
         return this.cdciPictureEssenceDescriptorBO.getEssenceContainerUL();
     }
 
@@ -71,11 +71,16 @@ public final class CDCIPictureEssenceDescriptor extends GenericPictureEssenceDes
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class CDCIPictureEssenceDescriptorBO extends GenericPictureEssenceDescriptor.GenericPictureEssenceDescriptorBO
     {
-        @MXFProperty(size=4) private final Long component_depth = null;
-        @MXFProperty(size=4) private final Long horizontal_subsampling = null;
-        @MXFProperty(size=4) private final Long vertical_subsampling = null;
-        @MXFProperty(size=4) protected final Long black_ref_level = null;
-        @MXFProperty(size=4) protected final Long white_ref_level = null;
+        @MXFProperty(size = 4)
+        private final Long component_depth = null;
+        @MXFProperty(size = 4)
+        private final Long horizontal_subsampling = null;
+        @MXFProperty(size = 4)
+        private final Long vertical_subsampling = null;
+        @MXFProperty(size = 4)
+        protected final Long black_ref_level = null;
+        @MXFProperty(size = 4)
+        protected final Long white_ref_level = null;
 
         /**
          * Instantiates a new parsed CDCIPictureEssenceDescriptor object by virtue of parsing the MXF file bitstream
@@ -121,7 +126,7 @@ public final class CDCIPictureEssenceDescriptor extends GenericPictureEssenceDes
          * Accessor for the BlackRefLevel UL
          * @return a long integer representing the luminance value for black
          */
-        public Long getBlackRefLevel(){
+        public Long getBlackRefLevel() {
             return this.black_ref_level;
         }
 
@@ -129,7 +134,7 @@ public final class CDCIPictureEssenceDescriptor extends GenericPictureEssenceDes
          * Accessor for the WhiteRefLevel UL
          * @return a long integer representing the luminance value for white
          */
-        public Long getWhiteRefLevel(){
+        public Long getWhiteRefLevel() {
             return this.white_ref_level;
         }
 

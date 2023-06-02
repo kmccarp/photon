@@ -74,7 +74,7 @@ public final class IMFDocumentsObjectFieldsFactory {
     /**
      * To prevent instantiation
      */
-    private IMFDocumentsObjectFieldsFactory(){
+    private IMFDocumentsObjectFieldsFactory() {
 
     }
 
@@ -101,12 +101,12 @@ public final class IMFDocumentsObjectFieldsFactory {
                     continue;
 
                 // No need to construct XMLGregorianCalendar, because an already constructed instance will be provided when assigned
-                if(XMLGregorianCalendar.class.isAssignableFrom(fieldType))
+                if (XMLGregorianCalendar.class.isAssignableFrom(fieldType))
                     continue;
 
                 // Types that wrap a collection provide access to the collection through
                 // an accessor hence negating the need to construct the collection.
-                if(Collection.class.isAssignableFrom(fieldType))
+                if (Collection.class.isAssignableFrom(fieldType))
                     continue;
 
                 // Construct a field of a complex type, and construct that types fields recursively
@@ -118,17 +118,17 @@ public final class IMFDocumentsObjectFieldsFactory {
                 field.set(object, value);
             }
         }
-        catch(IllegalAccessException e){
+        catch(IllegalAccessException e) {
             throw new MXFException(String.format("Error occurred while trying to construct %s", object.getClass().getSimpleName()));
         }
     }
 
-    private static Object constructObjectByName(Class clazz) throws MXFException{
+    private static Object constructObjectByName(Class clazz) throws MXFException {
         try {
             Constructor<?> constructor = clazz.getConstructor();
             return clazz.cast(constructor.newInstance());
         }
-        catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e){
+        catch(NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             throw new MXFException(String.format("Error occurred while trying to construct %s", clazz.getSimpleName()));
         }
     }

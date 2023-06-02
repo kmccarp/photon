@@ -66,28 +66,29 @@ public class DOMNodeObjectModel {
     private final Map<String, Map<String, Integer>> fieldsLocalNameMap = new HashMap<>();
     private static final Logger logger = LoggerFactory.getLogger(DOMNodeObjectModel.class);
     private final IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
+
     /**
      * A constructor for the object model of a DOM Node.
      * @param node the DOM Node whose object model is desired.
      */
-    public DOMNodeObjectModel(@Nonnull Node node){
+    public DOMNodeObjectModel(@Nonnull Node node) {
         this.node = node;
         this.nodeType = node.getNodeType();
         this.localName = node.getLocalName();
         this.localNamespaceURI = node.getNamespaceURI();
-        if(this.localName == null){
+        if (this.localName == null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger
                             .IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("DOM Node Local Name is not set for a node of type %d", node.getNodeType()));
             return;
         }
         Node child = node.getFirstChild();
-        switch(child.getNodeType()){
+        switch (child.getNodeType()) {
             case Node.ELEMENT_NODE:
-                while(child != null) {
+                while (child != null) {
                     Node grandChild = child.getFirstChild();
-                    if (grandChild != null){
-                        if(grandChild.getNodeType() == Node.TEXT_NODE) {
+                    if (grandChild != null) {
+                        if (grandChild.getNodeType() == Node.TEXT_NODE) {
                             DOMNodeElementTuple domNodeElementTuple = new DOMNodeElementTuple(child.getNamespaceURI(), child.getLocalName());
                             Map<String, Integer> values = fields.get(domNodeElementTuple);
                             Map<String, Integer> fieldsLocalNameValues = fieldsLocalNameMap.get(domNodeElementTuple.getLocalName());
@@ -95,28 +96,29 @@ public class DOMNodeObjectModel {
                                 values = new HashMap<String, Integer>();
                                 fields.put(domNodeElementTuple, values);
                             }
-                            if(fieldsLocalNameValues == null){
+                            if (fieldsLocalNameValues == null) {
                                 fieldsLocalNameValues = new HashMap<String, Integer>();
                                 fieldsLocalNameMap.put(domNodeElementTuple.getLocalName(), fieldsLocalNameValues);
                             }
                             Integer count = 0;
-                            if(values.containsKey(child.getFirstChild().getNodeValue())) {
+                            if (values.containsKey(child.getFirstChild().getNodeValue())) {
                                 count = values.get(child.getFirstChild().getNodeValue());
                             }
-                            values.put(child.getFirstChild().getNodeValue(), count+1);
+                            values.put(child.getFirstChild().getNodeValue(), count + 1);
                             Integer localNameCount = 0;
-                            if(fieldsLocalNameValues.containsKey(domNodeElementTuple.getNamespaceURI())){
+                            if (fieldsLocalNameValues.containsKey(domNodeElementTuple.getNamespaceURI())) {
                                 localNameCount = fieldsLocalNameValues.get(domNodeElementTuple.getNamespaceURI());
                             }
-                            fieldsLocalNameValues.put(domNodeElementTuple.getNamespaceURI(), localNameCount+1);
-                        } else {
+                            fieldsLocalNameValues.put(domNodeElementTuple.getNamespaceURI(), localNameCount + 1);
+                        }
+                        else {
                             Integer count = 0;
                             DOMNodeObjectModel domNode = new DOMNodeObjectModel(child);
-                            if(childrenDOMNodes.containsKey(domNode))
+                            if (childrenDOMNodes.containsKey(domNode))
                             {
                                 count = childrenDOMNodes.get(domNode);
                             }
-                            childrenDOMNodes.put(domNode, count+1);
+                            childrenDOMNodes.put(domNode, count + 1);
                             imfErrorLogger.addAllErrors(domNode.getErrors());
                         }
                     }
@@ -129,7 +131,7 @@ public class DOMNodeObjectModel {
             default:
                 String message = String.format("Unsupported DOM Node type  %d ", child.getNodeType());
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger
-                        .IMFErrors.ErrorLevels.FATAL,
+                                .IMFErrors.ErrorLevels.FATAL,
                         message);
                 throw new IMFException(message, imfErrorLogger);
         }
@@ -137,7 +139,7 @@ public class DOMNodeObjectModel {
 
     private DOMNodeObjectModel(Node node, String localName, String localNamespaceURI, short nodeType, Map<DOMNodeObjectModel, Integer> childrenDOMNodes, Map<DOMNodeElementTuple, Map<String,
             Integer>> fields,
-                               Map<String, Map<String, Integer>> fieldsLocalNamesMap){
+            Map<String, Map<String, Integer>> fieldsLocalNamesMap) {
         this.node = node;
         this.localName = localName;
         this.localNamespaceURI = localNamespaceURI;
@@ -154,27 +156,27 @@ public class DOMNodeObjectModel {
      *                  that should be excluded in from the newly minted DOMNodeObjectModel
      * @return a DOMNodeObjectModel that excludes the elements indicated in the ignore set.
      */
-    public static DOMNodeObjectModel createDOMNodeObjectModelIgnoreSet(DOMNodeObjectModel domNodeObjectModel, @Nonnull Set<String> ignoreSet){
+    public static DOMNodeObjectModel createDOMNodeObjectModelIgnoreSet(DOMNodeObjectModel domNodeObjectModel, @Nonnull Set<String> ignoreSet) {
 
 
         Map<DOMNodeElementTuple, Map<String, Integer>> thisFields = new HashMap<>();
-        for(Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry : domNodeObjectModel.getFields().entrySet()){
-            if(!ignoreSet.contains(entry.getKey().getLocalName())){
+        for (Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry : domNodeObjectModel.getFields().entrySet()) {
+            if (!ignoreSet.contains(entry.getKey().getLocalName())) {
                 thisFields.put(entry.getKey(), entry.getValue());
             }
         }
 
 
         Map<String, Map<String, Integer>> thisFieldsLocalNamesMap = new HashMap<>();
-        for(Map.Entry<String, Map<String, Integer>> entry : domNodeObjectModel.getFieldsLocalNameMap().entrySet()){
-            if(!ignoreSet.contains(entry.getKey())){
+        for (Map.Entry<String, Map<String, Integer>> entry : domNodeObjectModel.getFieldsLocalNameMap().entrySet()) {
+            if (!ignoreSet.contains(entry.getKey())) {
                 thisFieldsLocalNamesMap.put(entry.getKey(), entry.getValue());
             }
         }
 
         Map<DOMNodeObjectModel, Integer> childrenDOMNodes = new HashMap<>();
-        for(Map.Entry<DOMNodeObjectModel, Integer> entry : domNodeObjectModel.getChildrenDOMNodes().entrySet()){
-            if(!ignoreSet.contains(entry.getKey().getLocalName()))
+        for (Map.Entry<DOMNodeObjectModel, Integer> entry : domNodeObjectModel.getChildrenDOMNodes().entrySet()) {
+            if (!ignoreSet.contains(entry.getKey().getLocalName()))
             {
                 DOMNodeObjectModel child = entry.getKey().createDOMNodeObjectModelIgnoreSet(entry.getKey(), ignoreSet);
                 if (child.getChildrenDOMNodes().size() > 0
@@ -194,27 +196,27 @@ public class DOMNodeObjectModel {
      *                  that should be included in the newly minted DOMNodeObjectModel
      * @return a DOMNodeObjectModel that contains only the elements indicated in the selection set.
      */
-    public static DOMNodeObjectModel createDOMNodeObjectModelSelectionSet(DOMNodeObjectModel domNodeObjectModel, @Nonnull Set<String> selectionSet){
+    public static DOMNodeObjectModel createDOMNodeObjectModelSelectionSet(DOMNodeObjectModel domNodeObjectModel, @Nonnull Set<String> selectionSet) {
 
 
         Map<DOMNodeElementTuple, Map<String, Integer>> thisFields = new HashMap<>();
-        for(Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry : domNodeObjectModel.getFields().entrySet()){
-            if(selectionSet.contains(entry.getKey().getLocalName())){
+        for (Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry : domNodeObjectModel.getFields().entrySet()) {
+            if (selectionSet.contains(entry.getKey().getLocalName())) {
                 thisFields.put(entry.getKey(), entry.getValue());
             }
         }
 
 
         Map<String, Map<String, Integer>> thisFieldsLocalNamesMap = new HashMap<>();
-        for(Map.Entry<String, Map<String, Integer>> entry : domNodeObjectModel.getFieldsLocalNameMap().entrySet()){
-            if(selectionSet.contains(entry.getKey())){
+        for (Map.Entry<String, Map<String, Integer>> entry : domNodeObjectModel.getFieldsLocalNameMap().entrySet()) {
+            if (selectionSet.contains(entry.getKey())) {
                 thisFieldsLocalNamesMap.put(entry.getKey(), entry.getValue());
             }
         }
 
         Map<DOMNodeObjectModel, Integer> childrenDOMNodes = new HashMap<>();
-        for(Map.Entry<DOMNodeObjectModel, Integer> entry : domNodeObjectModel.getChildrenDOMNodes().entrySet()){
-            if(selectionSet.contains(entry.getKey().getLocalName()))
+        for (Map.Entry<DOMNodeObjectModel, Integer> entry : domNodeObjectModel.getChildrenDOMNodes().entrySet()) {
+            if (selectionSet.contains(entry.getKey().getLocalName()))
             {
                 DOMNodeObjectModel child = entry.getKey().createDOMNodeObjectModelSelectionSet(entry.getKey(), selectionSet);
                 if (child.getChildrenDOMNodes().size() > 0
@@ -232,13 +234,13 @@ public class DOMNodeObjectModel {
      * @param domNodeObjectModel a DOMNodeObjectModel object to derive the statically constructed model from
      * @return a DOMNodeObjectModel that excludes the elements indicated in the ignore set.
      */
-    private static DOMNodeObjectModel createDOMNodeObjectModelWOFullyQualifiedFields(DOMNodeObjectModel domNodeObjectModel){
+    private static DOMNodeObjectModel createDOMNodeObjectModelWOFullyQualifiedFields(DOMNodeObjectModel domNodeObjectModel) {
 
         Set<Map.Entry<DOMNodeElementTuple, Map<String, Integer>>> entries = domNodeObjectModel.getFields().entrySet();
         Iterator<Map.Entry<DOMNodeElementTuple, Map<String, Integer>>> iterator = entries.iterator();
         Map<DOMNodeElementTuple, Map<String, Integer>> thisFields = new HashMap<>();
 
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry = iterator.next();
             DOMNodeElementTuple newKey = new DOMNodeElementTuple("", entry.getKey().getLocalName());
             thisFields.put(newKey, entry.getValue());
@@ -246,7 +248,7 @@ public class DOMNodeObjectModel {
 
         Map<DOMNodeObjectModel, Integer> childrenDOMNodes = new HashMap<>();
         Iterator<Map.Entry<DOMNodeObjectModel, Integer>> childEntriesIterator = domNodeObjectModel.getChildrenDOMNodes().entrySet().iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<DOMNodeObjectModel, Integer> entry = childEntriesIterator.next();
             DOMNodeObjectModel child = DOMNodeObjectModel.createDOMNodeObjectModelWOFullyQualifiedFields(entry.getKey());
             childrenDOMNodes.put(child, entry.getValue());
@@ -263,12 +265,12 @@ public class DOMNodeObjectModel {
      * @return a DOMNodeObjectModel corresponding to the DOMNodeObjectModel in the list that matches the reference
      */
     @Nullable
-    public static DOMNodeObjectModel getMatchingDOMNodeObjectModel(DOMNodeObjectModel reference, Collection<DOMNodeObjectModel> models){
+    public static DOMNodeObjectModel getMatchingDOMNodeObjectModel(DOMNodeObjectModel reference, Collection<DOMNodeObjectModel> models) {
 
         DOMNodeObjectModel refDOMNodelObjectModelWONamespaceURI = DOMNodeObjectModel.createDOMNodeObjectModelWOFullyQualifiedFields(reference);
-        for(DOMNodeObjectModel model : models){
+        for (DOMNodeObjectModel model : models) {
             DOMNodeObjectModel modelWONamespaceURI = DOMNodeObjectModel.createDOMNodeObjectModelWOFullyQualifiedFields(model);
-            if(refDOMNodelObjectModelWONamespaceURI.equals(modelWONamespaceURI)){
+            if (refDOMNodelObjectModelWONamespaceURI.equals(modelWONamespaceURI)) {
                 return modelWONamespaceURI;
             }
         }
@@ -282,49 +284,49 @@ public class DOMNodeObjectModel {
      * @param other a DOMNodeObjectModel object which needs to be compared against the reference
      * @return a list of errors related to NamespaceURI mismatches between the reference and other DOMNodeObjectModel object
      */
-    public static List<ErrorLogger.ErrorObject> getNamespaceURIMismatchErrors(DOMNodeObjectModel reference, DOMNodeObjectModel other){
+    public static List<ErrorLogger.ErrorObject> getNamespaceURIMismatchErrors(DOMNodeObjectModel reference, DOMNodeObjectModel other) {
 
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
-        if(reference == null
-                || other == null){
+        if (reference == null
+                || other == null) {
             return imfErrorLogger.getErrors();
         }
         Iterator<Map.Entry<String, Map<String, Integer>>> fieldsLocalNamesIterator = reference.getFieldsLocalNameMap().entrySet().iterator();
-        while(fieldsLocalNamesIterator.hasNext()){
+        while (fieldsLocalNamesIterator.hasNext()) {
             Map.Entry<String, Map<String, Integer>> entry = fieldsLocalNamesIterator.next();
             Map<String, Integer> thisFieldsLocalNameValues = entry.getValue();
             Map<String, Integer> otherFieldsLocalNameValues = other.getFieldsLocalNameMap().get(entry.getKey());
-            if(!thisFieldsLocalNameValues.equals(otherFieldsLocalNameValues)){
-                if(otherFieldsLocalNameValues != null) {
+            if (!thisFieldsLocalNameValues.equals(otherFieldsLocalNameValues)) {
+                if (otherFieldsLocalNameValues != null) {
                     Iterator<Map.Entry<String, Integer>> iterator = thisFieldsLocalNameValues.entrySet().iterator();
                     StringBuilder stringBuilder1 = new StringBuilder();
-                    while(iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         Map.Entry<String, Integer> thisEntry = iterator.next();
                         stringBuilder1.append(String.format("NameSpaceURI %s, %d times", thisEntry.getKey(), thisEntry.getValue()));
                     }
 
                     Iterator<Map.Entry<String, Integer>> iterator2 = otherFieldsLocalNameValues.entrySet().iterator();
                     StringBuilder stringBuilder2 = new StringBuilder();
-                    while(iterator2.hasNext()){
+                    while (iterator2.hasNext()) {
                         Map.Entry<String, Integer> thisEntry = iterator2.next();
                         stringBuilder2.append(String.format("NameSpaceURI %s, %d times", thisEntry.getKey(), thisEntry.getValue()));
                     }
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                             String.format("The DOMNodeElement represented by the local name %s, has namespace URI inconsistencies " +
-                                            "in one DOM Node it appears with the %s " +
-                                            ", in the other DOM Node it appears with the %s"
-                                    , entry.getKey()
-                                    , stringBuilder1.toString()
-                                    , stringBuilder2.toString()));
+                                    "in one DOM Node it appears with the %s " +
+                                    ", in the other DOM Node it appears with the %s"
+                            , entry.getKey()
+                            , stringBuilder1.toString()
+                            , stringBuilder2.toString()));
                 }
-                else{
+                else {
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                             String.format("The DOMNodeElement represented by the local name %s, is absent in the other DOMNodeObjectModel", entry.getKey()));
                 }
             }
         }
         Iterator<Map.Entry<DOMNodeObjectModel, Integer>>iterator = reference.getChildrenDOMNodes().entrySet().iterator();
-        while(iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<DOMNodeObjectModel, Integer>entry = iterator.next();
             Set<DOMNodeObjectModel>otherModels = other.getChildrenDOMNodes().keySet();
             DOMNodeObjectModel matchingDOMNodeObjectModel = DOMNodeObjectModel.getMatchingDOMNodeObjectModel(entry.getKey(), otherModels);
@@ -338,7 +340,7 @@ public class DOMNodeObjectModel {
      * A getter for the DOM node represented by this DOMNodeObjectModel
      * @return a org.w3c.dom node
      */
-    public Node getNode(){
+    public Node getNode() {
         return this.node;
     }
 
@@ -346,7 +348,7 @@ public class DOMNodeObjectModel {
      * A getter for the DOM node type represented by this object model.
      * @return a short representing the DOM Node type as defined in org.w3c.dom.Node
      */
-    public short getNodeType(){
+    public short getNodeType() {
         return this.nodeType;
     }
 
@@ -354,7 +356,7 @@ public class DOMNodeObjectModel {
      * A getter for the DOM Node local name represented by this object model.
      * @return a string representing the DOM Node's local name field.
      */
-    public String getLocalName(){
+    public String getLocalName() {
         return this.localName;
     }
 
@@ -362,7 +364,7 @@ public class DOMNodeObjectModel {
      * A getter for the DOM Node namespace URI represented by this object model.
      * @return a string representing the DOM Node's namespace URI field.
      */
-    public String getLocalNamespaceURI(){
+    public String getLocalNamespaceURI() {
         return this.localNamespaceURI;
     }
 
@@ -370,7 +372,7 @@ public class DOMNodeObjectModel {
      * A getter for the Fields represented in the DOMNodeObjectModel
      * @return a map of Key, Value pairs corresponding to the fields on the DOM Node
      */
-    public Map<DOMNodeElementTuple, Map<String, Integer>> getFields(){
+    public Map<DOMNodeElementTuple, Map<String, Integer>> getFields() {
         return Collections.unmodifiableMap(this.fields);
     }
 
@@ -378,7 +380,7 @@ public class DOMNodeObjectModel {
      * A getter for the Fields Local Name Map represented in the DOMNodeObjectModel
      * @return a map of Key, Value pairs corresponding to the fieldsLocalName and the corresponding NamespaceURIs
      */
-    public Map<String, Map<String, Integer>> getFieldsLocalNameMap(){
+    public Map<String, Map<String, Integer>> getFieldsLocalNameMap() {
         return Collections.unmodifiableMap(this.fieldsLocalNameMap);
     }
 
@@ -386,7 +388,7 @@ public class DOMNodeObjectModel {
      * A getter for the Fields represented in the DOMNodeObjectModel
      * @return a map of Key, Value pairs corresponding to the fields on the DOM Node
      */
-    public Map<DOMNodeObjectModel, Integer> getChildrenDOMNodes(){
+    public Map<DOMNodeObjectModel, Integer> getChildrenDOMNodes() {
         return Collections.unmodifiableMap(this.childrenDOMNodes);
     }
 
@@ -395,7 +397,7 @@ public class DOMNodeObjectModel {
      * A getter for the list of errors that occurred while constructing this DOMNodeObjectModel
      * @return an unmodifiable list of Errors
      */
-    public List<ErrorLogger.ErrorObject> getErrors(){
+    public List<ErrorLogger.ErrorObject> getErrors() {
         return imfErrorLogger.getErrors();
     }
 
@@ -406,18 +408,18 @@ public class DOMNodeObjectModel {
      * @return boolean returns true if the 2 DOMNodeObjectModels have the same content.
      */
     @Override
-    public boolean equals(Object other){
+    public boolean equals(Object other) {
 
-        if(other == null
-                || this.getClass() != other.getClass()){
+        if (other == null
+                || this.getClass() != other.getClass()) {
             return false;
         }
 
-        DOMNodeObjectModel otherDOMNodeObjectModel = (DOMNodeObjectModel) other;
+        DOMNodeObjectModel otherDOMNodeObjectModel = (DOMNodeObjectModel)other;
 
-        if(this.nodeType.equals(otherDOMNodeObjectModel.nodeType) &&
-            this.fields.equals(otherDOMNodeObjectModel.fields) &&
-            this.childrenDOMNodes.equals(otherDOMNodeObjectModel.childrenDOMNodes)) {
+        if (this.nodeType.equals(otherDOMNodeObjectModel.nodeType) &&
+                this.fields.equals(otherDOMNodeObjectModel.fields) &&
+                this.childrenDOMNodes.equals(otherDOMNodeObjectModel.childrenDOMNodes)) {
             return true;
         }
         return false;
@@ -428,17 +430,17 @@ public class DOMNodeObjectModel {
      * @param other DoMNodeObjectModel
      * @return DOMNodeObjectModel this DOMNodeObjectModel without any common nodes from other DoMNodeObjectModel
      */
-    public DOMNodeObjectModel removeNodes(Object other){
+    public DOMNodeObjectModel removeNodes(Object other) {
 
-        if(other == null
-                || this.getClass() != other.getClass()){
+        if (other == null
+                || this.getClass() != other.getClass()) {
             return createDOMNodeObjectModelIgnoreSet(this, new HashSet<>());
         }
 
 
-        DOMNodeObjectModel otherDOMNodeObjectModel = (DOMNodeObjectModel) other;
+        DOMNodeObjectModel otherDOMNodeObjectModel = (DOMNodeObjectModel)other;
 
-        if(!this.localName.equals(otherDOMNodeObjectModel.localName)) {
+        if (!this.localName.equals(otherDOMNodeObjectModel.localName)) {
             return createDOMNodeObjectModelIgnoreSet(this, new HashSet<>());
         }
 
@@ -456,43 +458,45 @@ public class DOMNodeObjectModel {
         otherChildrenDOMNodes.putAll(otherDOMNodeObjectModel.childrenDOMNodes);
         otherChildrenDOMNodes.entrySet().removeAll(this.childrenDOMNodes.entrySet());
 
-        while(!thisChildrenDOMNodes.isEmpty()) {
+        while (!thisChildrenDOMNodes.isEmpty()) {
             Map.Entry<DOMNodeObjectModel, Integer> entry = thisChildrenDOMNodes.entrySet().iterator().next();
             Integer minDiffCount = entry.getKey().getFieldCount();
             Map.Entry<DOMNodeObjectModel, Integer> matchingEntry = null;
-            for(Map.Entry<DOMNodeObjectModel, Integer> otherEntry: otherChildrenDOMNodes.entrySet()) {
+            for (Map.Entry<DOMNodeObjectModel, Integer> otherEntry : otherChildrenDOMNodes.entrySet()) {
                 DOMNodeObjectModel diffDOMNodeObjectModel = entry.getKey().removeNodes(otherEntry.getKey());
-                if(diffDOMNodeObjectModel.getFieldCount() < minDiffCount) {
+                if (diffDOMNodeObjectModel.getFieldCount() < minDiffCount) {
                     matchingEntry = otherEntry;
                     minDiffCount = diffDOMNodeObjectModel.getFieldCount();
                 }
             }
-            if(matchingEntry != null) {
+            if (matchingEntry != null) {
                 Integer remaining = entry.getValue() - matchingEntry.getValue();
                 Integer count = remaining >= 0 ? matchingEntry.getValue() : entry.getValue();
 
-                if(remaining == 0) {
+                if (remaining == 0) {
                     otherChildrenDOMNodes.remove(matchingEntry.getKey());
                     thisChildrenDOMNodes.remove(entry.getKey());
                 }
-                else if(remaining > 0) {
+                else if (remaining > 0) {
                     otherChildrenDOMNodes.remove(matchingEntry.getKey());
                     thisChildrenDOMNodes.put(entry.getKey(), remaining);
-                } else {
+                }
+                else {
                     otherChildrenDOMNodes.put(matchingEntry.getKey(), -remaining);
                     thisChildrenDOMNodes.remove(entry.getKey());
                 }
 
-                if(!entry.getKey().equals(matchingEntry.getKey())) {
+                if (!entry.getKey().equals(matchingEntry.getKey())) {
                     DOMNodeObjectModel diffDOMNodeObjectModel = entry.getKey().removeNodes(matchingEntry.getKey());
-                    if(outChildrenDOMNodes.containsKey(diffDOMNodeObjectModel)) {
+                    if (outChildrenDOMNodes.containsKey(diffDOMNodeObjectModel)) {
                         count += outChildrenDOMNodes.get(diffDOMNodeObjectModel);
                     }
                     outChildrenDOMNodes.put(diffDOMNodeObjectModel, count);
                 }
-            } else {
+            }
+            else {
                 Integer count = entry.getValue();
-                if(outChildrenDOMNodes.containsKey(entry.getKey())) {
+                if (outChildrenDOMNodes.containsKey(entry.getKey())) {
                     count += outChildrenDOMNodes.get(entry.getKey());
                 }
                 outChildrenDOMNodes.put(entry.getKey(), count);
@@ -503,7 +507,7 @@ public class DOMNodeObjectModel {
 
         return new DOMNodeObjectModel(this.getNode(), this.getLocalName(), this.getLocalNamespaceURI(),
                 this.getNodeType(), Collections.unmodifiableMap(outChildrenDOMNodes), Collections.unmodifiableMap
-                (thisFields), Collections.unmodifiableMap(this.fieldsLocalNameMap));
+                        (thisFields), Collections.unmodifiableMap(this.fieldsLocalNameMap));
     }
 
 
@@ -511,12 +515,12 @@ public class DOMNodeObjectModel {
      * A method that returns total number of fields in a DOMNodeObjectModel.
      * @return Integer total number of fields .
      */
-    public Integer getFieldCount(){
+    public Integer getFieldCount() {
         Integer entryCount = 0;
 
         entryCount += this.fields.size();
 
-        for(Map.Entry<DOMNodeObjectModel, Integer> entry: this.childrenDOMNodes.entrySet()) {
+        for (Map.Entry<DOMNodeObjectModel, Integer> entry : this.childrenDOMNodes.entrySet()) {
             entryCount += entry.getKey().getFieldCount();
         }
 
@@ -528,7 +532,7 @@ public class DOMNodeObjectModel {
      * @return integer containing the hash code corresponding to this object
      */
     @Override
-    public int hashCode(){
+    public int hashCode() {
         int hash = 1;
         hash = hash * 31 + localName.hashCode();
         hash = hash * 31 + this.nodeType.hashCode();
@@ -546,20 +550,20 @@ public class DOMNodeObjectModel {
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(String.format("<%s xmlns=\"%s\">", this.localName, this.localNamespaceURI)+"\n");
-        for(Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry : fields.entrySet()){
+        sb.append(String.format("<%s xmlns=\"%s\">", this.localName, this.localNamespaceURI) + "\n");
+        for (Map.Entry<DOMNodeElementTuple, Map<String, Integer>> entry : fields.entrySet()) {
             Map<String, Integer> values = (Map<String, Integer>)entry.getValue();
             Iterator<Map.Entry<String, Integer>> iterator = values.entrySet().iterator();
-            while(iterator.hasNext()){
+            while (iterator.hasNext()) {
                 Map.Entry<String, Integer> fieldValuesEntry = iterator.next();
-                for(Integer i = 0; i< fieldValuesEntry.getValue(); i++) {
+                for (Integer i = 0; i < fieldValuesEntry.getValue(); i++) {
                     sb.append(String.format("  <%s xmlns=\"%s\">%s</%s>%n", entry.getKey().getLocalName(), entry.getKey().getNamespaceURI(), fieldValuesEntry.getKey(), entry.getKey().getLocalName()));
                 }
             }
         }
 
-        for(Map.Entry<DOMNodeObjectModel, Integer> domEntry : this.childrenDOMNodes.entrySet()) {
-            for(Integer i = 0; i < domEntry.getValue(); i++) {
+        for (Map.Entry<DOMNodeObjectModel, Integer> domEntry : this.childrenDOMNodes.entrySet()) {
+            for (Integer i = 0; i < domEntry.getValue(); i++) {
                 String domNodeString = domEntry.getKey().toString();
                 sb.append(domNodeString.replaceAll("(?m)(^)", "  "));
             }
@@ -575,7 +579,7 @@ public class DOMNodeObjectModel {
         String         ls = System.getProperty("line.separator");
 
         try {
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 stringBuilder.append(line);
                 stringBuilder.append(ls);
             }
@@ -596,9 +600,9 @@ public class DOMNodeObjectModel {
         this.getChildrenDOMNodes().entrySet()
                 .stream()
                 .filter(e -> e.getKey().getLocalName().equals(name))
-                .forEach( e ->
+                .forEach(e ->
                 {
-                    for(int i =0; i <e.getValue(); i++)
+                    for (int i = 0; i < e.getValue(); i++)
                     {
                         domNodeObjectModelList.add(e.getKey());
                     }
@@ -613,7 +617,7 @@ public class DOMNodeObjectModel {
      */
     public DOMNodeObjectModel getDOMNode(String name) {
         List<DOMNodeObjectModel> domNodeObjectModelList = getDOMNodes(name);
-        if(domNodeObjectModelList.size() > 0) {
+        if (domNodeObjectModelList.size() > 0) {
             return domNodeObjectModelList.get(0);
         }
         else
@@ -649,8 +653,8 @@ public class DOMNodeObjectModel {
     public UL getFieldAsUL(String name) {
         String value = getFieldAsString(name);
         try {
-            if(value != null)
-            return UL.fromULAsURNStringToUL(value);
+            if (value != null)
+                return UL.fromULAsURNStringToUL(value);
         }
         catch(Exception e) {
             return null;
@@ -667,7 +671,7 @@ public class DOMNodeObjectModel {
     public Long getFieldAsLong(String name) {
         String value = getFieldAsString(name);
         try {
-            if(value != null)
+            if (value != null)
                 return Long.valueOf(value);
         }
         catch(Exception e) {
@@ -685,7 +689,7 @@ public class DOMNodeObjectModel {
     public Integer getFieldAsInteger(String name) {
         String value = getFieldAsString(name);
         try {
-            if(value != null)
+            if (value != null)
                 return Integer.valueOf(value);
         }
         catch(Exception e) {
@@ -703,7 +707,7 @@ public class DOMNodeObjectModel {
     public  Fraction getFieldAsFraction(String name) {
         String value = getFieldAsString(name);
         try {
-            if(value != null)
+            if (value != null)
                 return Fraction.valueOf(value);
         }
         catch(Exception e) {
@@ -734,7 +738,7 @@ public class DOMNodeObjectModel {
         try {
             Set<String> matchingValues = this.getFields().entrySet().stream().filter(e -> e.getKey().getLocalName().equals(name)).map(Map.Entry::getValue).map(Map::keySet).flatMap(Set::stream).collect(Collectors.toSet());
             values.addAll(matchingValues);
-            for(DOMNodeObjectModel domNodeObjectModel:  this.getChildrenDOMNodes().keySet()) {
+            for (DOMNodeObjectModel domNodeObjectModel :  this.getChildrenDOMNodes().keySet()) {
                 domNodeObjectModel.getFieldsAsStringRecursive(values, name);
             }
             return;
@@ -754,7 +758,7 @@ public class DOMNodeObjectModel {
         Set<String> values = getFieldsAsStringRecursive(name);
         try {
             Set<UL> uls = new HashSet<>();
-            for(String value: values) {
+            for (String value : values) {
                 uls.add(UL.fromULAsURNStringToUL(value));
             }
             return uls;
@@ -775,7 +779,7 @@ public class DOMNodeObjectModel {
         Set<String> values = getFieldsAsStringRecursive(name);
         try {
             Set<UUID> uuids = new HashSet<>();
-            for(String value: values) {
+            for (String value : values) {
                 uuids.add(UUIDHelper.fromUUIDAsURNStringToUUID(value));
             }
             return uuids;
@@ -793,7 +797,7 @@ public class DOMNodeObjectModel {
         private final String localName;
         private final String namespaceURI;
 
-        private DOMNodeElementTuple(@Nonnull String namespaceURI, @Nonnull String localName){
+        private DOMNodeElementTuple(@Nonnull String namespaceURI, @Nonnull String localName) {
             this.namespaceURI = namespaceURI;
             this.localName = localName;
         }
@@ -802,7 +806,7 @@ public class DOMNodeObjectModel {
          * A getter for the local name property of the fully qualified DOMNode element
          * @return string representing the local name property of a DOMNode element
          */
-        public String getLocalName(){
+        public String getLocalName() {
             return this.localName;
         }
 
@@ -810,7 +814,7 @@ public class DOMNodeObjectModel {
          * A getter for the namespaceURI property of the fully qualified DOMNode element
          * @return string representing the namespaceURI property of a DOMNode element
          */
-        public String getNamespaceURI(){
+        public String getNamespaceURI() {
             return this.namespaceURI;
         }
 
@@ -821,9 +825,9 @@ public class DOMNodeObjectModel {
          * of DOMNodeElementTuple type, or if the local name and namespaceURI are not equal to this object.
          */
         @Override
-        public boolean equals(Object other){
-            if(other == null
-                    || other.getClass() != this.getClass()){
+        public boolean equals(Object other) {
+            if (other == null
+                    || other.getClass() != this.getClass()) {
                 return false;
             }
             DOMNodeElementTuple otherDOMNodeElementTuple = DOMNodeElementTuple.class.cast(other);
@@ -838,7 +842,7 @@ public class DOMNodeObjectModel {
          * @return integer containing the hash code corresponding to this object
          */
         @Override
-        public int hashCode(){
+        public int hashCode() {
             int hash = 1;
             hash = hash * 31 + this.localName.hashCode(); /*LocalName can be used since it is non-null*/
             hash = hash * 31
@@ -851,7 +855,7 @@ public class DOMNodeObjectModel {
          * @return a string representing the contents of the DOMNodeElementTuple object
          */
         @Override
-        public String toString(){
+        public String toString() {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(String.format("%nLocalName : %s", this.getLocalName()));
             stringBuilder.append(String.format("%nNamespaceURI : %s", this.getNamespaceURI()));

@@ -33,17 +33,17 @@ public final class IMFEssenceDescriptorBaseType {
     protected final List<Object> any;
 
     public IMFEssenceDescriptorBaseType(String id,
-                                    List<Object> any)
+            List<Object> any)
     {
-        this.id             = UUIDHelper.fromUUIDAsURNStringToUUID(id);
-        this.any            = any;
+        this.id = UUIDHelper.fromUUIDAsURNStringToUUID(id);
+        this.any = any;
     }
 
     /**
      * Getter for the Sequence ID
      * @return a string representing the urn:uuid of the Essence Descriptor.
      */
-    public UUID getId(){
+    public UUID getId() {
         return this.id;
     }
 
@@ -51,7 +51,7 @@ public final class IMFEssenceDescriptorBaseType {
      * Getter for the Any property of the Essence Descriptor
      * @return a List representing Any property of the Essence Descriptor.
      */
-    public List<Object> getAny(){
+    public List<Object> getAny() {
         return this.any;
     }
 

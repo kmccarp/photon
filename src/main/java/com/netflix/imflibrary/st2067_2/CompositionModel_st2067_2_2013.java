@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 final class CompositionModel_st2067_2_2013 {
 
     //To prevent instantiation
-    private CompositionModel_st2067_2_2013(){
+    private CompositionModel_st2067_2_2013() {
 
     }
 
@@ -43,7 +43,8 @@ final class CompositionModel_st2067_2_2013 {
      * @param imfErrorLogger - an object for logging errors
      * @return A canonical, version-independent, instance of IMFCompositionPlaylistType
      */
-    @Nonnull public static IMFCompositionPlaylistType getCompositionPlaylist (@Nonnull org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    public static IMFCompositionPlaylistType getCompositionPlaylist(@Nonnull org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         // Parse each Segment
         List<IMFSegmentType> segmentList = compositionPlaylistType.getSegmentList().getSegment().stream()
@@ -69,7 +70,7 @@ final class CompositionModel_st2067_2_2013 {
             // Get the namespaces of each Sequence being used
             Set<String> sequenceNamespaces = compositionPlaylistType.getSegmentList().getSegment().get(0)
                     .getSequenceList().getAny().stream().filter(JAXBElement.class::isInstance)
-                    .map(je -> ((JAXBElement<?>) je).getName().getNamespaceURI()).collect(Collectors.toSet());
+                    .map(je -> ((JAXBElement<?>)je).getName().getNamespaceURI()).collect(Collectors.toSet());
             // Find the Core Constraints version, based on the namespaces of the Sequences
             coreConstraintsSchema = CoreConstraints.fromElementNamespaces(sequenceNamespaces);
 
@@ -92,9 +93,10 @@ final class CompositionModel_st2067_2_2013 {
         );
     }
 
-    @Nonnull static org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType unmarshallCpl(@Nonnull ResourceByteRangeProvider resourceByteRangeProvider, @Nonnull IMFErrorLogger imfErrorLogger) throws IOException
+    @Nonnull
+    static org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType unmarshallCpl(@Nonnull ResourceByteRangeProvider resourceByteRangeProvider, @Nonnull IMFErrorLogger imfErrorLogger) throws IOException
     {
-        try (InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1))
+        try(InputStream inputStream = resourceByteRangeProvider.getByteRangeAsStream(0, resourceByteRangeProvider.getResourceSize() - 1))
         {
             // Validate the document against the CPL schemas, when unmarshalling
             Schema schema = CompositionModel_st2067_2_2013.ValidationSchema.INSTANCE;
@@ -128,7 +130,8 @@ final class CompositionModel_st2067_2_2013 {
     }
 
     // Parse the list of ApplicationIdentification values
-    @Nonnull private static Set<String> parseApplicationIds(@Nonnull org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static Set<String> parseApplicationIds(@Nonnull org.smpte_ra.schemas._2067_3._2013.CompositionPlaylistType compositionPlaylistType, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         if (compositionPlaylistType.getExtensionProperties() == null)
             return Collections.emptySet();
@@ -136,20 +139,22 @@ final class CompositionModel_st2067_2_2013 {
         return compositionPlaylistType.getExtensionProperties().getAny().stream()
                 .filter(JAXBElement.class::isInstance).map(JAXBElement.class::cast)
                 .filter(extProp -> extProp.getName().getLocalPart().equals("ApplicationIdentification")).map(JAXBElement::getValue)
-                .filter(List.class::isInstance).map(appIdList -> (List<?>) appIdList)
+                .filter(List.class::isInstance).map(appIdList -> (List<?>)appIdList)
                 .findAny().orElse(Collections.emptyList()).stream().map(Object::toString).collect(Collectors.toSet());
     }
 
     // Converts an instance of the JAXB class org.smpte_ra.schemas._2067_3._2013.EssenceDescriptorBaseType
     // Into a canonical, version-independent, instance of IMFEssenceDescriptorBaseType
-    @Nonnull private static IMFEssenceDescriptorBaseType parseEssenceDescriptor(@Nonnull org.smpte_ra.schemas._2067_3._2013.EssenceDescriptorBaseType essenceDescriptor, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static IMFEssenceDescriptorBaseType parseEssenceDescriptor(@Nonnull org.smpte_ra.schemas._2067_3._2013.EssenceDescriptorBaseType essenceDescriptor, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         return new IMFEssenceDescriptorBaseType(essenceDescriptor.getId(), essenceDescriptor.getAny());
     }
 
     // Converts an instance of the JAXB class org.smpte_ra.schemas._2067_3._2013.SegmentType
     // Into a canonical, version-independent, instance of IMFSegmentType
-    @Nonnull private static IMFSegmentType parseSegment(@Nonnull org.smpte_ra.schemas._2067_3._2013.SegmentType segment, @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static IMFSegmentType parseSegment(@Nonnull org.smpte_ra.schemas._2067_3._2013.SegmentType segment, @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         List<IMFSequenceType> sequenceList = new ArrayList<IMFSequenceType>();
 
@@ -164,9 +169,9 @@ final class CompositionModel_st2067_2_2013 {
         for (Object object : segment.getSequenceList().getAny())
         {
             // Ignore unrecognized Sequence types
-            if(!(object instanceof JAXBElement)){
+            if (!(object instanceof JAXBElement)) {
                 String details = "";
-                if(object instanceof Element)
+                if (object instanceof Element)
                 {
                     Element element = Element.class.cast(object);
                     details = "Tag: " + element.getTagName() + " URI: " + element.getNamespaceURI();
@@ -179,7 +184,7 @@ final class CompositionModel_st2067_2_2013 {
 
             // Get the JAXB SequenceType object
             JAXBElement jaxbElement = (JAXBElement)(object);
-            org.smpte_ra.schemas._2067_3._2013.SequenceType sequence = (org.smpte_ra.schemas._2067_3._2013.SequenceType) jaxbElement.getValue();
+            org.smpte_ra.schemas._2067_3._2013.SequenceType sequence = (org.smpte_ra.schemas._2067_3._2013.SequenceType)jaxbElement.getValue();
             // Determine the type of Sequence being parsed
             Composition.SequenceTypeEnum sequenceType = Composition.SequenceTypeEnum.getSequenceTypeEnum(jaxbElement.getName().getLocalPart());
             // Parse the Sequence
@@ -190,8 +195,9 @@ final class CompositionModel_st2067_2_2013 {
 
     // Converts an instance of the JAXB class org.smpte_ra.schemas._2067_3._2013.SequenceType
     // Into a canonical, version-independent, instance of IMFSequenceType
-    @Nonnull private static IMFSequenceType parseMarkerSequence(@Nonnull org.smpte_ra.schemas._2067_3._2013.SequenceType markerSequence,
-                                                                @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static IMFSequenceType parseMarkerSequence(@Nonnull org.smpte_ra.schemas._2067_3._2013.SequenceType markerSequence,
+            @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         List<IMFBaseResourceType> sequenceResources = new ArrayList<>();
         for (org.smpte_ra.schemas._2067_3._2013.BaseResourceType resource : markerSequence.getResourceList().getResource())
@@ -201,7 +207,7 @@ final class CompositionModel_st2067_2_2013 {
                 try
                 {
                     IMFMarkerResourceType markerResource = parseMarkerResource(
-                            (org.smpte_ra.schemas._2067_3._2013.MarkerResourceType) resource, cplEditRate, imfErrorLogger);
+                            (org.smpte_ra.schemas._2067_3._2013.MarkerResourceType)resource, cplEditRate, imfErrorLogger);
                     sequenceResources.add(markerResource);
                 }
                 catch(IMFException e)
@@ -222,18 +228,19 @@ final class CompositionModel_st2067_2_2013 {
 
     // Converts an instance of the JAXB class org.smpte_ra.schemas._2067_3._2013.SequenceType
     // Into a canonical, version-independent, instance of IMFSequenceType
-    @Nonnull private static IMFSequenceType parseSequence(@Nonnull org.smpte_ra.schemas._2067_3._2013.SequenceType sequence,
-                                                          @Nonnull List<Long> cplEditRate, Composition.SequenceTypeEnum sequenceType, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static IMFSequenceType parseSequence(@Nonnull org.smpte_ra.schemas._2067_3._2013.SequenceType sequence,
+            @Nonnull List<Long> cplEditRate, Composition.SequenceTypeEnum sequenceType, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         List<IMFBaseResourceType> sequenceResources = new ArrayList<>();
         for (org.smpte_ra.schemas._2067_3._2013.BaseResourceType resource : sequence.getResourceList().getResource())
         {
-            if(resource instanceof  org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType)
+            if (resource instanceof  org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType)
             {
                 try
                 {
                     IMFTrackFileResourceType trackFileResource = parseTrackFileResource(
-                            (org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType) resource, cplEditRate, imfErrorLogger);
+                            (org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType)resource, cplEditRate, imfErrorLogger);
                     sequenceResources.add(trackFileResource);
                 }
                 catch(IMFException e)
@@ -255,14 +262,15 @@ final class CompositionModel_st2067_2_2013 {
 
     // Converts an instance of the JAXB class org.smpte_ra.schemas._2067_3._2013.MarkerResourceType
     // Into a canonical, version-independent, instance of IMFMarkerResourceType
-    @Nonnull private static IMFMarkerResourceType parseMarkerResource(@Nonnull org.smpte_ra.schemas._2067_3._2013.MarkerResourceType markerResource,
-                                                                      @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static IMFMarkerResourceType parseMarkerResource(@Nonnull org.smpte_ra.schemas._2067_3._2013.MarkerResourceType markerResource,
+            @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         // Parse each Marker within the MarkerResource
         List<IMFMarkerType> markerList = new ArrayList<IMFMarkerType>();
         for (org.smpte_ra.schemas._2067_3._2013.MarkerType marker : markerResource.getMarker()) {
             markerList.add(new IMFMarkerType(marker.getAnnotation() == null ? null : marker
-                    .getAnnotation().getValue(),
+                            .getAnnotation().getValue(),
                     new IMFMarkerType.Label(marker.getLabel().getValue(), marker.getLabel().getScope()),
                     marker.getOffset()));
         }
@@ -279,8 +287,9 @@ final class CompositionModel_st2067_2_2013 {
 
     // Converts an instance of the JAXB class org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType
     // Into a canonical, version-independent, instance of IMFTrackFileResourceType
-    @Nonnull private static IMFTrackFileResourceType parseTrackFileResource(@Nonnull org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType trackFileResource,
-                                                                            @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
+    @Nonnull
+    private static IMFTrackFileResourceType parseTrackFileResource(@Nonnull org.smpte_ra.schemas._2067_3._2013.TrackFileResourceType trackFileResource,
+            @Nonnull List<Long> cplEditRate, @Nonnull IMFErrorLogger imfErrorLogger)
     {
         return new IMFTrackFileResourceType(
                 trackFileResource.getId(),
@@ -300,14 +309,15 @@ final class CompositionModel_st2067_2_2013 {
     private static class CompositionPlaylistType2013_Context
     {
         static final JAXBContext INSTANCE = createJAXBContext();
+
         private static JAXBContext createJAXBContext()
         {
             try
             {
                 return JAXBContext.newInstance(
                         org.smpte_ra.schemas._2067_3._2013.ObjectFactory.class,  // 2013 CPL
-                                            org.smpte_ra.schemas._2067_2._2013.ObjectFactory.class //Core constraints
-                                            ); 
+                        org.smpte_ra.schemas._2067_2._2013.ObjectFactory.class //Core constraints
+                );
             }
             catch(JAXBException e)
             {
@@ -320,15 +330,16 @@ final class CompositionModel_st2067_2_2013 {
     private static class ValidationSchema
     {
         static final Schema INSTANCE = createValidationSchema();
+
         private static Schema createValidationSchema()
         {
             // Load all XSD schemas required to validate a CompositionPlaylist document
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
-            try (InputStream xsd_xmldsig_core = contextClassLoader.getResourceAsStream("org/w3/_2000_09/xmldsig/xmldsig-core-schema.xsd");
+            try(InputStream xsd_xmldsig_core = contextClassLoader.getResourceAsStream("org/w3/_2000_09/xmldsig/xmldsig-core-schema.xsd");
                  InputStream xsd_dcmlTypes = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st0433_2008/dcmlTypes/dcmlTypes.xsd");
                  InputStream xsd_cpl_2013 = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st2067_3_2013/imf-cpl.xsd");
                  InputStream xsd_core_constraints_2013 = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st2067_2_2013/imf-core-constraints-20130620-pal.xsd");
-            )
+                    )
             {
                 // Build a schema from all of the XSD files provided
                 SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

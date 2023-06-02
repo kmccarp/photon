@@ -29,7 +29,7 @@ public class MXFUIDTest
     {
         byte[] bytes = new byte[16];
         MXFUID MXFUID = new MXFUID(bytes);
-        Assert.assertTrue(MXFUID.toString().length()> 0);
+        Assert.assertTrue(MXFUID.toString().length() > 0);
         Assert.assertEquals(MXFUID.getUID(), bytes);
     }
 
@@ -61,11 +61,11 @@ public class MXFUIDTest
     {
         byte[] bytes = new byte[16];
         MXFUID MXFUID = new MXFUID(bytes);
-        Assert.assertEquals(MXFUID.toString().trim(),"0x00000000000000000000000000000000");
+        Assert.assertEquals(MXFUID.toString().trim(), "0x00000000000000000000000000000000");
 
         bytes = new byte[32];
         MXFUID = new MXFUID(bytes);
-        Assert.assertEquals(MXFUID.toString().trim(),"0x0000000000000000000000000000000000000000000000000000000000000000");
+        Assert.assertEquals(MXFUID.toString().trim(), "0x0000000000000000000000000000000000000000000000000000000000000000");
 
         bytes = new byte[1];
         MXFUID = new MXFUID(bytes);

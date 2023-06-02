@@ -30,6 +30,7 @@ public enum AudioContentKind {
     Unknown("Unknown");
 
     String description;
+
     AudioContentKind(String description) {
         this.description = description;
     }
@@ -48,7 +49,7 @@ public enum AudioContentKind {
      * @return AudioContentKind enumeration for the symbol if present otherwise returns Unknown enumeration
      */
     public static AudioContentKind getAudioContentKindFromSymbol(String value) {
-        if(value == null) {
+        if (value == null) {
             return Unknown;
         }
         try {

@@ -35,7 +35,7 @@ public class IMFUUIDGenerator {
      * This class is a singleton, hence prevent instantiation by having a private constructor
      * @return
      */
-    private IMFUUIDGenerator(){
+    private IMFUUIDGenerator() {
 
     }
 
@@ -44,10 +44,10 @@ public class IMFUUIDGenerator {
      * @return the uniqueInstance of this class
      */
 
-    public static IMFUUIDGenerator getInstance(){
-        if(uniqueInstance == null){
-            synchronized (IMFUUIDGenerator.class){
-                if(uniqueInstance == null){
+    public static IMFUUIDGenerator getInstance() {
+        if (uniqueInstance == null) {
+            synchronized (IMFUUIDGenerator.class) {
+                if (uniqueInstance == null) {
                     uniqueInstance = new IMFUUIDGenerator();
                 }
             }
@@ -60,7 +60,7 @@ public class IMFUUIDGenerator {
      * Note: this method guarantees uniqueness only as long as the class remains loaded
      * @return string representation of the UUID
      */
-    public String getUrnUUID(){
+    public String getUrnUUID() {
         //Create the UUID string
         return "urn" + ":" + "uuid" + ":" + generateUUID();
     }
@@ -70,10 +70,10 @@ public class IMFUUIDGenerator {
      * Note: This method does not guarantee uniqueness across multiple invocations of the Photon library
      * @return a UUID
      */
-    public UUID generateUUID(){
+    public UUID generateUUID() {
         String uuidString = "";
         UUID uuid = null;
-        while(!uuidString.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
+        while (!uuidString.matches("[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}")
                 || assignedUUIDs.contains(uuid)) {
             uuid = UUID.randomUUID();
             uuidString = uuid.toString();

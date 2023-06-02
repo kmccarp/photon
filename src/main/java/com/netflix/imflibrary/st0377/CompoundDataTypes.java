@@ -50,8 +50,10 @@ public interface CompoundDataTypes
         @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
         public static final class Header
         {
-            @MXFProperty(size=4) private final Long numberOfElements = null;
-            @MXFProperty(size=4) private final Long sizeOfElement = null;
+            @MXFProperty(size = 4)
+            private final Long numberOfElements = null;
+            @MXFProperty(size = 4)
+            private final Long sizeOfElement = null;
 
             /**
              * Instantiates a new collection Header.
@@ -165,7 +167,7 @@ public interface CompoundDataTypes
                         sb.append(String.format("0x%x(%d)%n", entry, entry));
                     }
                     else if (entry instanceof InterchangeObject.InterchangeObjectBO.StrongRef
-                                || entry instanceof UL){
+                            || entry instanceof UL) {
                         sb.append(String.format("%s%n", entry.toString()));
                     }
                     else
@@ -188,8 +190,10 @@ public interface CompoundDataTypes
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     final class Rational
     {
-        @MXFProperty(size=4) private final Long numerator = null;
-        @MXFProperty(size=4) private final Long denominator = null;
+        @MXFProperty(size = 4)
+        private final Long numerator = null;
+        @MXFProperty(size = 4)
+        private final Long denominator = null;
 
         /**
          * Instantiates a new Rational.
@@ -271,13 +275,20 @@ public interface CompoundDataTypes
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     final class Timestamp
     {
-        @MXFProperty(size=2) private final Short year = null;
-        @MXFProperty(size=1) private final Short month = null;
-        @MXFProperty(size=1) private final Short day = null;
-        @MXFProperty(size=1) private final Short hour = null;
-        @MXFProperty(size=1) private final Short minute = null;
-        @MXFProperty(size=1) private final Short second = null;
-        @MXFProperty(size=1) private final Short msecByFour = null;
+        @MXFProperty(size = 2)
+        private final Short year = null;
+        @MXFProperty(size = 1)
+        private final Short month = null;
+        @MXFProperty(size = 1)
+        private final Short day = null;
+        @MXFProperty(size = 1)
+        private final Short hour = null;
+        @MXFProperty(size = 1)
+        private final Short minute = null;
+        @MXFProperty(size = 1)
+        private final Short second = null;
+        @MXFProperty(size = 1)
+        private final Short msecByFour = null;
 
         /**
          * Instantiates a new Timestamp.
@@ -305,7 +316,7 @@ public interface CompoundDataTypes
         {
             StringBuilder sb = new StringBuilder();
             sb.append(String.format("year = %d, month = %d, day = %d, hour = %d, minute = %d, second = %d, msec = %d%n",
-                    this.year, this.month, this.day, this.hour, this.minute, this.second, this.msecByFour*4));
+                    this.year, this.month, this.day, this.hour, this.minute, this.second, this.msecByFour * 4));
             return sb.toString();
         }
 

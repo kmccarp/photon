@@ -23,9 +23,9 @@ package com.netflix.imflibrary.exceptions;
 public class IMFAuthoringException extends RuntimeException {
 
     public IMFAuthoringException()
-        {
-            super();
-        }
+    {
+        super();
+    }
 
     public IMFAuthoringException(String s)
     {
@@ -38,7 +38,7 @@ public class IMFAuthoringException extends RuntimeException {
     }
 
     public IMFAuthoringException(String s, Throwable t)
-        {
-            super(s,t);
-        }
+    {
+        super(s, t);
+    }
 }

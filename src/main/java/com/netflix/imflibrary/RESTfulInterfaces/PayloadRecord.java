@@ -20,7 +20,7 @@ public class PayloadRecord {
      * @param originalFileOffset - offset of the data in the original asset/file
      * @param originalSize - size of the payload as read from the original asset/file
      */
-    public PayloadRecord(byte[] payload, PayloadAssetType payloadAssetType, @Nullable Long originalFileOffset, @Nullable Long originalSize){
+    public PayloadRecord(byte[] payload, PayloadAssetType payloadAssetType, @Nullable Long originalFileOffset, @Nullable Long originalSize) {
         this.payload = Arrays.copyOf(payload, payload.length);
         this.payloadAssetType = payloadAssetType;
         this.originalFileOffset = originalFileOffset;
@@ -31,7 +31,7 @@ public class PayloadRecord {
      * A getter for the Payload raw bytes
      * @return a byte[] containing the raw bytes that need to be analyzed
      */
-    public byte[] getPayload(){
+    public byte[] getPayload() {
         return Arrays.copyOf(payload, payload.length);
     }
 
@@ -39,7 +39,7 @@ public class PayloadRecord {
      * A getter for the Payload Asset type
      * @return the PayloadAssetType of the payload
      */
-    public PayloadAssetType getPayloadAssetType(){
+    public PayloadAssetType getPayloadAssetType() {
         return this.payloadAssetType;
     }
 
@@ -59,7 +59,7 @@ public class PayloadRecord {
 
         private final String assetType;
 
-        PayloadAssetType(String assetType){
+        PayloadAssetType(String assetType) {
             this.assetType = assetType;
         }
 
@@ -67,7 +67,7 @@ public class PayloadRecord {
          * A toString() method
          * @return string representation of this enumeration constant
          */
-        public String toString(){
+        public String toString() {
             return this.assetType;
         }
     }

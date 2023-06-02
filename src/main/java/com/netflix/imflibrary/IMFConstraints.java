@@ -52,9 +52,11 @@ public final class IMFConstraints
     public static final String IMSC1ImageProfileDesignator = "http://www.w3.org/ns/ttml/profile/imsc1/image";
     public static final String IMSC1ImageResourceMimeMediaType = "image/png";
     public static final String IMSC1FontResourceMimeMediaType = "application/x-font-opentype";
+
     //to prevent instantiation
     private IMFConstraints()
-    {}
+    {
+    }
 
     /**
      * Checks the compliance of an OP1A-conformant header partition with st2067-5:2013. A runtime
@@ -83,7 +85,7 @@ public final class IMFConstraints
         {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String
                     .format("IMFTrackFile represented by Id %s, Lower four bits of Operational Pattern qualifier byte = 0x%x, should be = 0x01 per the definition of OperationalPattern-1A for Package Complexity.",
-                    packageID.toString(), bytes[13]));
+                            packageID.toString(), bytes[13]));
         }
 
         //Section 8.3.3 st377-1:2011
@@ -91,7 +93,7 @@ public final class IMFConstraints
         {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String
                     .format("IMFTrackFile represented by Id %s, Lower four bits of Operational Pattern qualifier byte = 0x%x, should be = 0x01 per the definition of OperationalPattern-1A for Item Complexity.",
-                    packageID.toString(), bytes[12]));
+                            packageID.toString(), bytes[12]));
         }
 
         //Section 5.1.1#13 st2067-5:2014 , primary package identifier for Preface shall be set to the top-level file package
@@ -106,11 +108,11 @@ public final class IMFConstraints
             byte[] packageUID_first16Bytes_Constrained = {0x06, 0x0a, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05, 0x01, 0x01, 0x0f, 0x20, 0x13, 0x00, 0x00, 0x00};
             byte[] packageUID_first16Bytes = Arrays.copyOfRange(packageUID.getUID(), 0, packageUID_first16Bytes_Constrained.length);
             boolean result = packageUID_first16Bytes[0] == packageUID_first16Bytes_Constrained[0];
-            for(int i=1; i < packageUID_first16Bytes_Constrained.length ; i++){
+            for (int i = 1; i < packageUID_first16Bytes_Constrained.length; i++) {
                 result &= packageUID_first16Bytes[i] == packageUID_first16Bytes_Constrained[i];
             }
             //Section 5.1.5 st2067-2:2016
-            if(!result){
+            if (!result) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String.format("PackageUID in FilePackage = %s, which does not obey the constraint that the first 16 bytes = %s in the IMFTrackFile represented by ID %s.",
                         packageUID.toString(), Utilities.serializeBytesToHexString(packageUID_first16Bytes_Constrained), packageID.toString()));
             }
@@ -126,7 +128,7 @@ public final class IMFConstraints
                     numEssenceTracks++;
                 }
                 //Section 5.1.7 st2067-2:2016
-                if(timelineTrack.getOrigin() != 0){
+                if (timelineTrack.getOrigin() != 0) {
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String.format("The origin property of a timeline track in the IMFTrackFile represented by ID %s is non-zero, only 0 is allowed.", packageID));
                 }
             }
@@ -146,12 +148,13 @@ public final class IMFConstraints
                 if (sequence == null) {
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String.format("TimelineTrack with instanceUID = %s in the IMFTrackFile represented by ID %s has no sequence.",
                             timelineTrack.getInstanceUID(), packageID.toString()));
-                } else {
+                }
+                else {
                     MXFDataDefinition filePackageMxfDataDefinition = sequence.getMxfDataDefinition();
                     GenericDescriptor genericDescriptor = filePackage.getGenericDescriptor();
                     if (filePackageMxfDataDefinition.equals(MXFDataDefinition.SOUND)) {
                         if (genericDescriptor instanceof WaveAudioEssenceDescriptor) {
-                            WaveAudioEssenceDescriptor waveAudioEssenceDescriptor = (WaveAudioEssenceDescriptor) genericDescriptor;
+                            WaveAudioEssenceDescriptor waveAudioEssenceDescriptor = (WaveAudioEssenceDescriptor)genericDescriptor;
                             if ((waveAudioEssenceDescriptor.getChannelAssignmentUL() == null) ||
                                     (!waveAudioEssenceDescriptor.getChannelAssignmentUL().equals(new MXFUID(IMFConstraints.IMF_CHANNEL_ASSIGNMENT_UL)))) {
                                 //Section 5.3.4.2 st2067-2:2016
@@ -161,7 +164,8 @@ public final class IMFConstraints
                             //RFC-5646 spoken language is a part of the MCALabelSubDescriptor and SoundFieldGroupLabelSubdescriptors according to Section 5.3.6.5 st2067-2:2016 has language around RFC-5646 primary spoken language
                             if (headerPartition.getAudioEssenceSpokenLanguage() == null) {
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String.format("WaveAudioEssenceDescriptor in the IMFTrackFile represented by ID %s does not have a RFC5646 spoken language indicated, language code shall be set in the SoundFieldGroupLabelSubDescriptor, unless the AudioEssence does not have a primary spoken language.", packageID.toString()));
-                            } else {
+                            }
+                            else {
                                 //Section 6.3.6 st377-4:2012
                                 if (!IMFConstraints.isSpokenLanguageRFC5646Compliant(headerPartition.getAudioEssenceSpokenLanguage())) {
                                     List<String> strings = IMFConstraints.getPrimarySpokenLanguageUnicodeString(headerPartition.getAudioEssenceSpokenLanguage());
@@ -178,7 +182,8 @@ public final class IMFConstraints
                             if (subDescriptors.size() == 0) {
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX +
                                         String.format("WaveAudioEssenceDescriptor in the IMFTrackFile represented by ID %s indicates a channel count of %d, however there are %d AudioChannelLabelSubdescriptors, every audio channel should refer to exactly one AudioChannelLabelSubDescriptor and vice versa.", packageID.toString(), waveAudioEssenceDescriptor.getChannelCount(), subDescriptors.size()));
-                            } else {
+                            }
+                            else {
                                 //Section 5.3.6.2 st2067-2:2016
                                 Map<Long, AudioChannelLabelSubDescriptor> audioChannelLabelSubDescriptorMap = headerPartition.getAudioChannelIDToMCASubDescriptorMap();
                                 if (waveAudioEssenceDescriptor.getChannelCount() == 0 || waveAudioEssenceDescriptor.getChannelCount() != audioChannelLabelSubDescriptorMap.size()) {
@@ -197,7 +202,8 @@ public final class IMFConstraints
                                 if (soundFieldGroupLabelSubDescriptors.size() != 1) {
                                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX +
                                             String.format("WaveAudioEssenceDescriptor in the IMFTrackFile represented by ID %s refers to %d SoundFieldGroupLabelSubDescriptors exactly 1 is required", packageID.toString(), soundFieldGroupLabelSubDescriptors.size()));
-                                } else {
+                                }
+                                else {
                                     SoundFieldGroupLabelSubDescriptor.SoundFieldGroupLabelSubDescriptorBO soundFieldGroupLabelSubDescriptorBO = SoundFieldGroupLabelSubDescriptor.SoundFieldGroupLabelSubDescriptorBO.class.cast(soundFieldGroupLabelSubDescriptors.get(0));
                                     //Section 5.3.6.5 st2067-2:2016
                                     if ((soundFieldGroupLabelSubDescriptorBO.getMCATitle() == null || soundFieldGroupLabelSubDescriptorBO.getMCATitle().isEmpty())
@@ -207,7 +213,7 @@ public final class IMFConstraints
                                         imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX +
                                                 String.format("WaveAudioEssenceDescriptor in the IMFTrackFile represented by ID %s refers to a SoundFieldGroupLabelSubDescriptor that is missing one/all of MCATitle, MCATitleVersion, MCAAudioContentKind, MCAAudioElementKind, %n%s.", packageID.toString(), soundFieldGroupLabelSubDescriptorBO.toString()));
                                     }
-                                    SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor) headerPartition.getSoundFieldGroupLabelSubDescriptors()
+                                    SoundFieldGroupLabelSubDescriptor soundFieldGroupLabelSubDescriptor = (SoundFieldGroupLabelSubDescriptor)headerPartition.getSoundFieldGroupLabelSubDescriptors()
                                             .get(0);
                                     List<InterchangeObject> audioChannelLabelSubDescriptors = headerPartition.getAudioChannelLabelSubDescriptors();
                                     //Section 6.3.2 st377-4:2012
@@ -215,7 +221,8 @@ public final class IMFConstraints
                                         imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX +
                                                 String.format("SoundFieldGroupLabelSubDescriptor is missing MCALinkID, in the IMFTrackFile represented by ID %s",
                                                         packageID.toString()));
-                                    } else {
+                                    }
+                                    else {
                                         for (InterchangeObject interchangeObject : audioChannelLabelSubDescriptors) {
                                             AudioChannelLabelSubDescriptor audioChannelLabelSubDescriptor = AudioChannelLabelSubDescriptor.class.cast(interchangeObject);
                                             //Section 5.3.6.3 st2067-2:2016
@@ -245,7 +252,7 @@ public final class IMFConstraints
                             if (audioSampleRate != 48000
                                     && audioSampleRate != 96000) {
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMF_ESSENCE_EXCEPTION_PREFIX +
-                                        String.format("WaveAudioEssenceDescriptor in the IMFTrackFile represented by ID %s seems to indicate an Audio Sample Rate = %f, only 48000 and 96000 are allowed.", packageID.toString(), (double) waveAudioEssenceDescriptor.getAudioSamplingRateNumerator() / waveAudioEssenceDescriptor.getAudioSamplingRateDenominator()));
+                                        String.format("WaveAudioEssenceDescriptor in the IMFTrackFile represented by ID %s seems to indicate an Audio Sample Rate = %f, only 48000 and 96000 are allowed.", packageID.toString(), (double)waveAudioEssenceDescriptor.getAudioSamplingRateNumerator() / waveAudioEssenceDescriptor.getAudioSamplingRateDenominator()));
                             }
 
                             int bitDepth = waveAudioEssenceDescriptor.getQuantizationBits();
@@ -258,7 +265,8 @@ public final class IMFConstraints
 //                        else {//Section 5.3.4.1 st2067-2:2016
 //                            imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String.format("Header Partition does not have a WaveAudioEssenceDescriptor set in the IMFTrackFile represented by ID %s", packageID.toString()));
 //                        }
-                    } else if (filePackageMxfDataDefinition.equals(MXFDataDefinition.DATA)) {
+                    }
+                    else if (filePackageMxfDataDefinition.equals(MXFDataDefinition.DATA)) {
                         if (genericDescriptor instanceof TimedTextDescriptor) {
                             TimedTextDescriptor timedTextDescriptor = TimedTextDescriptor.class.cast(genericDescriptor);
 
@@ -274,7 +282,7 @@ public final class IMFConstraints
                                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CORE_CONSTRAINTS_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL, IMFConstraints
                                         .IMF_ESSENCE_EXCEPTION_PREFIX + String.format("Invalid UCSEncoding(%s) in TimedTextDescriptor within trackFile represented by ID %s. Only UTF-8 is valid UCSEncoding. ",
                                         timedTextDescriptor
-                                        .getUCSEncoding(),
+                                                .getUCSEncoding(),
                                         packageID.toString()));
                             }
                             //https://www.w3.org/TR/ttml-imsc1/ Section 6.3
@@ -284,7 +292,7 @@ public final class IMFConstraints
                                         "{%s}, {%s}",
                                         timedTextDescriptor.getNamespaceURI(), packageID.toString(), IMSC1TextProfileDesignator, IMSC1ImageProfileDesignator));
                             }
-                            for(TimeTextResourceSubDescriptor textResourceSubDescriptor : timedTextDescriptor.getSubDescriptorList()) {
+                            for (TimeTextResourceSubDescriptor textResourceSubDescriptor : timedTextDescriptor.getSubDescriptorList()) {
                                 //Section 5.4.5 and 5.4.6 st2067-2:2016
                                 if (!textResourceSubDescriptor.getMimeMediaType().equals(IMSC1ImageResourceMimeMediaType) && !textResourceSubDescriptor.getMimeMediaType().equals
                                         (IMSC1FontResourceMimeMediaType)) {
@@ -304,7 +312,7 @@ public final class IMFConstraints
 
         }
 
-        if(imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors())){
+        if (imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors())) {
             throw new IMFException(String.format("Found fatal errors in the in the IMFTrackFile represented by ID %s that violate the IMF Core constraints.", packageID.toString()), imfErrorLogger);
         }
         return new HeaderPartitionIMF(headerPartitionOP1A);
@@ -350,7 +358,7 @@ public final class IMFConstraints
                 }
             }
         }
-        if(imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors())){
+        if (imfErrorLogger.hasFatalErrors(previousNumberOfErrors, imfErrorLogger.getNumberOfErrors())) {
             throw new MXFException(String.format("Found fatal errors in the IMFTrackFile that violate the IMF Core constraints"), imfErrorLogger);
         }
     }
@@ -377,7 +385,7 @@ public final class IMFConstraints
             for (TimelineTrack timelineTrack : filePackage.getTimelineTracks())
             {
                 Sequence sequence = timelineTrack.getSequence();
-                if(sequence == null){
+                if (sequence == null) {
                     imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_ESSENCE_COMPONENT_ERROR, IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, IMFConstraints.IMF_ESSENCE_EXCEPTION_PREFIX + String.format("TimelineTrack with instanceUID = %s in the IMFTrackFile represented by ID %s has no sequence.",
                             timelineTrack.getInstanceUID(), packageID.toString()));
                 }
@@ -407,7 +415,7 @@ public final class IMFConstraints
                         numPartitionsWithEssence, filePackageMxfDataDefinition, packageID.toString()));
             }
         }
-        if(imfErrorLogger.hasFatalErrors()){
+        if (imfErrorLogger.hasFatalErrors()) {
             throw new MXFException(String.format("Found fatal errors in the IMFTrackFile represented by ID %s that violate the IMF Core constraints.", packageID.toString()), imfErrorLogger);
         }
     }
@@ -420,6 +428,7 @@ public final class IMFConstraints
     {
         private final MXFOperationalPattern1A.HeaderPartitionOP1A headerPartitionOP1A;
         private final IMFErrorLogger imfErrorLogger;
+
         private HeaderPartitionIMF(MXFOperationalPattern1A.HeaderPartitionOP1A headerPartitionOP1A)
         {
             this.headerPartitionOP1A = headerPartitionOP1A;
@@ -442,15 +451,15 @@ public final class IMFConstraints
             {
                 targetMXFDataDefinition = MXFDataDefinition.PICTURE;
             }
-            else if(essenceType.equals(HeaderPartition.EssenceTypeEnum.MainAudioEssence))
+            else if (essenceType.equals(HeaderPartition.EssenceTypeEnum.MainAudioEssence))
             {
                 targetMXFDataDefinition = MXFDataDefinition.SOUND;
             }
-            else if(essenceType.equals(HeaderPartition.EssenceTypeEnum.IABEssence))
+            else if (essenceType.equals(HeaderPartition.EssenceTypeEnum.IABEssence))
             {
                 targetMXFDataDefinition = MXFDataDefinition.SOUND;
             }
-            else{
+            else {
                 targetMXFDataDefinition = MXFDataDefinition.DATA;
             }
 
@@ -565,7 +574,7 @@ public final class IMFConstraints
          * A method that returns the IMF Essence Component type.
          * @return essenceTypeEnum an enumeration constant corresponding to the IMFEssenceComponent type
          */
-        public HeaderPartition.EssenceTypeEnum getEssenceType(){
+        public HeaderPartition.EssenceTypeEnum getEssenceType() {
             HeaderPartition headerPartition = this.headerPartitionOP1A.getHeaderPartition();
             Preface preface = headerPartition.getPreface();
             MXFDataDefinition filePackageMxfDataDefinition = null;
@@ -582,9 +591,9 @@ public final class IMFConstraints
                 }
             }
             List<HeaderPartition.EssenceTypeEnum> essenceTypes = headerPartition.getEssenceTypes();
-            if(essenceTypes.size() != 1){
+            if (essenceTypes.size() != 1) {
                 StringBuilder stringBuilder = new StringBuilder();
-                for(HeaderPartition.EssenceTypeEnum essenceTypeEnum : essenceTypes){
+                for (HeaderPartition.EssenceTypeEnum essenceTypeEnum : essenceTypes) {
                     stringBuilder.append(String.format("%s, ", essenceTypeEnum.toString()));
                 }
                 String message = String.format("IMF constrains MXF essences to mono essences only, however more" +
@@ -613,26 +622,26 @@ public final class IMFConstraints
      * @param rfc5646SpokenLanguage the language tag that needs to be verified
      * @return a boolean indicating the result of the verification check
      */
-    public static boolean isSpokenLanguageRFC5646Compliant(String rfc5646SpokenLanguage){
-        if(rfc5646SpokenLanguage != null){
+    public static boolean isSpokenLanguageRFC5646Compliant(String rfc5646SpokenLanguage) {
+        if (rfc5646SpokenLanguage != null) {
             Matcher matcher = buildRegExpLangRFC5646().matcher(rfc5646SpokenLanguage);
             return matcher.find();
         }
         return false;
     }
 
-    private static List<String> getPrimarySpokenLanguageUnicodeString(String rfc5646SpokenLanguage){
+    private static List<String> getPrimarySpokenLanguageUnicodeString(String rfc5646SpokenLanguage) {
 
         Integer asciiStartRange = 0x21;
         Integer asciiEndRange = 0x7e;
         String inputString = rfc5646SpokenLanguage;
         char[] charArray = inputString.toCharArray();
         List<Integer> unicodeCodePoints = new ArrayList<>();
-        for (int i=0; i<charArray.length;)
+        for (int i = 0; i < charArray.length; )
         {
             if (!Character.isHighSurrogate(charArray[i]))
             {
-                int unicodeCodePoint = Character.codePointAt(charArray, i, (i+1));
+                int unicodeCodePoint = Character.codePointAt(charArray, i, (i + 1));
                 unicodeCodePoints.add(unicodeCodePoint);
                 i++;
             }
@@ -640,7 +649,7 @@ public final class IMFConstraints
             {
                 if ((i + 1) < charArray.length)
                 {
-                    int unicodeCodePoint = Character.codePointAt(charArray, i, (i+2));
+                    int unicodeCodePoint = Character.codePointAt(charArray, i, (i + 2));
                     unicodeCodePoints.add(unicodeCodePoint);
                     i += 2;
                 }
@@ -657,11 +666,11 @@ public final class IMFConstraints
         for (int unicodeCodePoint : unicodeCodePoints)
         {
             unicodeString.append(String.format("%02x", unicodeCodePoint));
-            if(unicodeCodePoint < asciiStartRange
-                    || unicodeCodePoint > asciiEndRange){
+            if (unicodeCodePoint < asciiStartRange
+                    || unicodeCodePoint > asciiEndRange) {
                 stringBuilder.append(".");
             }
-            else{
+            else {
                 stringBuilder.append(String.format("%s", String.copyValueOf(Character.toChars(unicodeCodePoint))));
             }
         }

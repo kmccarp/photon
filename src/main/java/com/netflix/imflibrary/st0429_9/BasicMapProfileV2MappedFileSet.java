@@ -47,6 +47,7 @@ public final class BasicMapProfileV2MappedFileSet
     private final AssetMap assetMap;
     private final URI absoluteAssetMapURI;
     private final IMFErrorLogger imfErrorLogger;
+
     /**
      * Constructor for a MappedFileSet object from a file representing the root of a directory tree
      * @param rootFile the directory which serves as the tree root of the Mapped File Set
@@ -60,7 +61,7 @@ public final class BasicMapProfileV2MappedFileSet
             String message = String.format("Root file %s corresponding to the mapped file set is not a " +
                     "directory", rootFile.getAbsolutePath());
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_AM_ERROR, IMFErrorLogger.IMFErrors
-                    .ErrorLevels.FATAL,
+                            .ErrorLevels.FATAL,
                     message);
             throw new IMFException(message, imfErrorLogger);
         }

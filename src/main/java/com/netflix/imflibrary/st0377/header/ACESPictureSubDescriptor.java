@@ -41,7 +41,7 @@ public final class ACESPictureSubDescriptor extends SubDescriptor {
      * Constructor for a ACESPictureSubDescriptor object
      * @param subDescriptorBO the parsed ACESPictureSubDescriptor object
      */
-    public ACESPictureSubDescriptor(ACESPictureSubDescriptorBO subDescriptorBO){
+    public ACESPictureSubDescriptor(ACESPictureSubDescriptorBO subDescriptorBO) {
         this.subDescriptorBO = subDescriptorBO;
     }
 
@@ -59,12 +59,17 @@ public final class ACESPictureSubDescriptor extends SubDescriptor {
      * Object corresponding to a parsed ACESPictureSubDescriptor as defined in st2067-50
      */
     @Immutable
-    public static final class ACESPictureSubDescriptorBO extends SubDescriptorBO{
-        @MXFProperty(size=0, charset="UTF-16") private final String aces_authoring_information = null;
-        @MXFProperty(size=12) private final byte[] aces_mastering_display_primaries = null;
-        @MXFProperty(size=4) private final byte[] aces_mastering_white = null;
-        @MXFProperty(size=4) private final Integer aces_max_luminance = null;
-        @MXFProperty(size=4) private final Integer aces_min_luminance = null;
+    public static final class ACESPictureSubDescriptorBO extends SubDescriptorBO {
+        @MXFProperty(size = 0, charset = "UTF-16")
+        private final String aces_authoring_information = null;
+        @MXFProperty(size = 12)
+        private final byte[] aces_mastering_display_primaries = null;
+        @MXFProperty(size = 4)
+        private final byte[] aces_mastering_white = null;
+        @MXFProperty(size = 4)
+        private final Integer aces_max_luminance = null;
+        @MXFProperty(size = 4)
+        private final Integer aces_min_luminance = null;
 
         /**
          * Instantiates a new ACESPictureSubDescriptor ByteObject.
@@ -108,14 +113,14 @@ public final class ACESPictureSubDescriptor extends SubDescriptor {
             sb.append(String.format("aces_authoring_information = %s", this.aces_authoring_information));
             String aces_mastering_display_primariesString = "";
             if (aces_mastering_display_primaries != null) {
-                for(byte b: aces_mastering_display_primaries){
+                for (byte b : aces_mastering_display_primaries) {
                     aces_mastering_display_primariesString = aces_mastering_display_primariesString.concat(String.format("%02x", b));
                 }
             }
             sb.append(String.format("aces_mastering_display_primaries = %s", aces_mastering_display_primariesString));
             String aces_mastering_whiteString = "";
             if (aces_mastering_white != null) {
-                for(byte b: aces_mastering_white){
+                for (byte b : aces_mastering_white) {
                     aces_mastering_whiteString = aces_mastering_whiteString.concat(String.format("%02x", b));
                 }
             }

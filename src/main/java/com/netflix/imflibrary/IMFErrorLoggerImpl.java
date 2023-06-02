@@ -129,7 +129,7 @@ public final class IMFErrorLoggerImpl implements IMFErrorLogger //This is really
      */
     public List<ErrorLogger.ErrorObject> getErrors(IMFErrors.ErrorCodes errorCode) throws IllegalArgumentException
     {
-        return getErrors(errorCode, 0 , this.errorObjects.size());
+        return getErrors(errorCode, 0, this.errorObjects.size());
     }
 
     /**

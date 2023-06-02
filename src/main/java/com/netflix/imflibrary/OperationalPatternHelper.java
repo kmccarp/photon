@@ -28,15 +28,16 @@ public final class OperationalPatternHelper {
 
     private static final int packageComplexity_key_byte_position = 13; //Byte-14 of the OperationalPattern UL identifies the OperationPattern Package Complexity
     private static final int itemComplexity_key_byte_position = 12; //Byte-13 of the OperationalPattern UL identifies the OperationPattern Package Complexity
+
     //Private default constructor to prevent instantiation
-    private OperationalPatternHelper(){
+    private OperationalPatternHelper() {
 
     }
 
     /**
      * An enumeration representing the Package Complexity
      */
-    public static enum PackageComplexity{
+    public static enum PackageComplexity {
         SinglePackage(0x01),
         GangedPackages(0x02),
         AlternatePackages (0x03),
@@ -44,11 +45,11 @@ public final class OperationalPatternHelper {
 
         private final int packageComplexityKey;
 
-        private PackageComplexity (int packageComplexityKey){
+        private PackageComplexity(int packageComplexityKey) {
             this.packageComplexityKey = packageComplexityKey;
         }
 
-        private int getPackageComplexityKey(){
+        private int getPackageComplexityKey() {
             return this.packageComplexityKey;
         }
     }
@@ -56,7 +57,7 @@ public final class OperationalPatternHelper {
     /**
      * An enumeration representing ItemComplexity
      */
-    public static enum ItemComplexity{
+    public static enum ItemComplexity {
         SingleItem(0x01),
         PlaylistItems(0x02),
         EditItems (0x03),
@@ -64,11 +65,11 @@ public final class OperationalPatternHelper {
 
         private final int itemComplexityKey;
 
-        private ItemComplexity (int itemComplexityKey){
+        private ItemComplexity(int itemComplexityKey) {
             this.itemComplexityKey = itemComplexityKey;
         }
 
-        private int getItemComplexityKey(){
+        private int getItemComplexityKey() {
             return this.itemComplexityKey;
         }
     }
@@ -78,10 +79,10 @@ public final class OperationalPatternHelper {
      * @param ul the universal label corresponding to the operational pattern that this file complies with
      * @return returns the Package Complexity corresponding to the Operational Pattern
      */
-    public static PackageComplexity getPackageComplexity(byte[] ul){
+    public static PackageComplexity getPackageComplexity(byte[] ul) {
         EnumSet<PackageComplexity> enumSet = EnumSet.copyOf(Arrays.asList(PackageComplexity.values()));
-        for(PackageComplexity packageComplexity : enumSet){
-            if(packageComplexity.getPackageComplexityKey() == ul[packageComplexity_key_byte_position]){
+        for (PackageComplexity packageComplexity : enumSet) {
+            if (packageComplexity.getPackageComplexityKey() == ul[packageComplexity_key_byte_position]) {
                 return packageComplexity;
             }
         }
@@ -93,10 +94,10 @@ public final class OperationalPatternHelper {
      * @param ul the universal label corresponding to the operational pattern that this file complies with
      * @return returns the Item Complexity corresponding to this Operational Pattern
      */
-    public static ItemComplexity getItemComplexity(byte[] ul){
+    public static ItemComplexity getItemComplexity(byte[] ul) {
         EnumSet<ItemComplexity> enumSet = EnumSet.copyOf(Arrays.asList(ItemComplexity.values()));
-        for(ItemComplexity itemComplexity : enumSet){
-            if(itemComplexity.getItemComplexityKey() == ul[itemComplexity_key_byte_position]){
+        for (ItemComplexity itemComplexity : enumSet) {
+            if (itemComplexity.getItemComplexityKey() == ul[itemComplexity_key_byte_position]) {
                 return itemComplexity;
             }
         }

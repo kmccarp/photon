@@ -60,16 +60,16 @@ public class PackingListBuilderFunctionalTest {
         List<PackingList.Asset> assets = packingList.getAssets();
 
         List<PackingListBuilder.PackingListBuilderAsset_2007> packingListBuilderAssets = new ArrayList<>();
-        for(PackingList.Asset asset : assets){
+        for (PackingList.Asset asset : assets) {
             org.smpte_ra.schemas._429_8._2007.pkl.UserText annotationText = PackingListBuilder.buildPKLUserTextType_2007("Netflix", "en");
             org.smpte_ra.schemas._429_8._2007.pkl.UserText originalFileName = PackingListBuilder.buildPKLUserTextType_2007(asset.getOriginalFilename(), "en");
             PackingListBuilder.PackingListBuilderAsset_2007 asset_2007 =
                     new PackingListBuilder.PackingListBuilderAsset_2007(asset.getUUID(),
-                                                                        annotationText,
-                                                                        asset.getHash(),
-                                                                        asset.getSize(),
-                                                                        PackingListBuilder.PKLAssetTypeEnum.getAssetTypeEnum(asset.getType()),
-                                                                        originalFileName);
+                            annotationText,
+                            asset.getHash(),
+                            asset.getSize(),
+                            PackingListBuilder.PKLAssetTypeEnum.getAssetTypeEnum(asset.getType()),
+                            originalFileName);
             packingListBuilderAssets.add(asset_2007);
         }
 
@@ -88,23 +88,23 @@ public class PackingListBuilderFunctionalTest {
         new PackingListBuilder(packingList.getUUID(), issueDate, tempDir, packingListBuilderErrorLogger).buildPackingList_2007(annotationText, issuer, creator, packingListBuilderAssets);
 
         imfErrorLogger.addAllErrors(packingList.getErrors());
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, 0, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, 0, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the PackingList. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, 0, imfErrorLogger.getNumberOfErrors()))));
         }
 
         File pklOutputFile = null;
-        for(File file : tempDir.listFiles()){
-            if(file.getName().contains("PKL-")){
+        for (File file : tempDir.listFiles()) {
+            if (file.getName().contains("PKL-")) {
                 pklOutputFile = file;
             }
         }
-        if(pklOutputFile == null){
+        if (pklOutputFile == null) {
             throw new IMFAuthoringException(String.format("PackingList file does not exist in the working directory %s, cannot generate the rest of the documents", tempDir.getAbsolutePath()));
         }
         Assert.assertTrue(pklOutputFile.length() > 0);
 
         resourceByteRangeProvider = new FileByteRangeProvider(pklOutputFile);
-        List<ErrorLogger.ErrorObject> errors = IMPValidator.validatePKL(new PayloadRecord(resourceByteRangeProvider.getByteRangeAsBytes(0, pklOutputFile.length()-1), PayloadRecord.PayloadAssetType.PackingList, 0L, 0L));
+        List<ErrorLogger.ErrorObject> errors = IMPValidator.validatePKL(new PayloadRecord(resourceByteRangeProvider.getByteRangeAsBytes(0, pklOutputFile.length() - 1), PayloadRecord.PayloadAssetType.PackingList, 0L, 0L));
         Assert.assertEquals(errors.size(), 0);
 
         //Destroy the temporary working directory
@@ -123,7 +123,7 @@ public class PackingListBuilderFunctionalTest {
         List<PackingList.Asset> assets = packingList.getAssets();
 
         List<PackingListBuilder.PackingListBuilderAsset_2016> packingListBuilderAssets = new ArrayList<>();
-        for(PackingList.Asset asset : assets){
+        for (PackingList.Asset asset : assets) {
             org.smpte_ra.schemas._2067_2._2016.pkl.UserText annotationText = PackingListBuilder.buildPKLUserTextType_2016("Netflix", "en");
             org.smpte_ra.schemas._2067_2._2016.pkl.UserText originalFileName = PackingListBuilder.buildPKLUserTextType_2016(asset.getOriginalFilename(), "en");
             org.w3._2000._09.xmldsig_.DigestMethodType hashAlgorithm = new org.w3._2000._09.xmldsig_.DigestMethodType();
@@ -152,23 +152,23 @@ public class PackingListBuilderFunctionalTest {
         org.smpte_ra.schemas._2067_2._2016.pkl.UserText issuer = PackingListBuilder.buildPKLUserTextType_2016("Netflix", "en");
         new PackingListBuilder(packingList.getUUID(), issueDate, tempDir, packingListBuilderErrorLogger).buildPackingList_2016(annotationText, issuer, creator, packingListBuilderAssets);
 
-        if(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, 0, imfErrorLogger.getNumberOfErrors()).size() > 0){
+        if (imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, 0, imfErrorLogger.getNumberOfErrors()).size() > 0) {
             throw new IMFAuthoringException(String.format("Fatal errors occurred while generating the PackingList. Please see following error messages %s", Utilities.serializeObjectCollectionToString(imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, 0, imfErrorLogger.getNumberOfErrors()))));
         }
 
         File pklOutputFile = null;
-        for(File file : tempDir.listFiles()){
-            if(file.getName().contains("PKL-")){
+        for (File file : tempDir.listFiles()) {
+            if (file.getName().contains("PKL-")) {
                 pklOutputFile = file;
             }
         }
-        if(pklOutputFile == null){
+        if (pklOutputFile == null) {
             throw new IMFAuthoringException(String.format("PackingList file does not exist in the working directory %s, cannot generate the rest of the documents", tempDir.getAbsolutePath()));
         }
         Assert.assertTrue(pklOutputFile.length() > 0);
 
         resourceByteRangeProvider = new FileByteRangeProvider(pklOutputFile);
-        List<ErrorLogger.ErrorObject> pklValidationErrors = IMPValidator.validatePKL(new PayloadRecord(resourceByteRangeProvider.getByteRangeAsBytes(0, pklOutputFile.length()-1), PayloadRecord.PayloadAssetType.PackingList, 0L, 0L));
+        List<ErrorLogger.ErrorObject> pklValidationErrors = IMPValidator.validatePKL(new PayloadRecord(resourceByteRangeProvider.getByteRangeAsBytes(0, pklOutputFile.length() - 1), PayloadRecord.PayloadAssetType.PackingList, 0L, 0L));
         Assert.assertTrue(pklValidationErrors.size() == 0);
 
         //Destroy the temporary working directory

@@ -26,12 +26,12 @@ public class TestException  extends RuntimeException
 
     public TestException(Throwable cause, String format, Object ... args)
     {
-        super(args.length == 0? format : String.format(format, args), cause);
+        super(args.length == 0 ? format : String.format(format, args), cause);
     }
 
     public TestException(String format, Object ... args)
     {
-        super(args.length == 0? format : String.format(format, args));
+        super(args.length == 0 ? format : String.format(format, args));
     }
 
     public TestException(Throwable cause)

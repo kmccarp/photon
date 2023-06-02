@@ -31,7 +31,7 @@ public enum MXFRectangle {
     }
 
     public static MXFRectangle fromValue(String value) {
-        for (MXFRectangle mxfRectangleEnum: MXFRectangle.values()) {
+        for (MXFRectangle mxfRectangleEnum : MXFRectangle.values()) {
             if (mxfRectangleEnum.value.equals(value)) {
                 return mxfRectangleEnum;
             }

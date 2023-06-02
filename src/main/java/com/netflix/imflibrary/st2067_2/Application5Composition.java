@@ -47,20 +47,36 @@ public class Application5Composition extends AbstractApplicationComposition {
     public static final String SCHEMA_URI_APP5_2017 = "http://www.smpte-ra.org/ns/2067-50/2017";
     public static final Integer MAX_RGB_IMAGE_FRAME_WIDTH = Integer.MAX_VALUE; //TODO: 2067-50 specifies 2^32-1, would require using Long instead of Integer
     public static final Integer MAX_RGB_IMAGE_FRAME_HEIGHT = Integer.MAX_VALUE; //TODO: 2067-50 specifies 2^32-1, would require using Long instead of Integer
-    public static final Map<Colorimetry, Set<Integer>>colorToBitDepthMap = Collections.unmodifiableMap(new HashMap<Colorimetry, Set<Integer>>() {{
-        put(Colorimetry.Unknown, new HashSet<Integer>(){{ }});
-        put(Colorimetry.Color_App5_AP0, new HashSet<Integer>(){{ add(16); }});
-    }});
-    public static final Set<Integer>bitDepthsSupported = Collections.unmodifiableSet(new HashSet<Integer>() {{
-        add(16); }});
+    public static final Map<Colorimetry, Set<Integer>>colorToBitDepthMap = Collections.unmodifiableMap(new HashMap<Colorimetry, Set<Integer>>() {
+        {
+            put(Colorimetry.Unknown, new HashSet<Integer>(){
+                {
+                }
+            });
+            put(Colorimetry.Color_App5_AP0, new HashSet<Integer>(){
+                {
+                    add(16);
+                }
+            });
+        }
+    });
+    public static final Set<Integer>bitDepthsSupported = Collections.unmodifiableSet(new HashSet<Integer>() {
+        {
+            add(16);
+        }
+    });
 
-    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>() {{
-    }});
+    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+        }
+    });
 
-    private static final Set<String> acesPictureSubDescriptorHomogeneitySelectionSet = Collections.unmodifiableSet(new HashSet<String>(){{
-        add("ACESAuthoringInformation");
-    }});
-    
+    private static final Set<String> acesPictureSubDescriptorHomogeneitySelectionSet = Collections.unmodifiableSet(new HashSet<String>(){
+        {
+            add("ACESAuthoringInformation");
+        }
+    });
+
     public Application5Composition(@Nonnull IMFCompositionPlaylistType imfCompositionPlaylistType) {
         this(imfCompositionPlaylistType, new HashSet<>());
     }
@@ -101,7 +117,8 @@ public class Application5Composition extends AbstractApplicationComposition {
                     if (other.size() != refAcesPictureSubDescriptors.size()) { // Number of ACESPictureSubDescriptors is different
                         areAcesPictureSubDecriptorsHomogeneous = false;
                         inhomogeneousEssenceDescriptorIds.add(virtualTrackEssenceDescriptors.get(i).getFieldsAsUUID(regXMLLibDictionary.getSymbolNameFromURN(instanceID)).toString());
-                    } else {
+                    }
+                    else {
                         for (DOMNodeObjectModel desc : other) {
                             DOMNodeObjectModel selectOther = desc.createDOMNodeObjectModelSelectionSet(desc, acesPictureSubDescriptorHomogeneitySelectionSet);
                             if (!refAcesPictureSubDescriptors.contains(selectOther)) { // Value of Field ACESAuthoringInformation is different
@@ -111,9 +128,10 @@ public class Application5Composition extends AbstractApplicationComposition {
                         }
                     }
                 }
-            } else if (indexFirstAcesPictureSubdescriptor > 1 )  { // Inhomogeneous: First subdescriptor does not contain an ACESPictureSubDescriptor, but others do
+            }
+            else if (indexFirstAcesPictureSubdescriptor > 1) { // Inhomogeneous: First subdescriptor does not contain an ACESPictureSubDescriptor, but others do
                 areAcesPictureSubDecriptorsHomogeneous = false;
-                DOMNodeObjectModel firstOccurence = virtualTrackEssenceDescriptors.get(indexFirstAcesPictureSubdescriptor-1);
+                DOMNodeObjectModel firstOccurence = virtualTrackEssenceDescriptors.get(indexFirstAcesPictureSubdescriptor - 1);
                 if (firstOccurence != null) {
                     inhomogeneousEssenceDescriptorIds.add(firstOccurence.getFieldsAsUUID(regXMLLibDictionary.getSymbolNameFromURN(instanceID)).toString());
                 }
@@ -126,12 +144,12 @@ public class Application5Composition extends AbstractApplicationComposition {
             }
 
             // Validate all Essence Descriptors, because ACES sub-descriptors are not required to be homogeneous for all elements, in particular the TargetFrameSubDescriptors may differ per ST 2067-50.
-            for(DOMNodeObjectModel imageEssencedescriptorDOMNode : virtualTrackEssenceDescriptors){
+            for (DOMNodeObjectModel imageEssencedescriptorDOMNode : virtualTrackEssenceDescriptors) {
                 CompositionImageEssenceDescriptorModel imageEssenceDescriptorModel = null;
                 UUID imageEssenceDescriptorID = this.getEssenceDescriptorListMap().entrySet().stream().filter(e -> e.getValue().equals(imageEssencedescriptorDOMNode)).map(e -> e.getKey()).findFirst()
                         .get();
                 imageEssenceDescriptorModel = new CompositionImageEssenceDescriptorModel(imageEssenceDescriptorID, imageEssencedescriptorDOMNode,
-                                regXMLLibDictionary);
+                        regXMLLibDictionary);
                 if (imageEssenceDescriptorModel != null) {
                     imfErrorLogger.addAllErrors(imageEssenceDescriptorModel.getErrors());
                     Application5Composition.validatePictureEssenceDescriptor(imageEssenceDescriptorModel, ApplicationCompositionType.APPLICATION_5_COMPOSITION_TYPE,
@@ -139,7 +157,7 @@ public class Application5Composition extends AbstractApplicationComposition {
                 }
             }
         }
-        catch (Exception e) {
+        catch(Exception e) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("Exception in validating EssenceDescriptors in APPLICATION_5_COMPOSITION_TYPE: %s ", e.getMessage()));
@@ -147,13 +165,13 @@ public class Application5Composition extends AbstractApplicationComposition {
     }
 
     public static void validatePictureEssenceDescriptor(CompositionImageEssenceDescriptorModel imageEssenceDescriptorModel,
-                                                               ApplicationCompositionFactory.ApplicationCompositionType applicationCompositionType,
-                                                               IMFErrorLogger
-            imfErrorLogger)
+            ApplicationCompositionFactory.ApplicationCompositionType applicationCompositionType,
+            IMFErrorLogger
+                    imfErrorLogger)
     {
         UUID imageEssenceDescriptorID = imageEssenceDescriptorModel.getImageEssencedescriptorID();
         ColorModel colorModel = imageEssenceDescriptorModel.getColorModel();
-        if( !colorModel.equals(ColorModel.RGB)) {
+        if (!colorModel.equals(ColorModel.RGB)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall be an RGBA descriptor per %s",
@@ -200,7 +218,7 @@ public class Application5Composition extends AbstractApplicationComposition {
         }
 
         Fraction imageAspectRatio = imageEssenceDescriptorModel.getImageAspectRatio();
-        if( imageAspectRatio == null) {
+        if (imageAspectRatio == null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall have an Aspect Ratio item as per %s",
@@ -208,7 +226,7 @@ public class Application5Composition extends AbstractApplicationComposition {
         } //TODO: Test if imageAspectRatio == roundToIntegralTiesToAway(DisplayWidth*pixelAspectRatio) / DisplayHeight
 
         ColorPrimaries colorPrimaries = imageEssenceDescriptorModel.getColorPrimaries();
-        if(!colorPrimaries.equals(ColorPrimaries.ACES)) {
+        if (!colorPrimaries.equals(ColorPrimaries.ACES)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid ColorPrimaries as per %s",
@@ -216,7 +234,7 @@ public class Application5Composition extends AbstractApplicationComposition {
         }
 
         TransferCharacteristic transferCharacteristic = imageEssenceDescriptorModel.getTransferCharacteristic();
-        if(!transferCharacteristic.equals(TransferCharacteristic.Linear)) {
+        if (!transferCharacteristic.equals(TransferCharacteristic.Linear)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid TransferCharacteristic as per %s",
@@ -224,7 +242,7 @@ public class Application5Composition extends AbstractApplicationComposition {
         }
 
         Colorimetry color = imageEssenceDescriptorModel.getColor();
-        if(!color.equals(Colorimetry.Color_App5_AP0)) {
+        if (!color.equals(Colorimetry.Color_App5_AP0)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid ColorPrimaries(%s) as per %s",
@@ -233,12 +251,13 @@ public class Application5Composition extends AbstractApplicationComposition {
 
         UL essenceContainerFormatUL = imageEssenceDescriptorModel.getEssenceContainerFormatUL();
         UL MXFGCFrameWrappedACESPictures = UL.fromULAsURNStringToUL("urn:smpte:ul:060e2b34.0401010d.0d010301.02190100"); // MXF-GC Frame-wrapped ACES Pictures per 2065-5
-        if(essenceContainerFormatUL == null) {
-                imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
-                        IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
-                        String.format("EssenceDescriptor with ID %s does not contain a ContainerFormat as per %s",
-                                imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
-        } else  {
+        if (essenceContainerFormatUL == null) {
+            imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
+                    IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
+                    String.format("EssenceDescriptor with ID %s does not contain a ContainerFormat as per %s",
+                            imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
+        }
+        else {
             if (!essenceContainerFormatUL.equals(MXFGCFrameWrappedACESPictures)) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
@@ -247,7 +266,7 @@ public class Application5Composition extends AbstractApplicationComposition {
             }
         }
         Integer offset = imageEssenceDescriptorModel.getSampledXOffset();
-        if((offset != null) && (offset != 0)) {
+        if ((offset != null) && (offset != 0)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has invalid SampledXOffset (%d) as per %s",
@@ -255,13 +274,13 @@ public class Application5Composition extends AbstractApplicationComposition {
         }
 
         offset = imageEssenceDescriptorModel.getSampledYOffset();
-        if((offset != null) && (offset != 0)) {
+        if ((offset != null) && (offset != 0)) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s has an invalid SampledYOffset (%d) item as per %s",
                             imageEssenceDescriptorID.toString(), offset, applicationCompositionType.toString()));
         }
-        
+
         //FrameLayout
         FrameLayoutType frameLayoutType = imageEssenceDescriptorModel.getFrameLayoutType();
         if (!frameLayoutType.equals(FrameLayoutType.FullFrame)) {
@@ -281,111 +300,111 @@ public class Application5Composition extends AbstractApplicationComposition {
         }
 
         //The following items shall not be present per 2065-5 Table 10 
-        if(imageEssenceDescriptorModel.getStoredOffset() != null) {
+        if (imageEssenceDescriptorModel.getStoredOffset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a StoredF2Offset item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getDisplayF2Offset() != null) {
+
+        if (imageEssenceDescriptorModel.getDisplayF2Offset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a DisplayF2Offset item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getActiveFormatDescriptor() != null) {
+
+        if (imageEssenceDescriptorModel.getActiveFormatDescriptor() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Active Format Descriptor item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getAlphaTransparency() != null) {
+
+        if (imageEssenceDescriptorModel.getAlphaTransparency() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Alpha Transparency as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getImageAlignmentOffset() != null) {
+
+        if (imageEssenceDescriptorModel.getImageAlignmentOffset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Image Alignment Offset item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        if(imageEssenceDescriptorModel.getStoredOffset() != null) {
+        if (imageEssenceDescriptorModel.getStoredOffset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a StoredF2Offset item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getImageStartOffset() != null) {
+
+        if (imageEssenceDescriptorModel.getImageStartOffset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Image Start Offset item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getImageEndOffset() != null) {
+
+        if (imageEssenceDescriptorModel.getImageEndOffset() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Image End Offset item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getFieldDominance() != null) {
+
+        if (imageEssenceDescriptorModel.getFieldDominance() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a Field Dominance item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
-        
-        if(imageEssenceDescriptorModel.getCodingEquations() != null) {
+
+        if (imageEssenceDescriptorModel.getCodingEquations() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a Coding Equations item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
 
-        if(imageEssenceDescriptorModel.getComponentMaxRef() != null) {
+        if (imageEssenceDescriptorModel.getComponentMaxRef() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a Component Max Ref item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
 
-        if(imageEssenceDescriptorModel.getComponentMinRef() != null) {
+        if (imageEssenceDescriptorModel.getComponentMinRef() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a Component Min Ref item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
 
-        if(imageEssenceDescriptorModel.getAlphaMaxRef() != null) {
+        if (imageEssenceDescriptorModel.getAlphaMaxRef() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Alpha Max Ref item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
 
-        if(imageEssenceDescriptorModel.getAlphaMinRef() != null) {
+        if (imageEssenceDescriptorModel.getAlphaMinRef() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain an Alpha Min Ref item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
 
-        if(imageEssenceDescriptorModel.getPalette() != null) {
+        if (imageEssenceDescriptorModel.getPalette() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a Palette item as per %s",
                             imageEssenceDescriptorID.toString(), applicationCompositionType.toString()));
         }
 
-        if(imageEssenceDescriptorModel.getPaletteLayout() != null) {
+        if (imageEssenceDescriptorModel.getPaletteLayout() != null) {
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
                     String.format("EssenceDescriptor with ID %s shall not contain a Palette Layout item as per %s",

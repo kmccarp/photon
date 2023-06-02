@@ -34,7 +34,7 @@ public class FileByteRangeProviderTest
     public void setUp() throws Exception
     {
         String keyboard = "qwertyuiopasdfghjklzxcvbnm";
-        this.file = File.createTempFile("test_file",".tmp");
+        this.file = File.createTempFile("test_file", ".tmp");
         FileWriter fileWriter = new FileWriter(this.file);
         try
         {

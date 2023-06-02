@@ -41,10 +41,10 @@ public class ExceptionTester<T extends Throwable> {
                 T ex = ctor.newInstance();
                 assertNull(ex.getMessage());
                 assertNull(ex.getCause());
-            } catch (Exception e) {
+            } catch(Exception e) {
                 fail("We expect this operation to succeed, but it threw an exception - signature: no parameters", e);
             }
-        } catch (NoSuchMethodException e) {         // NOPMD
+        } catch(NoSuchMethodException e) {         // NOPMD
             // We don't have one of these constructors, that's ok
         }
 
@@ -54,10 +54,10 @@ public class ExceptionTester<T extends Throwable> {
                 T ex = ctor.newInstance(nestedException);
                 assertSame(ex.getCause(), nestedException);
                 assertEquals(ex.getMessage(), nestedException.toString());
-            } catch (Exception e) {
+            } catch(Exception e) {
                 fail("We expect this operation to succeed, but it threw an exception - signature(nested_exception)", e);
             }
-        } catch (NoSuchMethodException e) {         // NOPMD
+        } catch(NoSuchMethodException e) {         // NOPMD
             // We don't have one of these constructors, that's ok
         }
 
@@ -67,10 +67,10 @@ public class ExceptionTester<T extends Throwable> {
                 T ex = ctor.newInstance(message);
                 assertEquals(ex.getMessage(), message);
                 assertNull(ex.getCause());
-            } catch (Exception e) {
+            } catch(Exception e) {
                 fail("We expect this operation to succeed, but it threw an exception - signature(message)", e);
             }
-        } catch (NoSuchMethodException e) {         // NOPMD
+        } catch(NoSuchMethodException e) {         // NOPMD
             // We don't have one of these constructors, that's ok
         }
 
@@ -80,10 +80,10 @@ public class ExceptionTester<T extends Throwable> {
                 T ex = ctor.newInstance(message, nestedException);
                 assertEquals(ex.getMessage(), message);
                 assertSame(ex.getCause(), nestedException);
-            } catch (Exception e) {
+            } catch(Exception e) {
                 fail("We expect this operation to succeed, but it threw an exception - signature(nested_exception, message", e);
             }
-        } catch (NoSuchMethodException e) {         // NOPMD
+        } catch(NoSuchMethodException e) {         // NOPMD
             // We don't have one of these constructors, that's ok
         }
     }

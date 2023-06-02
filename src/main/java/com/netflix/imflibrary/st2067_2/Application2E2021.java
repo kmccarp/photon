@@ -36,6 +36,7 @@ public class Application2E2021 extends AbstractApplicationComposition {
         private HashSet<Sampling> samplings;
         private HashSet<Quantization> quantizations;
         private HashSet<ColorModel> colorModels;
+
         /* Stereoscopic images are not supported */
 
         public CharacteristicsSet(Integer maxWidth,
@@ -80,159 +81,161 @@ public class Application2E2021 extends AbstractApplicationComposition {
     }
 
     static final Fraction[] FPS_HD = {
-        new Fraction(25),
-        new Fraction(30),
-        new Fraction(30000, 1001)
+            new Fraction(25),
+            new Fraction(30),
+            new Fraction(30000, 1001)
     };
 
     static final Fraction[] FPS_UHD = {
-        new Fraction(24),
-        new Fraction(24000, 1001),
-        new Fraction(25),
-        new Fraction(30),
-        new Fraction(30000, 1001),
-        new Fraction(50),
-        new Fraction(60),
-        new Fraction(60000, 1001)
+            new Fraction(24),
+            new Fraction(24000, 1001),
+            new Fraction(25),
+            new Fraction(30),
+            new Fraction(30000, 1001),
+            new Fraction(50),
+            new Fraction(60),
+            new Fraction(60000, 1001)
     };
 
     static final Fraction[] FPS_4K = {
-        new Fraction(24),
-        new Fraction(24000, 1001),
-        new Fraction(25),
-        new Fraction(30),
-        new Fraction(30000, 1001),
-        new Fraction(50),
-        new Fraction(60),
-        new Fraction(60000, 1001),
-        new Fraction(120)
+            new Fraction(24),
+            new Fraction(24000, 1001),
+            new Fraction(25),
+            new Fraction(30),
+            new Fraction(30000, 1001),
+            new Fraction(50),
+            new Fraction(60),
+            new Fraction(60000, 1001),
+            new Fraction(120)
     };
 
     /* Table 3 at SMPTE ST 2067-21:2023 */
     static final CharacteristicsSet[] IMAGE_CHARACTERISTICS = {
-        new CharacteristicsSet(
-            1920,
-            1080,
-            Arrays.asList(Colorimetry.Color1, Colorimetry.Color2, Colorimetry.Color3),
-            Arrays.asList(8, 10),
-            Arrays.asList(FrameLayoutType.SeparateFields),
-            Arrays.asList(FPS_HD),
-            Arrays.asList(Sampling.Sampling422),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV)
-        ),
-        new CharacteristicsSet(
-            1920,
-            1080,
-            Arrays.asList(Colorimetry.Color1, Colorimetry.Color2, Colorimetry.Color3),
-            Arrays.asList(8, 10),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_HD),
-            Arrays.asList(Sampling.Sampling422),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV)
-        ),
-        new CharacteristicsSet(
-            1920,
-            1080,
-            Arrays.asList(Colorimetry.Color1, Colorimetry.Color2, Colorimetry.Color3),
-            Arrays.asList(8, 10),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_HD),
-            Arrays.asList(Sampling.Sampling444),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV, ColorModel.RGB)
-        ),
-        new CharacteristicsSet(
-            3840,
-            2160,
-            Arrays.asList(Colorimetry.Color4),
-            Arrays.asList(8, 10),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_UHD),
-            Arrays.asList(Sampling.Sampling422),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV)
-        ),
-        new CharacteristicsSet(
-            3840,
-            2160,
-            Arrays.asList(Colorimetry.Color3),
-            Arrays.asList(8, 10, 12, 16),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_UHD),
-            Arrays.asList(Sampling.Sampling422),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV)
-        ),
-        new CharacteristicsSet(
-            3840,
-            2160,
-            Arrays.asList(Colorimetry.Color5, Colorimetry.Color8),
-            Arrays.asList(10, 12),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_UHD),
-            Arrays.asList(Sampling.Sampling422),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV)
-        ),
-        new CharacteristicsSet(
-            3840,
-            2160,
-            Arrays.asList(Colorimetry.Color7),
-            Arrays.asList(10, 12, 16),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_UHD),
-            Arrays.asList(Sampling.Sampling422),
-            Arrays.asList(Quantization.QE1),
-            Arrays.asList(ColorModel.YUV)
-        ),
-        new CharacteristicsSet(
-            4096,
-            3112,
-            Arrays.asList(Colorimetry.Color3),
-            Arrays.asList(8, 10, 12, 16),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_4K),
-            Arrays.asList(Sampling.Sampling444),
-            Arrays.asList(Quantization.QE1, Quantization.QE2),
-            Arrays.asList(ColorModel.RGB)
-        ),
-        new CharacteristicsSet(
-            4096,
-            3112,
-            Arrays.asList(Colorimetry.Color5, Colorimetry.Color8),
-            Arrays.asList(10, 12),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_4K),
-            Arrays.asList(Sampling.Sampling444),
-            Arrays.asList(Quantization.QE1, Quantization.QE2),
-            Arrays.asList(ColorModel.RGB)
-        ),
-        new CharacteristicsSet(
-            4096,
-            3112,
-            Arrays.asList(Colorimetry.Color6, Colorimetry.Color7),
-            Arrays.asList(10, 12, 16),
-            Arrays.asList(FrameLayoutType.FullFrame),
-            Arrays.asList(FPS_4K),
-            Arrays.asList(Sampling.Sampling444),
-            Arrays.asList(Quantization.QE1, Quantization.QE2),
-            Arrays.asList(ColorModel.RGB)
-        )
+            new CharacteristicsSet(
+                    1920,
+                    1080,
+                    Arrays.asList(Colorimetry.Color1, Colorimetry.Color2, Colorimetry.Color3),
+                    Arrays.asList(8, 10),
+                    Arrays.asList(FrameLayoutType.SeparateFields),
+                    Arrays.asList(FPS_HD),
+                    Arrays.asList(Sampling.Sampling422),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV)
+            ),
+            new CharacteristicsSet(
+                    1920,
+                    1080,
+                    Arrays.asList(Colorimetry.Color1, Colorimetry.Color2, Colorimetry.Color3),
+                    Arrays.asList(8, 10),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_HD),
+                    Arrays.asList(Sampling.Sampling422),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV)
+            ),
+            new CharacteristicsSet(
+                    1920,
+                    1080,
+                    Arrays.asList(Colorimetry.Color1, Colorimetry.Color2, Colorimetry.Color3),
+                    Arrays.asList(8, 10),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_HD),
+                    Arrays.asList(Sampling.Sampling444),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV, ColorModel.RGB)
+            ),
+            new CharacteristicsSet(
+                    3840,
+                    2160,
+                    Arrays.asList(Colorimetry.Color4),
+                    Arrays.asList(8, 10),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_UHD),
+                    Arrays.asList(Sampling.Sampling422),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV)
+            ),
+            new CharacteristicsSet(
+                    3840,
+                    2160,
+                    Arrays.asList(Colorimetry.Color3),
+                    Arrays.asList(8, 10, 12, 16),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_UHD),
+                    Arrays.asList(Sampling.Sampling422),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV)
+            ),
+            new CharacteristicsSet(
+                    3840,
+                    2160,
+                    Arrays.asList(Colorimetry.Color5, Colorimetry.Color8),
+                    Arrays.asList(10, 12),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_UHD),
+                    Arrays.asList(Sampling.Sampling422),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV)
+            ),
+            new CharacteristicsSet(
+                    3840,
+                    2160,
+                    Arrays.asList(Colorimetry.Color7),
+                    Arrays.asList(10, 12, 16),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_UHD),
+                    Arrays.asList(Sampling.Sampling422),
+                    Arrays.asList(Quantization.QE1),
+                    Arrays.asList(ColorModel.YUV)
+            ),
+            new CharacteristicsSet(
+                    4096,
+                    3112,
+                    Arrays.asList(Colorimetry.Color3),
+                    Arrays.asList(8, 10, 12, 16),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_4K),
+                    Arrays.asList(Sampling.Sampling444),
+                    Arrays.asList(Quantization.QE1, Quantization.QE2),
+                    Arrays.asList(ColorModel.RGB)
+            ),
+            new CharacteristicsSet(
+                    4096,
+                    3112,
+                    Arrays.asList(Colorimetry.Color5, Colorimetry.Color8),
+                    Arrays.asList(10, 12),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_4K),
+                    Arrays.asList(Sampling.Sampling444),
+                    Arrays.asList(Quantization.QE1, Quantization.QE2),
+                    Arrays.asList(ColorModel.RGB)
+            ),
+            new CharacteristicsSet(
+                    4096,
+                    3112,
+                    Arrays.asList(Colorimetry.Color6, Colorimetry.Color7),
+                    Arrays.asList(10, 12, 16),
+                    Arrays.asList(FrameLayoutType.FullFrame),
+                    Arrays.asList(FPS_4K),
+                    Arrays.asList(Sampling.Sampling444),
+                    Arrays.asList(Quantization.QE1, Quantization.QE2),
+                    Arrays.asList(ColorModel.RGB)
+            )
     };
 
-    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>(){{
-        add("SignalStandard");
-        add("ActiveFormatDescriptor");
-        add("VideoLineMap");
-        add("AlphaTransparency");
-        add("PixelLayout");
-        add("ActiveHeight");
-        add("ActiveWidth");
-        add("ActiveXOffset");
-        add("ActiveYOffset");
-    }});
+    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>(){
+        {
+            add("SignalStandard");
+            add("ActiveFormatDescriptor");
+            add("VideoLineMap");
+            add("AlphaTransparency");
+            add("PixelLayout");
+            add("ActiveHeight");
+            add("ActiveWidth");
+            add("ActiveXOffset");
+            add("ActiveYOffset");
+        }
+    });
 
     public Application2E2021(@Nonnull IMFCompositionPlaylistType imfCompositionPlaylistType) {
         this(imfCompositionPlaylistType, new HashSet<>());
@@ -251,15 +254,15 @@ public class Application2E2021 extends AbstractApplicationComposition {
                 imfErrorLogger.addAllErrors(imageDescriptorModel.getErrors());
 
                 Application2Composition.validateGenericPictureEssenceDescriptor(
-                    imageDescriptorModel,
-                    ApplicationCompositionType.APPLICATION_2E2021_COMPOSITION_TYPE,
-                    imfErrorLogger
+                        imageDescriptorModel,
+                        ApplicationCompositionType.APPLICATION_2E2021_COMPOSITION_TYPE,
+                        imfErrorLogger
                 );
 
                 Application2E2021.validateImageCharacteristics(imageDescriptorModel, imfErrorLogger);
 
             }
-        } catch (Exception e) {
+        } catch(Exception e) {
             imfErrorLogger.addError(
                     IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                     IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
@@ -304,15 +307,15 @@ public class Application2E2021 extends AbstractApplicationComposition {
 
         for (CharacteristicsSet imgCharacteristicsSet : IMAGE_CHARACTERISTICS) {
             isValid = imgCharacteristicsSet.has(
-                imageDescriptor.getStoredWidth(),
-                imageDescriptor.getStoredHeight(),
-                imageDescriptor.getColor(),
-                imageDescriptor.getPixelBitDepth(),
-                imageDescriptor.getFrameLayoutType(),
-                imageDescriptor.getSampleRate(),
-                imageDescriptor.getSampling(),
-                imageDescriptor.getQuantization(),
-                imageDescriptor.getColorModel()
+                    imageDescriptor.getStoredWidth(),
+                    imageDescriptor.getStoredHeight(),
+                    imageDescriptor.getColor(),
+                    imageDescriptor.getPixelBitDepth(),
+                    imageDescriptor.getFrameLayoutType(),
+                    imageDescriptor.getSampleRate(),
+                    imageDescriptor.getSampling(),
+                    imageDescriptor.getQuantization(),
+                    imageDescriptor.getColorModel()
             );
 
             if (isValid)
@@ -321,12 +324,12 @@ public class Application2E2021 extends AbstractApplicationComposition {
 
         if (!isValid) {
             logger.addError(
-                IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
-                IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
-                String.format(
-                "Invalid image characteristics per %s",
-                    APP_STRING
-                )
+                    IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
+                    IMFErrorLogger.IMFErrors.ErrorLevels.NON_FATAL,
+                    String.format(
+                            "Invalid image characteristics per %s",
+                            APP_STRING
+                    )
             );
         }
     }

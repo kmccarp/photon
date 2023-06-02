@@ -67,7 +67,7 @@ public class IMPBuilderFunctionalTest {
 
     @DataProvider(name = "cplList")
     private Object[][] getCplList() {
-        return new Object[][] {
+        return new Object[][]{
                 {"TestIMP/Netflix_Sony_Plugfest_2015/CPL_BLACKL_202_HD_REC709_178_ENG_fe8cf2f4-1bcd-4145-8f72-6775af4038c4.xml", "2013", true, 1},
                 {"TestIMP/Netflix_Sony_Plugfest_2015/CPL_BLACKL_202_HD_REC709_178_ENG_fe8cf2f4-1bcd-4145-8f72-6775af4038c4_duplicate_source_encoding_element.xml", "2013", true, 1},
                 {"TestIMP/Netflix_Sony_Plugfest_2015/CPL_BLACKL_202_HD_REC709_178_ENG_fe8cf2f4-1bcd-4145-8f72-6775af4038c4.xml", "2013", false, 0},
@@ -104,7 +104,7 @@ public class IMPBuilderFunctionalTest {
         Path tempPath = Files.createTempDirectory(Paths.get(System.getProperty("java.io.tmpdir")), "IMFDocuments");
         File tempDir = tempPath.toFile();
 
-        if(useHeaderPartition) {
+        if (useHeaderPartition) {
             if (schemaVersion.equals("2016")) {
                 IMPBuilder.buildIMP_2016("IMP",
                         "Netflix",
@@ -113,7 +113,8 @@ public class IMPBuilderFunctionalTest {
                         Application2ExtendedComposition.SCHEMA_URI_APP2E_2016,
                         buildTrackFileMetadataMap(imfErrorLogger),
                         tempDir);
-            } else if (schemaVersion.equals("2020")) {
+            }
+            else if (schemaVersion.equals("2020")) {
                 IMPBuilder.buildIMP_2016("IMP",
                         "Netflix",
                         applicationComposition.getVirtualTracks(),
@@ -121,7 +122,8 @@ public class IMPBuilderFunctionalTest {
                         Application2ExtendedComposition.SCHEMA_URI_APP2E_2020,
                         buildTrackFileMetadataMap(imfErrorLogger),
                         tempDir);
-            } else if (schemaVersion.equals("2013")) {
+            }
+            else if (schemaVersion.equals("2013")) {
                 IMPBuilder.buildIMP_2013("IMP",
                         "Netflix",
                         applicationComposition.getVirtualTracks(),
@@ -130,7 +132,8 @@ public class IMPBuilderFunctionalTest {
                         buildTrackFileMetadataMap(imfErrorLogger),
                         tempDir);
             }
-        } else {
+        }
+        else {
             if (schemaVersion.equals("2016")) {
                 IMPBuilder.buildIMP_2016("IMP",
                         "Netflix",
@@ -140,7 +143,8 @@ public class IMPBuilderFunctionalTest {
                         buildTrackFileInfoMap(imfErrorLogger),
                         tempDir,
                         applicationComposition.getEssenceDescriptorDomNodeMap());
-            } else if (schemaVersion.equals("2020")) {
+            }
+            else if (schemaVersion.equals("2020")) {
                 IMPBuilder.buildIMP_2016("IMP",
                         "Netflix",
                         applicationComposition.getVirtualTracks(),
@@ -149,7 +153,8 @@ public class IMPBuilderFunctionalTest {
                         buildTrackFileInfoMap(imfErrorLogger),
                         tempDir,
                         applicationComposition.getEssenceDescriptorDomNodeMap());
-            } else if (schemaVersion.equals("2013")) {
+            }
+            else if (schemaVersion.equals("2013")) {
                 IMPBuilder.buildIMP_2013("IMP",
                         "Netflix",
                         applicationComposition.getVirtualTracks(),
@@ -168,16 +173,16 @@ public class IMPBuilderFunctionalTest {
         File pklFile = null;
         File cplFile = null;
 
-        for(File file : tempDir.listFiles()){
-            if(file.getName().contains("ASSETMAP.xml")){
+        for (File file : tempDir.listFiles()) {
+            if (file.getName().contains("ASSETMAP.xml")) {
                 assetMapFound = true;
                 assetMapFile = file;
             }
-            else if(file.getName().contains("PKL-")){
+            else if (file.getName().contains("PKL-")) {
                 pklFound = true;
                 pklFile = file;
             }
-            else if(file.getName().contains("CPL-")){
+            else if (file.getName().contains("CPL-")) {
                 cplFound = true;
                 cplFile = file;
             }
@@ -187,20 +192,20 @@ public class IMPBuilderFunctionalTest {
         Assert.assertTrue(cplFound == true);
 
         ResourceByteRangeProvider fileByteRangeProvider = new FileByteRangeProvider(assetMapFile);
-        byte[] documentBytes = fileByteRangeProvider.getByteRangeAsBytes(0, fileByteRangeProvider.getResourceSize()-1);
+        byte[] documentBytes = fileByteRangeProvider.getByteRangeAsBytes(0, fileByteRangeProvider.getResourceSize() - 1);
         PayloadRecord payloadRecord = new PayloadRecord(documentBytes, PayloadRecord.PayloadAssetType.AssetMap, 0L, 0L);
         List<ErrorLogger.ErrorObject> errors = IMPValidator.validateAssetMap(payloadRecord);
         Assert.assertEquals(errors.size(), 0);
 
         fileByteRangeProvider = new FileByteRangeProvider(pklFile);
-        documentBytes = fileByteRangeProvider.getByteRangeAsBytes(0, fileByteRangeProvider.getResourceSize()-1);
+        documentBytes = fileByteRangeProvider.getByteRangeAsBytes(0, fileByteRangeProvider.getResourceSize() - 1);
         payloadRecord = new PayloadRecord(documentBytes, PayloadRecord.PayloadAssetType.PackingList, 0L, 0L);
         errors = IMPValidator.validatePKL(payloadRecord);
         Assert.assertEquals(errors.size(), 0);
 
         fileByteRangeProvider = new FileByteRangeProvider(cplFile);
 
-        documentBytes = fileByteRangeProvider.getByteRangeAsBytes(0, fileByteRangeProvider.getResourceSize()-1);
+        documentBytes = fileByteRangeProvider.getByteRangeAsBytes(0, fileByteRangeProvider.getResourceSize() - 1);
         payloadRecord = new PayloadRecord(documentBytes, PayloadRecord.PayloadAssetType.CompositionPlaylist, 0L, 0L);
         errors = IMPValidator.validateCPL(payloadRecord);
         Assert.assertEquals(errors.size(), cplErrorsExpected);
@@ -210,7 +215,7 @@ public class IMPBuilderFunctionalTest {
         Map<UUID, IMPBuilder.IMFTrackFileMetadata> imfTrackFileMetadataMap = new HashMap<>();
         ResourceByteRangeProvider resourceByteRangeProvider;
         List<String> fileNames = Arrays.asList("TestIMP/Netflix_Sony_Plugfest_2015/Netflix_Plugfest_Oct2015.mxf.hdr", "TestIMP/Netflix_Sony_Plugfest_2015/Netflix_Plugfest_Oct2015_ENG20.mxf.hdr", "TestIMP/Netflix_Sony_Plugfest_2015/Netflix_Plugfest_Oct2015_ENG51.mxf.hdr");
-        for(String fileName: fileNames) {
+        for (String fileName : fileNames) {
             File headerPartition1 = TestHelper.findResourceByPath(fileName);
             resourceByteRangeProvider = new FileByteRangeProvider(headerPartition1);
             byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize() - 1);
@@ -223,7 +228,7 @@ public class IMPBuilderFunctionalTest {
             IMFConstraints.HeaderPartitionIMF headerPartitionIMF = IMFConstraints.checkIMFCompliance(headerPartitionOP1A, imfErrorLogger);
             Preface preface = headerPartitionIMF.getHeaderPartitionOP1A().getHeaderPartition().getPreface();
             GenericPackage genericPackage = preface.getContentStorage().getEssenceContainerDataList().get(0).getLinkedPackage();
-            SourcePackage filePackage = (SourcePackage) genericPackage;
+            SourcePackage filePackage = (SourcePackage)genericPackage;
             UUID packageUUID = filePackage.getPackageMaterialNumberasUUID();
 
             imfTrackFileMetadataMap.put(packageUUID, new IMPBuilder.IMFTrackFileMetadata(bytes,
@@ -240,23 +245,23 @@ public class IMPBuilderFunctionalTest {
         String hash1 = "yCsxE1M6xmEGkVoXAWWjvfq2VHM=";
         uuidimfTrackFileInfoMap.put(UUIDHelper.fromUUIDAsURNStringToUUID("urn:uuid:ec9f8003-655e-438a-b30a-d7700ec4cb6f"),
                 new IMPBuilder.IMFTrackFileInfo(hash1.getBytes(),
-                    CompositionPlaylistBuilder_2016.defaultHashAlgorithm,
-                    "Netflix_Plugfest_Oct2015.mxf",
-                    10517511198L, false));
+                        CompositionPlaylistBuilder_2016.defaultHashAlgorithm,
+                        "Netflix_Plugfest_Oct2015.mxf",
+                        10517511198L, false));
 
-            String hash2 = "9zit4G2zsmwpLqwXwFEJTu7UG50=";
+        String hash2 = "9zit4G2zsmwpLqwXwFEJTu7UG50=";
         uuidimfTrackFileInfoMap.put(UUIDHelper.fromUUIDAsURNStringToUUID("urn:uuid:7be07495-1aaa-4a69-8b92-3ec162122b34"),
                 new IMPBuilder.IMFTrackFileInfo(hash2.getBytes(),
-                    CompositionPlaylistBuilder_2016.defaultHashAlgorithm,
-                    "Netflix_Plugfest_Oct2015_ENG20.mxf",
-                    94532279L, false));
+                        CompositionPlaylistBuilder_2016.defaultHashAlgorithm,
+                        "Netflix_Plugfest_Oct2015_ENG20.mxf",
+                        94532279L, false));
 
-            String hash3 = "9zit4G2zsmwpLqwXwFEJTu7UG50=";
+        String hash3 = "9zit4G2zsmwpLqwXwFEJTu7UG50=";
         uuidimfTrackFileInfoMap.put(UUIDHelper.fromUUIDAsURNStringToUUID("urn:uuid:c808001c-da54-4295-a721-dcaa00659699"),
                 new IMPBuilder.IMFTrackFileInfo(hash3.getBytes(),
-                    CompositionPlaylistBuilder_2016.defaultHashAlgorithm,
-                    "Netflix_Plugfest_Oct2015_ENG51.mxf",
-                    94532279L, false));
+                        CompositionPlaylistBuilder_2016.defaultHashAlgorithm,
+                        "Netflix_Plugfest_Oct2015_ENG51.mxf",
+                        94532279L, false));
         return uuidimfTrackFileInfoMap;
     }
 

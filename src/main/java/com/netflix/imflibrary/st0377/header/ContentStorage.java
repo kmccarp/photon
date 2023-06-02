@@ -125,8 +125,10 @@ public final class ContentStorage extends InterchangeObject
     public static final class ContentStorageBO extends InterchangeObjectBO
     {
 
-        @MXFProperty(size=0, depends=true) private final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> packages = null;
-        @MXFProperty(size=0, depends=true) private final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> essencecontainer_data = null;
+        @MXFProperty(size = 0, depends = true)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> packages = null;
+        @MXFProperty(size = 0, depends = true)
+        private final CompoundDataTypes.MXFCollections.MXFCollection<StrongRef> essencecontainer_data = null;
         private final List<MXFUID> packageInstanceUIDs = new ArrayList<>();
         private final List<MXFUID> essenceContainerDataInstanceUIDs = new ArrayList<>();
 

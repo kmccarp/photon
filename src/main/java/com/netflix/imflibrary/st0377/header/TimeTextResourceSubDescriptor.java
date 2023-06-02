@@ -40,7 +40,7 @@ public final class TimeTextResourceSubDescriptor extends SubDescriptor {
      * Constructor for a TimeTextResourceSubdescriptor object
      * @param subDescriptorBO the parsed TimeTextResourceSubdescriptor object
      */
-    public TimeTextResourceSubDescriptor(TimeTextResourceSubdescriptorBO subDescriptorBO){
+    public TimeTextResourceSubDescriptor(TimeTextResourceSubdescriptorBO subDescriptorBO) {
         this.subDescriptorBO = subDescriptorBO;
     }
 
@@ -66,10 +66,13 @@ public final class TimeTextResourceSubDescriptor extends SubDescriptor {
      * Object corresponding to a parsed TimeTextResourceSubdescriptor as defined in st429-5-2009
      */
     @Immutable
-    public static final class TimeTextResourceSubdescriptorBO extends SubDescriptorBO{
-        @MXFProperty(size=4) private final Long body_sid = null;
-        @MXFProperty(size=16) protected final byte[] generation_uid = null;
-        @MXFProperty(size=0, charset="UTF-16") private final String mime_media_type = null;
+    public static final class TimeTextResourceSubdescriptorBO extends SubDescriptorBO {
+        @MXFProperty(size = 4)
+        private final Long body_sid = null;
+        @MXFProperty(size = 16)
+        protected final byte[] generation_uid = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        private final String mime_media_type = null;
 
         /**
          * Instantiates a new time text resource sub descriptor ByteObject.

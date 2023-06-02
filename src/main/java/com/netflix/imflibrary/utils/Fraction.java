@@ -109,4 +109,5 @@ public class Fraction {
     public String toString()
     {
         return String.format("%d/%d", this.numerator, this.denominator);
-    }}
+    }
+}

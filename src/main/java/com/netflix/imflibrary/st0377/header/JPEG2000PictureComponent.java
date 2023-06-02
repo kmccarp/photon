@@ -35,7 +35,7 @@ public final class JPEG2000PictureComponent {
      * Constructor for a JPEG2000PictureComponent object
      * @param componentBO the parse JPEG2000PictureComponent object
      */
-    public JPEG2000PictureComponent(JPEG2000PictureComponentBO componentBO){
+    public JPEG2000PictureComponent(JPEG2000PictureComponentBO componentBO) {
         this.componentBO = componentBO;
     }
 
@@ -43,10 +43,13 @@ public final class JPEG2000PictureComponent {
      * Object corresponding to a parsed JPEG2000PictureComponent as defined in ISO/IEC 15444-1 Annex A.5.1
      */
     @Immutable
-    public static final class JPEG2000PictureComponentBO{
-        @MXFProperty(size=1) protected final Short sSiz;
-        @MXFProperty(size=1) protected final Short xrSiz;
-        @MXFProperty(size=1) protected final Short yrSiz;
+    public static final class JPEG2000PictureComponentBO {
+        @MXFProperty(size = 1)
+        protected final Short sSiz;
+        @MXFProperty(size = 1)
+        protected final Short xrSiz;
+        @MXFProperty(size = 1)
+        protected final Short yrSiz;
 
         /**
          * Instantiates a new parsed JPEG2000PictureComponent object

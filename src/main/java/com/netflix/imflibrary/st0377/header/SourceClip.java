@@ -99,9 +99,12 @@ public final class SourceClip extends StructuralComponent
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class SourceClipBO extends StructuralComponentBO
     {
-        @MXFProperty(size=8) private final Long start_position = null;
-        @MXFProperty(size=32, depends=true) private final byte[] source_package_id = null; //Package Ref type
-        @MXFProperty(size=4) private final Long source_track_id = null;
+        @MXFProperty(size = 8)
+        private final Long start_position = null;
+        @MXFProperty(size = 32, depends = true)
+        private final byte[] source_package_id = null; //Package Ref type
+        @MXFProperty(size = 4)
+        private final Long source_track_id = null;
 
         /**
          * Instantiates a new parsed SourceClip object by virtue of parsing the MXF file bitstream

@@ -32,12 +32,12 @@ public final class IMFMarkerResourceType extends IMFBaseResourceType {
     private final List<IMFMarkerType> markerList;
 
     public IMFMarkerResourceType(String id,
-                                 List<Long> editRate,
-                                 BigInteger intrinsicDuration,
-                                 BigInteger entryPoint,
-                                 BigInteger sourceDuration,
-                                 BigInteger repeatCount,
-                                 List<IMFMarkerType> markerList )
+            List<Long> editRate,
+            BigInteger intrinsicDuration,
+            BigInteger entryPoint,
+            BigInteger sourceDuration,
+            BigInteger repeatCount,
+            List<IMFMarkerType> markerList)
     {
         super(id, editRate, intrinsicDuration, entryPoint, sourceDuration, repeatCount);
         markerList.sort(Comparator.comparing(IMFMarkerType::getOffset));
@@ -49,7 +49,7 @@ public final class IMFMarkerResourceType extends IMFBaseResourceType {
      * Getter for the Marker list
      * @return a list containing all the Markers of the resource
      */
-    public List<IMFMarkerType> getMarkerList(){
+    public List<IMFMarkerType> getMarkerList() {
         return this.markerList;
     }
 
@@ -61,20 +61,20 @@ public final class IMFMarkerResourceType extends IMFBaseResourceType {
     @Override
     public boolean equivalent(IMFBaseResourceType other)
     {
-        if(other == null || !(other instanceof IMFMarkerResourceType)){
+        if (other == null || !(other instanceof IMFMarkerResourceType)) {
             return false;
         }
 
         IMFMarkerResourceType otherMarkerResource = IMFMarkerResourceType.class.cast(other);
 
         boolean result = true;
-        result &= super.equivalent( otherMarkerResource );
+        result &= super.equivalent(otherMarkerResource);
 
         List<IMFMarkerType> otherMarkerList = otherMarkerResource.getMarkerList();
-        if(otherMarkerList.size() != this.markerList.size()){
+        if (otherMarkerList.size() != this.markerList.size()) {
             return false;
         }
-        for(int i=0; i< this.markerList.size(); i++){
+        for (int i = 0; i < this.markerList.size(); i++) {
             IMFMarkerType thisMarker = this.markerList.get(i);
             IMFMarkerType otherMarker = otherMarkerList.get(i);
 

@@ -51,7 +51,7 @@ public class IMFTrackFilePartitionsExtractor {
 
         File headerPartition = resourceByteRangeProvider.getByteRange(partitionByteOffsets.get(0), partitionByteOffsets.get(1) - 1, workingDirectory);
         String inputPath = input.getAbsolutePath();
-        if(!headerPartition.renameTo(new File(inputPath + ".hdr"))){
+        if (!headerPartition.renameTo(new File(inputPath + ".hdr"))) {
             logger.info(String.format("Couldn't rename the file containing the header partition"));
         }
         return headerPartition;
@@ -67,7 +67,7 @@ public class IMFTrackFilePartitionsExtractor {
 
     public static void main(String[] args)throws IOException {
 
-        if(args.length < 2){
+        if (args.length < 2) {
             usage();
             System.exit(-1);
         }

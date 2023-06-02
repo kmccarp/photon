@@ -33,21 +33,21 @@ final class IMFSequenceType {
     protected final Composition.SequenceTypeEnum type;
 
     public IMFSequenceType(String id,
-                           String trackId,
-                           Composition.SequenceTypeEnum type,
-                           List<? extends IMFBaseResourceType> resourceList)
+            String trackId,
+            Composition.SequenceTypeEnum type,
+            List<? extends IMFBaseResourceType> resourceList)
     {
-        this.id             = id;
-        this.trackId        = trackId;
-        this.resourceList   = Collections.unmodifiableList(resourceList);
-        this.type           = type;
+        this.id = id;
+        this.trackId = trackId;
+        this.resourceList = Collections.unmodifiableList(resourceList);
+        this.type = type;
     }
 
     /**
      * Getter for the Sequence ID
      * @return a string representing the urn:uuid of the sequence
      */
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -55,7 +55,7 @@ final class IMFSequenceType {
      * Getter for the Sequence track ID
      * @return a string representing the track ID of the sequence
      */
-    public String getTrackId(){
+    public String getTrackId() {
         return this.trackId;
     }
 
@@ -63,7 +63,7 @@ final class IMFSequenceType {
      * Getter for the Sequence type
      * @return a enum  representing sequence type
      */
-    public Composition.SequenceTypeEnum getType(){
+    public Composition.SequenceTypeEnum getType() {
         return this.type;
     }
 
@@ -71,7 +71,7 @@ final class IMFSequenceType {
      * Getter for the Resource list
      * @return a list containing all the resources of the Sequence
      */
-    public List<? extends IMFBaseResourceType> getResourceList(){
+    public List<? extends IMFBaseResourceType> getResourceList() {
         return this.resourceList;
     }
 

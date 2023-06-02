@@ -59,9 +59,9 @@ class IMFCPLSerializer {
                 InputStream dcmlSchemaAsAStream = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st0433_2008/dcmlTypes/dcmlTypes.xsd");
                 InputStream dsigSchemaAsAStream = contextClassLoader.getResourceAsStream("org/w3/_2000_09/xmldsig/xmldsig-core-schema.xsd");
                 InputStream coreConstraintsSchemaAsAStream = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st2067_2_2013/imf-core-constraints-20130620-pal.xsd")
-        )
+                )
         {
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI );
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             StreamSource[] schemaSources = new StreamSource[4];
             schemaSources[0] = new StreamSource(dsigSchemaAsAStream);
             schemaSources[1] = new StreamSource(dcmlSchemaAsAStream);
@@ -83,7 +83,7 @@ class IMFCPLSerializer {
             marshaller.marshal(new JAXBElement<>(new QName("http://www.smpte-ra.org/schemas/2067-3/2013", "CompositionPlaylist"), CompositionPlaylistType.class, cplType), output);
 
 
-            if(validationEventHandler.hasErrors())
+            if (validationEventHandler.hasErrors())
             {
                 throw new IOException(validationEventHandler.toString());
             }

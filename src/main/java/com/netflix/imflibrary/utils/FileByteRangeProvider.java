@@ -124,8 +124,8 @@ public final class FileByteRangeProvider implements ResourceByteRangeProvider
     {
         //validation of range request guarantees that 0 <= rangeStart <= rangeEnd <= (resourceSize - 1)
         ResourceByteRangeProvider.Utilities.validateRangeRequest(this.fileSize, rangeStart, rangeEnd);
-        if((rangeEnd - rangeStart + 1) > Integer.MAX_VALUE){
-                throw new IOException(String.format("Number of bytes requested = %d is greater than %d", (rangeEnd - rangeStart + 1), Integer.MAX_VALUE));
+        if ((rangeEnd - rangeStart + 1) > Integer.MAX_VALUE) {
+            throw new IOException(String.format("Number of bytes requested = %d is greater than %d", (rangeEnd - rangeStart + 1), Integer.MAX_VALUE));
         }
 
         int totalNumBytesToRead = (int)(rangeEnd - rangeStart + 1);
@@ -133,7 +133,7 @@ public final class FileByteRangeProvider implements ResourceByteRangeProvider
         try(BufferedInputStream bis = new BufferedInputStream(new FileInputStream(this.resourceFile)))
         {
             long bytesSkipped = bis.skip(rangeStart);
-            if(bytesSkipped != rangeStart){
+            if (bytesSkipped != rangeStart) {
                 throw new IOException(String.format("Could not skip %d bytes of data, possible truncated data", rangeStart));
             }
 

@@ -47,8 +47,8 @@ public final class KLVPacket
 //we are currently using long for storing value of length, below allows a value of the order of 2^63 (i.e., 8 * 10^18)
     public static final int LENGTH_FIELD_SUFFIX_MAX_SIZE = 8;
 
-    private static final byte[] KLV_FILL_ITEM_KEY      = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x00, 0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
-    private static final byte[] KLV_FILL_ITEM_KEY_MASK = {   1,    1,     1,    1,    1,    1,   1,    0,    1,    1,    1,     1,    1,   1,    1,    1};
+    private static final byte[] KLV_FILL_ITEM_KEY = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x00, 0x03, 0x01, 0x02, 0x10, 0x01, 0x00, 0x00, 0x00};
+    private static final byte[] KLV_FILL_ITEM_KEY_MASK = {1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1};
 
     private static final byte[] PHDR_IMAGE_METADATA_ITEM_KEY = {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x02, 0x01, 0x05, 0x0E, 0x09, 0x06, 0x07, 0x01, 0x01, 0x01, 0x03};
     //the following mask can be used to ignore byte values in 8th and 16th positions
@@ -64,9 +64,9 @@ public final class KLVPacket
      */
     public static boolean isKLVFillItem(byte[] key)
     {
-        for (int i=0; i< KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
-            if((KLVPacket.KLV_FILL_ITEM_KEY_MASK[i] != 0) && (KLVPacket.KLV_FILL_ITEM_KEY[i] != key[i]))
+            if ((KLVPacket.KLV_FILL_ITEM_KEY_MASK[i] != 0) && (KLVPacket.KLV_FILL_ITEM_KEY[i] != key[i]))
             {
                 return false;
             }
@@ -82,7 +82,7 @@ public final class KLVPacket
      */
     public static boolean isPHDRImageMetadataItemKey(byte[] key)
     {
-        for (int i=0; i<KLVPacket.KEY_FIELD_SIZE; i++)
+        for (int i = 0; i < KLVPacket.KEY_FIELD_SIZE; i++)
         {
             if ((KLVPacket.PHDR_IMAGE_METADATA_ITEM_KEY_MASK[i] != 0) && (key[i] != KLVPacket.PHDR_IMAGE_METADATA_ITEM_KEY[i]))
             {
@@ -306,7 +306,7 @@ public final class KLVPacket
          *
          * @return the pack kind interpreted as an Integer
          */
-        public Integer getSetOrPackKindKey(){
+        public Integer getSetOrPackKindKey() {
             Byte setOrPackKind = this.key[13];
             return setOrPackKind.intValue();
         }
@@ -316,7 +316,7 @@ public final class KLVPacket
          *
          * @return the pack kind interpreted as an Integer
          */
-        public Integer getRegistryDesignator(){
+        public Integer getRegistryDesignator() {
             Byte registryDesignator = this.key[5]; //byte-6 of the 16 byte UL identifies the registry designator
             return registryDesignator.intValue();
         }

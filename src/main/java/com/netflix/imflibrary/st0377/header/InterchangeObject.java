@@ -40,7 +40,8 @@ public abstract class InterchangeObject
         /**
          * The Instance _ uid.
          */
-        @MXFProperty(size=16) protected final byte[] instance_uid = null;
+        @MXFProperty(size = 16)
+        protected final byte[] instance_uid = null;
 
 
         /**
@@ -82,14 +83,14 @@ public abstract class InterchangeObject
         /**
          * A logical representation of a Strong Reference
          */
-        public static final class StrongRef{
+        public static final class StrongRef {
             private final byte[] instance_uid;
 
             /**
              * Constructor for a StrongRef object
              * @param instance_uid that this Strong reference object represents
              */
-            public StrongRef(byte[] instance_uid){
+            public StrongRef(byte[] instance_uid) {
                 this.instance_uid = Arrays.copyOf(instance_uid, instance_uid.length);
             }
 
@@ -97,7 +98,7 @@ public abstract class InterchangeObject
              * Accessor for the underlying instance_uid
              * @return MXFUId type corresponding to the instance_uid that this Strong reference object represents
              */
-            public MXFUID getInstanceUID(){
+            public MXFUID getInstanceUID() {
                 return new MXFUID(this.instance_uid);
             }
 
@@ -105,10 +106,10 @@ public abstract class InterchangeObject
              * toString() method
              * @return string representation of the StrongRef object
              */
-            public String toString(){
+            public String toString() {
                 StringBuilder stringBuilder = new StringBuilder();
                 stringBuilder.append(String.format("0x"));
-                for(byte b : this.instance_uid) {
+                for (byte b : this.instance_uid) {
                     stringBuilder.append(String.format("%02x", b));
                 }
                 return stringBuilder.toString();

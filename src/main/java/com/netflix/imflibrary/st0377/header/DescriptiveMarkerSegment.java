@@ -33,7 +33,8 @@ public class DescriptiveMarkerSegment extends Event {
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class DescriptiveMarkerSegmentBO extends EventBO
     {
-        @MXFProperty(size=16, depends=true) private final StrongRef dm_framework = null;
+        @MXFProperty(size = 16, depends = true)
+        private final StrongRef dm_framework = null;
 
         /**
          * Instantiates a new parsed DescriptiveMarkerSegment object by virtue of parsing the MXF file bitstream

@@ -67,7 +67,7 @@ public class IMFException extends RuntimeException
     public List<ErrorLogger.ErrorObject> getErrors()
     {
         List errorList = new ArrayList<ErrorLogger.ErrorObject>();
-        if(this.errorLogger != null)
+        if (this.errorLogger != null)
         {
             errorList.addAll(this.errorLogger.getErrors());
         }

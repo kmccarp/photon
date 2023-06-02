@@ -72,9 +72,9 @@ public class PackingListBuilder {
      * @param imfErrorLogger a logger object to record errors that occur during the creation of the PackingList document
      */
     public PackingListBuilder(@Nonnull UUID uuid,
-                              @Nonnull XMLGregorianCalendar issueDate,
-                              @Nonnull File workingDirectory,
-                              @Nonnull IMFErrorLogger imfErrorLogger){
+            @Nonnull XMLGregorianCalendar issueDate,
+            @Nonnull File workingDirectory,
+            @Nonnull IMFErrorLogger imfErrorLogger) {
         this.uuid = uuid;
         this.issueDate = issueDate;
         this.iconId = null;
@@ -94,11 +94,11 @@ public class PackingListBuilder {
      * @param imfErrorLogger a logger object to record errors that occur during the creation of the PackingList document
      */
     public PackingListBuilder(@Nonnull UUID uuid,
-                              @Nonnull XMLGregorianCalendar issueDate,
-                              @Nonnull String iconId,
-                              @Nonnull String groupId,
-                              @Nonnull File workingDirectory,
-                              @Nonnull IMFErrorLogger imfErrorLogger){
+            @Nonnull XMLGregorianCalendar issueDate,
+            @Nonnull String iconId,
+            @Nonnull String groupId,
+            @Nonnull File workingDirectory,
+            @Nonnull IMFErrorLogger imfErrorLogger) {
         this.uuid = uuid;
         this.issueDate = issueDate;
         this.iconId = iconId;
@@ -114,7 +114,7 @@ public class PackingListBuilder {
      * @param language the language code of the annotation text
      * @return a UserTextType
      */
-    public static org.smpte_ra.schemas._429_8._2007.pkl.UserText buildPKLUserTextType_2007(String value, String language){
+    public static org.smpte_ra.schemas._429_8._2007.pkl.UserText buildPKLUserTextType_2007(String value, String language) {
         org.smpte_ra.schemas._429_8._2007.pkl.UserText userText = new org.smpte_ra.schemas._429_8._2007.pkl.UserText();
         userText.setValue(value);
         userText.setLanguage(language);
@@ -127,7 +127,7 @@ public class PackingListBuilder {
      * @param language the language code of the annotation text
      * @return a UserTextType
      */
-    public static org.smpte_ra.schemas._2067_2._2016.pkl.UserText buildPKLUserTextType_2016(String value, String language){
+    public static org.smpte_ra.schemas._2067_2._2016.pkl.UserText buildPKLUserTextType_2016(String value, String language) {
         org.smpte_ra.schemas._2067_2._2016.pkl.UserText userText = new org.smpte_ra.schemas._2067_2._2016.pkl.UserText();
         userText.setValue(value);
         userText.setLanguage(language);
@@ -138,7 +138,7 @@ public class PackingListBuilder {
      * A method to construct a Default Digest Method Type with a default HashAlgorithm
      * @return a DigestMethodType object conforming to the 2016 schema with the default HashAlgorithm
      */
-    public org.w3._2000._09.xmldsig_.DigestMethodType buildDefaultDigestMethodType(){
+    public org.w3._2000._09.xmldsig_.DigestMethodType buildDefaultDigestMethodType() {
         org.w3._2000._09.xmldsig_.DigestMethodType digestMethodType = new org.w3._2000._09.xmldsig_.DigestMethodType();
         digestMethodType.setAlgorithm(PackingListBuilder.defaultHashAlgorithm);
         return digestMethodType;
@@ -149,7 +149,7 @@ public class PackingListBuilder {
      * @param algorithm a String representing the algorithm used for generating the Hash
      * @return a DigestMethodType object conforming to the 2016 schema with the default HashAlgorithm
      */
-    public org.w3._2000._09.xmldsig_.DigestMethodType buildDigestMethodType(String algorithm){
+    public org.w3._2000._09.xmldsig_.DigestMethodType buildDigestMethodType(String algorithm) {
         org.w3._2000._09.xmldsig_.DigestMethodType digestMethodType = new org.w3._2000._09.xmldsig_.DigestMethodType();
         digestMethodType.setAlgorithm(algorithm);
         return digestMethodType;
@@ -166,9 +166,9 @@ public class PackingListBuilder {
      * @throws IOException - any I/O related error will be exposed through an IOException
      */
     public List<ErrorLogger.ErrorObject> buildPackingList_2007(@Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText annotationText,
-                                                               @Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText issuer,
-                                                               @Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText creator,
-                                                               @Nonnull List<PackingListBuilderAsset_2007> assets)
+            @Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText issuer,
+            @Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText creator,
+            @Nonnull List<PackingListBuilderAsset_2007> assets)
             throws IOException {
 
         IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
@@ -182,7 +182,7 @@ public class PackingListBuilder {
         packingListType.setGroupId(this.groupId);
         org.smpte_ra.schemas._429_8._2007.pkl.PackingListType.AssetList assetList = new org.smpte_ra.schemas._429_8._2007.pkl.PackingListType.AssetList();
         List<org.smpte_ra.schemas._429_8._2007.pkl.AssetType> packingListAssets = assetList.getAsset();
-        for(PackingListBuilderAsset_2007 asset : assets){
+        for (PackingListBuilderAsset_2007 asset : assets) {
             org.smpte_ra.schemas._429_8._2007.pkl.AssetType packingListAssetType = new org.smpte_ra.schemas._429_8._2007.pkl.AssetType();
             packingListAssetType.setId(asset.getUUID());
             packingListAssetType.setAnnotationText(asset.getAnnotationText());
@@ -205,7 +205,7 @@ public class PackingListBuilder {
                 InputStream packingListSchemaAsAStream = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st0429_8_2007/PKL/packingList_schema.xsd");
                 InputStream dsigSchemaAsAStream = contextClassLoader.getResourceAsStream("org/w3/_2000_09/xmldsig/xmldsig-core-schema.xsd");
                 OutputStream outputStream = new FileOutputStream(outputFile);
-        )
+                )
         {
             try
             {
@@ -238,7 +238,7 @@ public class PackingListBuilder {
                     }
                 }
             }
-            catch( SAXException | JAXBException e)
+            catch(SAXException | JAXBException e)
             {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors
                                 .ErrorLevels.FATAL,
@@ -271,11 +271,11 @@ public class PackingListBuilder {
          *                         containing the asset at the time the PackingList was created
          */
         public PackingListBuilderAsset_2007(@Nonnull UUID uuid,
-                                            @Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText annotationText,
-                                            @Nonnull byte[] hash,
-                                            @Nonnull Long size,
-                                            @Nonnull PKLAssetTypeEnum assetType,
-                                            org.smpte_ra.schemas._429_8._2007.pkl.UserText originalFileName){
+                @Nonnull org.smpte_ra.schemas._429_8._2007.pkl.UserText annotationText,
+                @Nonnull byte[] hash,
+                @Nonnull Long size,
+                @Nonnull PKLAssetTypeEnum assetType,
+                org.smpte_ra.schemas._429_8._2007.pkl.UserText originalFileName) {
             this.uuid = UUIDHelper.fromUUID(uuid);
             this.annotationText = annotationText;
             this.hash = Arrays.copyOf(hash, hash.length);
@@ -288,7 +288,7 @@ public class PackingListBuilder {
          * Getter for the UUID identifying this Packing List Asset
          * @return a String representing the "urn:uuid:" of this PackingList Asset
          */
-        public String getUUID(){
+        public String getUUID() {
             return this.uuid;
         }
 
@@ -296,7 +296,7 @@ public class PackingListBuilder {
          * Getter for the AnnotationText of this Packing List Asset
          * @return a UserText representing the Annotation Text
          */
-        public org.smpte_ra.schemas._429_8._2007.pkl.UserText getAnnotationText(){
+        public org.smpte_ra.schemas._429_8._2007.pkl.UserText getAnnotationText() {
             return this.annotationText;
         }
 
@@ -304,7 +304,7 @@ public class PackingListBuilder {
          * Getter for the Hash of this Packing List Asset
          * @return a byte[] representing the Base64 encoded SHA-1 Hash of the Asset
          */
-        public byte[] getHash(){
+        public byte[] getHash() {
             return Arrays.copyOf(this.hash, this.hash.length);
         }
 
@@ -312,7 +312,7 @@ public class PackingListBuilder {
          * Getter for the size of this Packing List Asset
          * @return a BigInteger representing the size of this PackingList Asset
          */
-        public BigInteger getSize(){
+        public BigInteger getSize() {
             return this.size;
         }
 
@@ -320,7 +320,7 @@ public class PackingListBuilder {
          * Getter for the type of this PackingList Asset
          * @return an enumerated value representing the type of this PackingList Asset
          */
-        public PKLAssetTypeEnum getAssetType(){
+        public PKLAssetTypeEnum getAssetType() {
             return this.assetType;
         }
 
@@ -329,7 +329,7 @@ public class PackingListBuilder {
          * @return a UserText representing the OriginalFileName of the PackingList Asset
          *          at the time that the PackingList was created
          */
-        public org.smpte_ra.schemas._429_8._2007.pkl.UserText getOriginalFileName(){
+        public org.smpte_ra.schemas._429_8._2007.pkl.UserText getOriginalFileName() {
             return this.originalFileName;
         }
     }
@@ -363,7 +363,7 @@ public class PackingListBuilder {
          * To prevent instantiation
          * @param pklAssetType a string representing the PKL AssetType
          */
-        private PKLAssetTypeEnum(String pklAssetType){
+        private PKLAssetTypeEnum(String pklAssetType) {
             this.assetType = pklAssetType;
         }
 
@@ -371,12 +371,12 @@ public class PackingListBuilder {
          * Getter for the AssetType of the PKLAssetTypeEnum
          * @return a string indicating the asset type represented by this Enumeration
          */
-        public String getAssetType(){
+        public String getAssetType() {
             return this.assetType;
         }
 
-        public static PKLAssetTypeEnum getAssetTypeEnum(String assetType){
-            switch (assetType){
+        public static PKLAssetTypeEnum getAssetTypeEnum(String assetType) {
+            switch (assetType) {
                 case "text/xml":
                     return PKLAssetTypeEnum.TEXT_XML;
                 case "application/mxf":
@@ -390,7 +390,7 @@ public class PackingListBuilder {
          * The overridden toString() method
          * @return a string representing this PKLAssetType enumeration
          */
-        public String toString(){
+        public String toString() {
             return this.assetType;
         }
     }
@@ -408,9 +408,9 @@ public class PackingListBuilder {
      * @throws JAXBException - any issues in serializing the XML document using JAXB are exposed through a JAXBException
      */
     public List<ErrorLogger.ErrorObject> buildPackingList_2016(@Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText annotationText,
-                                                         @Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText issuer,
-                                                         @Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText creator,
-                                                         @Nonnull List<PackingListBuilderAsset_2016> assets) throws IOException, SAXException, JAXBException {
+            @Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText issuer,
+            @Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText creator,
+            @Nonnull List<PackingListBuilderAsset_2016> assets) throws IOException, SAXException, JAXBException {
 
         int numErrors = imfErrorLogger.getNumberOfErrors();
         org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType packingListType = IMFPKLObjectFieldsFactory.constructPackingListType_2016();
@@ -423,7 +423,7 @@ public class PackingListBuilder {
         packingListType.setGroupId(this.groupId);
         org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType.AssetList assetList = new org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType.AssetList();
         List<org.smpte_ra.schemas._2067_2._2016.pkl.AssetType> packingListAssets = assetList.getAsset();
-        for(PackingListBuilderAsset_2016 asset : assets){
+        for (PackingListBuilderAsset_2016 asset : assets) {
             org.smpte_ra.schemas._2067_2._2016.pkl.AssetType packingListAssetType = new org.smpte_ra.schemas._2067_2._2016.pkl.AssetType();
             packingListAssetType.setId(asset.getUUID());
             packingListAssetType.setAnnotationText(asset.getAnnotationText());
@@ -447,9 +447,9 @@ public class PackingListBuilder {
                 InputStream packingListSchemaAsAStream = contextClassLoader.getResourceAsStream("org/smpte_ra/schemas/st2067_2_2016/PKL/packingList_schema.xsd");
                 InputStream dsigSchemaAsAStream = contextClassLoader.getResourceAsStream("org/w3/_2000_09/xmldsig/xmldsig-core-schema.xsd");
                 OutputStream outputStream = new FileOutputStream(outputFile);
-        )
+                )
         {
-            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI );
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             StreamSource[] schemaSources = new StreamSource[2];
             //The order in which these schema sources are initialized is important because some elements in the
             //PackingList schema depend on types defined in the DSig schema.
@@ -471,18 +471,18 @@ public class PackingListBuilder {
             marshaller.marshal(new JAXBElement<>(new QName("http://www.smpte-ra.org/schemas/2067-2/2016/PKL", "PackingList"), org.smpte_ra.schemas._2067_2._2016.pkl.PackingListType.class, packingListType), outputStream);
             outputStream.close();
 
-            if(validationEventHandler.hasErrors())
+            if (validationEventHandler.hasErrors())
             {
                 //TODO : Perhaps a candidate for a Lambda
-                for(ValidationEventHandlerImpl.ValidationErrorObject validationErrorObject : validationEventHandler.getErrors()) {
+                for (ValidationEventHandlerImpl.ValidationErrorObject validationErrorObject : validationEventHandler.getErrors()) {
                     this.imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_PKL_ERROR, validationErrorObject.getValidationEventSeverity(), validationErrorObject.getErrorMessage());
                 }
             }
         }
 
-        if(this.imfErrorLogger.getNumberOfErrors() > numErrors){
+        if (this.imfErrorLogger.getNumberOfErrors() > numErrors) {
             List<ErrorLogger.ErrorObject> fatalErrors = imfErrorLogger.getErrors(IMFErrorLogger.IMFErrors.ErrorLevels.FATAL, numErrors, this.imfErrorLogger.getNumberOfErrors());
-            if(fatalErrors.size() > 0){
+            if (fatalErrors.size() > 0) {
                 throw new IMFAuthoringException(String.format("Following FATAL errors were detected while building the PackingList document %s", fatalErrors.toString()));
             }
         }
@@ -514,12 +514,12 @@ public class PackingListBuilder {
          *                         containing the asset at the time the PackingList was created
          */
         public PackingListBuilderAsset_2016(@Nonnull UUID uuid,
-                                            @Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText annotationText,
-                                            @Nonnull byte[] hash,
-                                            @Nonnull org.w3._2000._09.xmldsig_.DigestMethodType hashAlgorithm,
-                                            @Nonnull Long size,
-                                            @Nonnull PKLAssetTypeEnum assetType,
-                                            org.smpte_ra.schemas._2067_2._2016.pkl.UserText originalFileName){
+                @Nonnull org.smpte_ra.schemas._2067_2._2016.pkl.UserText annotationText,
+                @Nonnull byte[] hash,
+                @Nonnull org.w3._2000._09.xmldsig_.DigestMethodType hashAlgorithm,
+                @Nonnull Long size,
+                @Nonnull PKLAssetTypeEnum assetType,
+                org.smpte_ra.schemas._2067_2._2016.pkl.UserText originalFileName) {
             this.uuid = UUIDHelper.fromUUID(uuid);
             this.annotationText = annotationText;
             this.hash = Arrays.copyOf(hash, hash.length);
@@ -533,7 +533,7 @@ public class PackingListBuilder {
          * Getter for the UUID identifying this Packing List Asset
          * @return a String representing the "urn:uuid:" of this PackingList Asset
          */
-        public String getUUID(){
+        public String getUUID() {
             return this.uuid;
         }
 
@@ -541,7 +541,7 @@ public class PackingListBuilder {
          * Getter for the AnnotationText of this Packing List Asset
          * @return a UserText representing the Annotation Text
          */
-        public org.smpte_ra.schemas._2067_2._2016.pkl.UserText getAnnotationText(){
+        public org.smpte_ra.schemas._2067_2._2016.pkl.UserText getAnnotationText() {
             return this.annotationText;
         }
 
@@ -549,7 +549,7 @@ public class PackingListBuilder {
          * Getter for the Hash of this Packing List Asset
          * @return a byte[] representing the Base64 encoded SHA-1 Hash of the Asset
          */
-        public byte[] getHash(){
+        public byte[] getHash() {
             return Arrays.copyOf(this.hash, this.hash.length);
         }
 
@@ -557,7 +557,7 @@ public class PackingListBuilder {
          * Getter for the HashAlgorithm used to generate the Hash of this PackingList Asset
          * @return a org.w3._2000._09.xmldsig_.DigestMethodType representing the Hashing algorithm
          */
-        public org.w3._2000._09.xmldsig_.DigestMethodType getHashAlgorithm(){
+        public org.w3._2000._09.xmldsig_.DigestMethodType getHashAlgorithm() {
             return this.hashAlgorithm;
         }
 
@@ -565,7 +565,7 @@ public class PackingListBuilder {
          * Getter for the size of this Packing List Asset
          * @return a BigInteger representing the size of this PackingList Asset
          */
-        public BigInteger getSize(){
+        public BigInteger getSize() {
             return this.size;
         }
 
@@ -573,7 +573,7 @@ public class PackingListBuilder {
          * Getter for the type of this PackingList Asset
          * @return an enumerated value representing the type of this PackingList Asset
          */
-        public PKLAssetTypeEnum getAssetType(){
+        public PKLAssetTypeEnum getAssetType() {
             return this.assetType;
         }
 
@@ -582,7 +582,7 @@ public class PackingListBuilder {
          * @return a UserText representing the OriginalFileName of the PackingList Asset
          *          at the time that the PackingList was created
          */
-        public org.smpte_ra.schemas._2067_2._2016.pkl.UserText getOriginalFileName(){
+        public org.smpte_ra.schemas._2067_2._2016.pkl.UserText getOriginalFileName() {
             return this.originalFileName;
         }
     }

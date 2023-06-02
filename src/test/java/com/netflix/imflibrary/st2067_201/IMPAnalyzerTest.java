@@ -21,16 +21,18 @@ public class IMPAnalyzerTest
         File inputFile = TestHelper.findResourceByPath("TestIMP/IAB/CompleteIMP");
         Map<String, List<ErrorLogger.ErrorObject>> errorMap = analyzePackage(inputFile);
         Assert.assertEquals(errorMap.size(), 7);
-        errorMap.entrySet().stream().forEach( e ->
-                {
-                    if (e.getKey().matches("CPL.*Conformance")) {
-                        Assert.assertEquals(e.getValue().size(), 6);
-                    } else if (e.getKey().matches("meridian.*")) {
-                            Assert.assertEquals(e.getValue().size(), 6);
-                    } else {
-                        Assert.assertEquals(e.getValue().size(), 0);
-                    }
-                }
+        errorMap.entrySet().stream().forEach(e ->
+        {
+            if (e.getKey().matches("CPL.*Conformance")) {
+                Assert.assertEquals(e.getValue().size(), 6);
+            }
+            else if (e.getKey().matches("meridian.*")) {
+                Assert.assertEquals(e.getValue().size(), 6);
+            }
+            else {
+                Assert.assertEquals(e.getValue().size(), 0);
+            }
+        }
         );
 
     }

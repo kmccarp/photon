@@ -112,9 +112,12 @@ public final class EssenceContainerData extends InterchangeObject
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static final class EssenceContainerDataBO  extends InterchangeObjectBO
     {
-        @MXFProperty(size=32, depends=true) private final byte[] linked_package_uid = null; //PackageRef type
-        @MXFProperty(size=4) private final Long index_sid = null;
-        @MXFProperty(size=4) private final Long body_sid = null;
+        @MXFProperty(size = 32, depends = true)
+        private final byte[] linked_package_uid = null; //PackageRef type
+        @MXFProperty(size = 4)
+        private final Long index_sid = null;
+        @MXFProperty(size = 4)
+        private final Long body_sid = null;
 
         /**
          * Instantiates a new parsed EssenceContainerData object by virtue of parsing the MXF file bitstream

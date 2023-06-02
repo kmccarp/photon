@@ -84,7 +84,8 @@ public final class Composition {
                                 "respectively, found %d numbers in list %s",
                         numbers.size(), Arrays.toString(numbers.toArray())));
 
-            } else if (numbers.get(0) == 0
+            }
+            else if (numbers.get(0) == 0
                     || numbers.get(1) == 0) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.IMF_CPL_ERROR, IMFErrorLogger.IMFErrors
                         .ErrorLevels.NON_FATAL, String.format(
@@ -97,7 +98,7 @@ public final class Composition {
                 denominator = numbers.get(1);
             }
 
-            if(imfErrorLogger.hasFatalErrors())
+            if (imfErrorLogger.hasFatalErrors())
             {
                 throw new IMFException("Failed to create IMFBaseResourceType", imfErrorLogger);
             }
@@ -111,8 +112,13 @@ public final class Composition {
          * @param numerator a long integer representing the numerator component of the EditRate
          * @param denominator a long integer representing the denominator component of the EditRate
          */
-        public EditRate(Long numerator, Long denominator){
-            this(new ArrayList<Long>(){{add(numerator); add(denominator);}});
+        public EditRate(Long numerator, Long denominator) {
+            this(new ArrayList<Long>(){
+                {
+                    add(numerator);
+                    add(denominator);
+                }
+            });
         }
 
         /**
@@ -157,7 +163,7 @@ public final class Composition {
                     || !(object instanceof EditRate)) {
                 return false;
             }
-            EditRate other = (EditRate) object;
+            EditRate other = (EditRate)object;
             return ((this.getNumerator().equals(other.getNumerator())) && (this.getDenominator().equals(other.getDenominator())));
         }
 
@@ -306,9 +312,9 @@ public final class Composition {
          * A method to return the duration of this VirtualTrack
          * @return a long integer representing the duration of this VirtualTrack in Track Edit Rate units
          */
-        public long getDurationInTrackEditRateUnits(){
+        public long getDurationInTrackEditRateUnits() {
             long duration = 0L;
-            for(IMFBaseResourceType imfBaseResourceType : this.resources){
+            for (IMFBaseResourceType imfBaseResourceType : this.resources) {
                 // Only handle TrackFileResource sequences currently
                 if (imfBaseResourceType instanceof IMFTrackFileResourceType) {
                     duration += imfBaseResourceType.getSourceDuration().longValue() * imfBaseResourceType.getRepeatCount().longValue();
@@ -321,10 +327,10 @@ public final class Composition {
          * A method to return the duration of this VirtualTrack
          * @return a long integer representing the duration of this VirtualTrack in Composition Edit Rate units
          */
-        public long getDuration(){
+        public long getDuration() {
             long duration = getDurationInTrackEditRateUnits();
             Composition.EditRate resourceEditRate = this.resources.get(0).getEditRate();//Resources of this virtual track should all have the same edit rate we enforce that check during IMFCoreConstraintsChecker.checkVirtualTracks()
-            long durationInCompositionEditUnits = Math.round((double) duration * (((double)this.compositionEditRate.getNumerator()/this.compositionEditRate.getDenominator()) / ((double)resourceEditRate.getNumerator()/resourceEditRate.getDenominator())));
+            long durationInCompositionEditUnits = Math.round((double)duration * (((double)this.compositionEditRate.getNumerator() / this.compositionEditRate.getDenominator()) / ((double)resourceEditRate.getNumerator() / resourceEditRate.getDenominator())));
             return durationInCompositionEditUnits;
         }
 
@@ -343,15 +349,15 @@ public final class Composition {
 
             List<? extends IMFBaseResourceType> otherResourceList = other.resources;
             boolean result = false;
-            if(this instanceof IMFEssenceComponentVirtualTrack){
-                if(this.getDuration() != other.getDuration()){
+            if (this instanceof IMFEssenceComponentVirtualTrack) {
+                if (this.getDuration() != other.getDuration()) {
                     return false;
                 }
                 IMFEssenceComponentVirtualTrack thisVirtualTrack = IMFEssenceComponentVirtualTrack.class.cast(this);
                 IMFEssenceComponentVirtualTrack otherVirtualTrack = IMFEssenceComponentVirtualTrack.class.cast(other);
                 List<IMFTrackFileResourceType> normalizedResourceList = this.normalizeResourceList(thisVirtualTrack.getTrackFileResourceList());
                 List<IMFTrackFileResourceType> normalizedOtherResourceList = this.normalizeResourceList(otherVirtualTrack.getTrackFileResourceList());
-                if(normalizedResourceList.size() != normalizedOtherResourceList.size()){
+                if (normalizedResourceList.size() != normalizedOtherResourceList.size()) {
                     return false;
                 }
                 result = normalizedResourceList.get(0).equivalent(normalizedOtherResourceList.get(0));
@@ -362,7 +368,7 @@ public final class Composition {
                     result &= thisResource.equivalent(otherResource);
                 }
             }
-            else{
+            else {
                 result = this.resources.get(0).equivalent(otherResourceList.get(0));
                 for (int i = 1; i < this.resources.size(); i++) {
                     IMFBaseResourceType thisResource = this.resources.get(i);
@@ -375,20 +381,20 @@ public final class Composition {
             return result;
         }
 
-        private List<IMFTrackFileResourceType> normalizeResourceList(List<IMFTrackFileResourceType> resourceList){
+        private List<IMFTrackFileResourceType> normalizeResourceList(List<IMFTrackFileResourceType> resourceList) {
             List<IMFTrackFileResourceType> normalizedResourceList = new ArrayList<>();
             IMFTrackFileResourceType prev = resourceList.get(0);
-            for(int i=1; i< resourceList.size(); i++){
+            for (int i = 1; i < resourceList.size(); i++) {
                 IMFTrackFileResourceType curr = IMFTrackFileResourceType.class.cast(resourceList.get(i));
-                if(curr.getTrackFileId().equals(prev.getTrackFileId())
+                if (curr.getTrackFileId().equals(prev.getTrackFileId())
                         && curr.getEditRate().equals(prev.getEditRate())
-                        && curr.getEntryPoint().longValue() == (prev.getEntryPoint().longValue() + prev.getSourceDuration().longValue())){
+                        && curr.getEntryPoint().longValue() == (prev.getEntryPoint().longValue() + prev.getSourceDuration().longValue())) {
                     //Candidate for normalization - We could create one resource representing the timelines of prev and curr
                     List<Long> editRate = new ArrayList<>();
                     editRate.add(prev.getEditRate().getNumerator());
                     editRate.add(prev.getEditRate().getDenominator());
 
-                    if(prev.getRepeatCount().longValue() > 1) {
+                    if (prev.getRepeatCount().longValue() > 1) {
                         BigInteger newRepeatCount = new BigInteger(String.format("%d", prev.getRepeatCount().longValue() - 1L));
                         IMFTrackFileResourceType modifiedPrevTrackFileResourceType =
                                 new IMFTrackFileResourceType(prev.getId(),
@@ -417,7 +423,7 @@ public final class Composition {
                             prev.getHashAlgorithm());
                     prev = mergedTrackFileResourceType;
 
-                    if(curr.getRepeatCount().longValue() > 1) {
+                    if (curr.getRepeatCount().longValue() > 1) {
                         BigInteger newRepeatCount = new BigInteger(String.format("%d", curr.getRepeatCount().longValue() - 1L));
                         editRate = new ArrayList<>();
                         editRate.add(curr.getEditRate().getNumerator());
@@ -438,7 +444,7 @@ public final class Composition {
                         prev = modifiedCurrTrackFileResourceType;
                     }
                 }
-                else{//prev and curr cannot be merged as they either point to different resources or do not represent continuous timeline
+                else {//prev and curr cannot be merged as they either point to different resources or do not represent continuous timeline
                     normalizedResourceList.add(prev);
                     prev = curr;
                 }
@@ -466,30 +472,30 @@ public final class Composition {
         }
 
         File inputFile = new File(args[0]);
-        if(!inputFile.exists()){
+        if (!inputFile.exists()) {
             logger.error(String.format("File %s does not exist", inputFile.getAbsolutePath()));
             System.exit(-1);
         }
         ResourceByteRangeProvider resourceByteRangeProvider = new FileByteRangeProvider(inputFile);
-        byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize()-1);
+        byte[] bytes = resourceByteRangeProvider.getByteRangeAsBytes(0, resourceByteRangeProvider.getResourceSize() - 1);
         PayloadRecord payloadRecord = new PayloadRecord(bytes, PayloadRecord.PayloadAssetType.CompositionPlaylist, 0L, resourceByteRangeProvider.getResourceSize());
         List<ErrorLogger.ErrorObject>errors = IMPValidator.validateCPL(payloadRecord);
 
-        if(errors.size() > 0){
+        if (errors.size() > 0) {
             long warningCount = errors.stream().filter(e -> e.getErrorLevel().equals(IMFErrorLogger.IMFErrors.ErrorLevels
                     .WARNING)).count();
             logger.info(String.format("CompositionPlaylist Document has %d errors and %d warnings",
                     errors.size() - warningCount, warningCount));
-            for(ErrorLogger.ErrorObject errorObject : errors){
-                if(errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+            for (ErrorLogger.ErrorObject errorObject : errors) {
+                if (errorObject.getErrorLevel() != IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.error(errorObject.toString());
                 }
-                else if(errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
+                else if (errorObject.getErrorLevel() == IMFErrorLogger.IMFErrors.ErrorLevels.WARNING) {
                     logger.warn(errorObject.toString());
                 }
             }
         }
-        else{
+        else {
             logger.info("No errors were detected in the CompositionPlaylist Document.");
         }
     }
@@ -501,7 +507,7 @@ public final class Composition {
         private final HeaderPartition headerPartition;
         private final ResourceByteRangeProvider resourceByteRangeProvider;
 
-        public HeaderPartitionTuple(HeaderPartition headerPartition, ResourceByteRangeProvider resourceByteRangeProvider){
+        public HeaderPartitionTuple(HeaderPartition headerPartition, ResourceByteRangeProvider resourceByteRangeProvider) {
             this.headerPartition = headerPartition;
             this.resourceByteRangeProvider = resourceByteRangeProvider;
         }
@@ -511,7 +517,7 @@ public final class Composition {
          * access to the raw bytes
          * @return ResourceByteRangeProvider object corresponding to this HeaderPartition
          */
-        public ResourceByteRangeProvider getResourceByteRangeProvider(){
+        public ResourceByteRangeProvider getResourceByteRangeProvider() {
             return this.resourceByteRangeProvider;
         }
 
@@ -519,7 +525,7 @@ public final class Composition {
          * A getter for the HeaderPartition object corresponding to a resource referenced from the Composition
          * @return HeaderPartition of a certain resource in the Composition
          */
-        public HeaderPartition getHeaderPartition(){
+        public HeaderPartition getHeaderPartition() {
             return this.headerPartition;
         }
     }

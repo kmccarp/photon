@@ -12,17 +12,19 @@ import java.util.Set;
  * A class that models Composition with Application 2 constraints from 2067-20 specification
  */
 public class ApplicationUnsupportedComposition extends AbstractApplicationComposition {
-    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>() {{
-        add("SignalStandard");
-        add("ActiveFormatDescriptor");
-        add("VideoLineMap");
-        add("AlphaTransparency");
-        add("PixelLayout");
-        add("ActiveHeight");
-        add("ActiveWidth");
-        add("ActiveXOffset");
-        add("ActiveYOffset");
-    }});
+    private static final Set<String> ignoreSet = Collections.unmodifiableSet(new HashSet<String>() {
+        {
+            add("SignalStandard");
+            add("ActiveFormatDescriptor");
+            add("VideoLineMap");
+            add("AlphaTransparency");
+            add("PixelLayout");
+            add("ActiveHeight");
+            add("ActiveWidth");
+            add("ActiveXOffset");
+            add("ActiveYOffset");
+        }
+    });
 
     public ApplicationUnsupportedComposition(@Nonnull IMFCompositionPlaylistType imfCompositionPlaylistType) {
         this(imfCompositionPlaylistType, new HashSet<>());
@@ -31,8 +33,8 @@ public class ApplicationUnsupportedComposition extends AbstractApplicationCompos
     public ApplicationUnsupportedComposition(@Nonnull IMFCompositionPlaylistType imfCompositionPlaylistType, Set<String> homogeneitySelectionSet) {
 
         super(imfCompositionPlaylistType, ignoreSet, homogeneitySelectionSet);
-        for(String appString: imfCompositionPlaylistType.getApplicationIdentificationSet()) {
-            if (ApplicationCompositionType.fromApplicationID(appString).equals(ApplicationCompositionType.APPLICATION_UNSUPPORTED_COMPOSITION_TYPE)){
+        for (String appString : imfCompositionPlaylistType.getApplicationIdentificationSet()) {
+            if (ApplicationCompositionType.fromApplicationID(appString).equals(ApplicationCompositionType.APPLICATION_UNSUPPORTED_COMPOSITION_TYPE)) {
                 imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.APPLICATION_COMPOSITION_ERROR,
                         IMFErrorLogger.IMFErrors.ErrorLevels.WARNING,
                         String.format("Application ID %s is not fully supported", appString));

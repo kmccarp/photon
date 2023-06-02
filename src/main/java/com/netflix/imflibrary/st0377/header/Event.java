@@ -26,8 +26,10 @@ public class Event extends StructuralComponent {
     @SuppressWarnings({"PMD.FinalFieldCouldBeStatic"})
     public static class EventBO extends StructuralComponentBO
     {
-        @MXFProperty(size=8) protected final Long event_start_position = null;
-        @MXFProperty(size=0, charset = "UTF-16") protected final String event_comment = null; //UTF-16 String
+        @MXFProperty(size = 8)
+        protected final Long event_start_position = null;
+        @MXFProperty(size = 0, charset = "UTF-16")
+        protected final String event_comment = null; //UTF-16 String
 
         /**
          * Instantiates a new parsed Event object by virtue of parsing the MXF file bitstream
