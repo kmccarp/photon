@@ -29,7 +29,7 @@ public class PresetMacro extends Macro {
     private final String preset;
 
     public PresetMacro(String name, String annotaion, String preset) {
-        super(name, annotaion, new ArrayList<Sequence>(), new ArrayList<Sequence>());
+        super(name, annotaion, new ArrayList<>(), new ArrayList<>());
         this.preset = preset;
     }
 
