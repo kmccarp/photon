@@ -103,22 +103,22 @@ public class UL {
 
     /**
      * A helper method to return the UUID without the "urn:uuid:" prefix
-     * @param ULasURN a urn:uuid type
+     * @param uLasURN a urn:uuid type
      * @return a UL without the "urn:smpte:ul:" prefix
      */
-    public static UL fromULAsURNStringToUL(String ULasURN)
+    public static UL fromULAsURNStringToUL(String uLasURN)
     {
-        if (!ULasURN.startsWith(UL.UL_as_a_URN_PREFIX))
+        if (!uLasURN.startsWith(UL.UL_as_a_URN_PREFIX))
         {
             IMFErrorLogger imfErrorLogger = new IMFErrorLoggerImpl();
             imfErrorLogger.addError(IMFErrorLogger.IMFErrors.ErrorCodes.UUID_ERROR, IMFErrorLogger.IMFErrors
                     .ErrorLevels.NON_FATAL, String.format("Input UUID %s " +
-                    "does not start with %s", ULasURN, UL
+                    "does not start with %s", uLasURN, UL
                     .UL_as_a_URN_PREFIX));
-            throw new IMFException(String.format("Input UUID %s does not start with %s", ULasURN, UL
+            throw new IMFException(String.format("Input UUID %s does not start with %s", uLasURN, UL
                     .UL_as_a_URN_PREFIX), imfErrorLogger);
         }
-        String ulValue = ULasURN.split(UL.UL_as_a_URN_PREFIX)[1].replace(".", "");
+        String ulValue = uLasURN.split(UL.UL_as_a_URN_PREFIX)[1].replace(".", "");
         byte[] bytes = new byte[16];
         for( int i =0; i < 16; i++) {
             bytes[i] = (byte)Integer.parseInt(ulValue.substring(i*2, i*2+2), 16);
@@ -136,8 +136,9 @@ public class UL {
     public boolean equalsWithMask(UL ul, int byteMask) {
 
         for (int i = 0; i < 16; i++) {
-            if ((byteMask & 0x8000) != 0 && this.ul[i] != ul.ul[i])
+            if ((byteMask & 0x8000) != 0 && this.ul[i] != ul.ul[i]) {
                 return false;
+            }
 
             byteMask = byteMask << 1;
         }
@@ -163,8 +164,9 @@ public class UL {
      * @return  true if the objects are the same; false otherwise
      */
     public boolean equals(Object other) {
-        if ((null == other) || (other.getClass() != this.getClass()))
+        if ((null == other) || (other.getClass() != this.getClass())) {
             return false;
+        }
         UL id = (UL)other;
         return Arrays.equals(this.ul, id.getULAsBytes());
     }
