@@ -193,12 +193,12 @@ public final class RegXMLLibHelper {
 
     /**
      * A utility method that gets Symbol name provided URN for an element
-     * @param URN - URN of the element
+     * @param urn - URN of the element
      * @return Symbol name of the element
      */
-    public String getElementSymbolNameFromUL(String URN) {
+    public String getElementSymbolNameFromUL(String urn) {
         DefinitionResolver definitionResolver = this.regXMLLibDictionary.getMetaDictionaryCollection();
-        Definition definition = definitionResolver.getDefinition(AUID.fromURN(URN));
+        Definition definition = definitionResolver.getDefinition(AUID.fromURN(urn));
         return definition.getSymbol();
     }
 
@@ -214,7 +214,7 @@ public final class RegXMLLibHelper {
         Definition definition = definitionResolver.getDefinition(AUID.fromURN(typeURN));
         if (definition instanceof EnumerationTypeDefinition) {
             EnumerationTypeDefinition enumerationTypeDefinition = EnumerationTypeDefinition.class.cast(definition);
-            intValue = enumerationTypeDefinition.getElements().stream().filter(e -> e.getName().equals(value)).map(e -> e.getValue()).findFirst().get();
+            intValue = enumerationTypeDefinition.getElements().stream().filter(e -> e.getName().equals(value)).map(com.sandflow.smpte.regxml.dict.definitions.EnumerationTypeDefinition.Element::getValue).findFirst().get();
         }
         return intValue;
     }

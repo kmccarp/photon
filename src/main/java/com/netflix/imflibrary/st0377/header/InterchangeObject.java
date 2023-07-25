@@ -87,10 +87,10 @@ public abstract class InterchangeObject
 
             /**
              * Constructor for a StrongRef object
-             * @param instance_uid that this Strong reference object represents
+             * @param instanceUid that this Strong reference object represents
              */
-            public StrongRef(byte[] instance_uid){
-                this.instance_uid = Arrays.copyOf(instance_uid, instance_uid.length);
+            public StrongRef(byte[] instanceUid){
+                this.instance_uid = Arrays.copyOf(instanceUid, instanceUid.length);
             }
 
             /**

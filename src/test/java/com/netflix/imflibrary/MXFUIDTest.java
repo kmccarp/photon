@@ -28,24 +28,24 @@ public class MXFUIDTest
     public void testGetUid()
     {
         byte[] bytes = new byte[16];
-        MXFUID MXFUID = new MXFUID(bytes);
-        Assert.assertTrue(MXFUID.toString().length()> 0);
-        Assert.assertEquals(MXFUID.getUID(), bytes);
+        MXFUID mxfuid = new MXFUID(bytes);
+        Assert.assertTrue(mxfuid.toString().length()> 0);
+        Assert.assertEquals(mxfuid.getUID(), bytes);
     }
 
     @Test
     public void testEquals()
     {
         byte[] bytes1 = new byte[16];
-        MXFUID MXFUID1 = new MXFUID(bytes1);
+        MXFUID mxfuid1 = new MXFUID(bytes1);
 
         byte[] bytes2 = Arrays.copyOf(bytes1, bytes1.length);
-        MXFUID MXFUID2 = new MXFUID(bytes2);
-        Assert.assertTrue(MXFUID1.equals(MXFUID2));
+        MXFUID mxfuid2 = new MXFUID(bytes2);
+        Assert.assertTrue(mxfuid1.equals(mxfuid2));
 
-        Assert.assertFalse(MXFUID1.equals(null));
+        Assert.assertFalse(mxfuid1.equals(null));
 
-        Assert.assertFalse(MXFUID1.equals(bytes1));
+        Assert.assertFalse(mxfuid1.equals(bytes1));
     }
 
     @Test
